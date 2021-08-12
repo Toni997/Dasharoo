@@ -10,7 +10,7 @@ namespace DasharooAPI.Utilities
 {
     public static class Logging
     {
-        public static void Initialize(IHostBuilder builder)
+        public static void Initialize(IHostBuilder hostBuilder)
         {
             Log.Logger = new LoggerConfiguration().WriteTo.File(
                 path: @"C:\dasharoo_logs\log-.txt",
@@ -22,8 +22,7 @@ namespace DasharooAPI.Utilities
             try
             {
                 Log.Information("Application is starting");
-                // builder(args).Build().Run();
-                builder.Build().Run();
+                hostBuilder.Build().Run();
             }
             catch (Exception e)
             {
