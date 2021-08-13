@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
 namespace DasharooAPI.Utilities
 {
-    public static class Logging
+    public static class Logger
     {
-        public static void Initialize(IHostBuilder hostBuilder)
+        public static void Initialize()
         {
             Log.Logger = new LoggerConfiguration().WriteTo.File(
                 path: @"C:\dasharoo_logs\log-.txt",
@@ -18,20 +19,6 @@ namespace DasharooAPI.Utilities
                 rollingInterval: RollingInterval.Day,
                 restrictedToMinimumLevel: LogEventLevel.Information
             ).CreateLogger();
-
-            try
-            {
-                Log.Information("Application is starting");
-                hostBuilder.Build().Run();
-            }
-            catch (Exception e)
-            {
-                Log.Fatal(e, "Application failed to start");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
         }
     }
 }

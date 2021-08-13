@@ -11,6 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreRateLimit;
+using DasharooAPI.Data;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace DasharooAPI
 {
@@ -26,12 +30,24 @@ namespace DasharooAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DasharooDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
+            );
 
-            services.AddControllers();
+            services.AddMemoryCache();
+
+            services.ConfigureRateLimiting();
+            services.AddHttpContextAccessor();
+
+            services.ConfigureHttpCacheHeaders();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DasharooAPI", Version = "v1" });
             });
+
+            services.AddControllers().AddNewtonsoftJson(o =>
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +64,10 @@ namespace DasharooAPI
             app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
+
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
+            app.UseIpRateLimiting();
 
             app.UseRouting();
 

@@ -15,8 +15,21 @@ namespace DasharooAPI
     {
         public static void Main(string[] args)
         {
-            var hostBuilder = CreateHostBuilder(args);
-            Logging.Initialize(hostBuilder);
+            Logger.Initialize();
+
+            try
+            {
+                Log.Information("Application is starting");
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Application failed to start");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
