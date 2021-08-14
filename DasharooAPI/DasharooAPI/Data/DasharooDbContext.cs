@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DasharooAPI.Data
 {
-    public class DasharooDbContext : DbContext
+    public class DasharooDbContext : IdentityDbContext<User>
     {
         public DasharooDbContext(DbContextOptions options) : base(options)
         {
-
         }
     }
 }

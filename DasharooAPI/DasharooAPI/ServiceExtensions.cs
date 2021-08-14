@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using AspNetCoreRateLimit;
+using DasharooAPI.Data;
 using DasharooAPI.Models;
 using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -15,6 +14,15 @@ namespace DasharooAPI
 {
     public static class ServiceExtensions
     {
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentityCore<User>(o => o.User.RequireUniqueEmail = true);
+
+            // make sure that RoleType works, else change it to typeof(IdentityRole)
+            builder = new IdentityBuilder(builder.UserType, builder.RoleType, services);
+            builder.AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
+        }
+
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(error =>
