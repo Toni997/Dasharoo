@@ -16,11 +16,22 @@ namespace DasharooAPI
     {
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            var builder = services.AddIdentityCore<User>(o => o.User.RequireUniqueEmail = true);
+            services.AddIdentity<User, IdentityRole>(o =>
+                {
+                    o.User.RequireUniqueEmail = true;
+                    o.SignIn.RequireConfirmedEmail = true;
+                }
+            ).AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
+
+            // var builder = services.AddIdentityCore(o =>
+            // {
+            //     o.User.RequireUniqueEmail = true;
+            //     o.SignIn.RequireConfirmedEmail = true;
+            // });
 
             // make sure that RoleType works, else change it to typeof(IdentityRole)
-            builder = new IdentityBuilder(builder.UserType, builder.RoleType, services);
-            builder.AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
+            // builder = new IdentityBuilder(builder.UserType, builder.RoleType, services);
+            // builder.AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
         }
 
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
@@ -69,10 +80,7 @@ namespace DasharooAPI
                     Period = "5s"
                 }
             };
-            services.Configure<IpRateLimitOptions>(opt =>
-            {
-                opt.GeneralRules = rateLimitRules;
-            });
+            services.Configure<IpRateLimitOptions>(opt => { opt.GeneralRules = rateLimitRules; });
             services.AddInMemoryRateLimiting();
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
