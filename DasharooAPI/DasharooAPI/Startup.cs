@@ -36,17 +36,13 @@ namespace DasharooAPI
 
             services.AddAuthentication();
             services.ConfigureIdentity();
+            services.ConfigureJwt(Configuration);
 
-            services.AddCors(o => o.AddDefaultPolicy(b =>
-                b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            services.ConfigureCors();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DasharooAPI", Version = "v1" });
-            });
+            services.ConfigureSwagger();
 
-            services.AddControllers().AddNewtonsoftJson(o =>
-                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.ConfigureControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
