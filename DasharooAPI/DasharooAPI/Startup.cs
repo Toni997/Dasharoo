@@ -1,5 +1,9 @@
 ﻿using AspNetCoreRateLimit;
+using DasharooAPI.Configurations;
 using DasharooAPI.Data;
+using DasharooAPI.IRepository;
+using DasharooAPI.Repository;
+using DasharooAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +43,11 @@ namespace DasharooAPI
             services.ConfigureJwt(Configuration);
 
             services.ConfigureCors();
+
+            services.AddAutoMapper(typeof(AutoMapperConfig));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthManager, AuthManager>();
 
             services.ConfigureSwagger();
 

@@ -7,7 +7,7 @@ using DasharooAPI.IRepository;
 
 namespace DasharooAPI.Repository
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly DasharooDbContext _context;
         // private IGenericRepository<Country> _countries;

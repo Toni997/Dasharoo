@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DasharooAPI.Controllers
@@ -24,6 +25,7 @@ namespace DasharooAPI.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IActionResult Get()
         {
