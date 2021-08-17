@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -30,16 +31,6 @@ namespace DasharooAPI
                     o.SignIn.RequireConfirmedEmail = true;
                 }
             ).AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
-
-            // var builder = services.AddIdentityCore(o =>
-            // {
-            //     o.User.RequireUniqueEmail = true;
-            //     o.SignIn.RequireConfirmedEmail = true;
-            // });
-
-            // make sure that RoleType works, else change it to typeof(IdentityRole)
-            // builder = new IdentityBuilder(builder.UserType, builder.RoleType, services);
-            // builder.AddEntityFrameworkStores<DasharooDbContext>().AddDefaultTokenProviders();
         }
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
@@ -137,6 +128,13 @@ namespace DasharooAPI
         {
             services.AddControllers().AddNewtonsoftJson(o =>
                 o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+        }
+
+        public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<DasharooDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("sqlConnection"))
+            );
         }
     }
 }

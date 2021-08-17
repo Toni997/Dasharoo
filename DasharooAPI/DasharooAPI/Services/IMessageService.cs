@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DasharooAPI.Data;
 using DasharooAPI.Models;
 
 namespace DasharooAPI.Services
 {
-    public interface IAuthManager
+    public interface IMessageService
     {
-        Task<User> ValidateAndReturnUser(LoginUserDto userDto);
-        Task<string> CreateToken();
+        Task SendAsync(MessageToSend message);
     }
 }

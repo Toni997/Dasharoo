@@ -27,9 +27,7 @@ namespace DasharooAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DasharooDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
-            );
+            services.ConfigureDbContext(Configuration);
 
             services.AddMemoryCache();
 
@@ -46,6 +44,7 @@ namespace DasharooAPI
 
             services.AddAutoMapper(typeof(AutoMapperConfig));
 
+            services.AddTransient<IMessageService, EmailService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthManager, AuthManager>();
 

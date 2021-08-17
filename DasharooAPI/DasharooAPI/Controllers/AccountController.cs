@@ -25,19 +25,22 @@ namespace DasharooAPI.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
+        private readonly IMessageService _emailService;
 
         public AccountController(UserManager<User> userManager,
-            ILogger<AccountController> logger, IMapper mapper, IAuthManager authManager)
+            ILogger<AccountController> logger, IMapper mapper,
+            IAuthManager authManager, IMessageService emailService)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
+            _emailService = emailService;
         }
 
         [HttpPost]
         [Route("Login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,23 +50,27 @@ namespace DasharooAPI.Controllers
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!await _authManager.ValidateUser(userDto)) return Unauthorized();
+            var user = await _authManager.ValidateAndReturnUser(userDto);
 
-            var userr = await _userManager.FindByEmailAsync(userDto.Email);
+            if (user == null) return Unauthorized(new
+            {
+                Message = "Wrong credentials."
+            });
 
-            var ress = await _userManager.ConfirmEmailAsync(userr, "jajaja");
+            if (!user.EmailConfirmed) return Unauthorized(new
+            {
+                Message = "Account not confirmed."
+            });
 
-            var createdToken = new
+            return Accepted(new
             {
                 Token = await _authManager.CreateToken()
-            };
-
-            return Accepted(createdToken);
+            });
         }
 
         [HttpPost]
         [Route("Signup")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Signup([FromBody] SignupUserDto userDto)
@@ -87,22 +94,39 @@ namespace DasharooAPI.Controllers
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            // create email message
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("no-reply@dasharoo.com"));
-            email.To.Add(MailboxAddress.Parse("skuezyt@gmail.com"));
-            email.Subject = "Dasharoo - Please confirm your email address";
-            email.Body = new TextPart(TextFormat.Plain) { Text = $"Your confirmation token: {emailConfirmationToken}" };
+            var emailToSend = new MessageToSend
+            {
+                Destination = user.Email,
+                Subject = "Dasharoo - Confirm your account",
+                Body = $"Please click <a href=\"https://localhost:44350/api/Account/ConfirmEmail/{emailConfirmationToken}\">HERE</a> to confirm your account."
+            };
 
-            // send email
-            using var smtp = new SmtpClient();
-            await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync("tkazinoti@hrcloud.com", "eypzgwnklnkmnxqm");
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+            await _emailService.SendAsync(emailToSend);
 
             return Accepted();
+        }
+        [HttpPut]
+        [Route("ConfirmEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string username, [FromQuery] string token)
+        {
+            if (username == null || token == null) return BadRequest();
 
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (!result.Succeeded) return BadRequest();
+
+            user.EmailConfirmed = true;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok();
         }
     }
 }

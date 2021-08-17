@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DasharooAPI.Data;
 using DasharooAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -76,14 +77,14 @@ namespace DasharooAPI.Services
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<bool> ValidateUser(LoginUserDto userDto)
+        public async Task<User> ValidateAndReturnUser(LoginUserDto userDto)
         {
-            _user = await _userManager.FindByEmailAsync(userDto.Email)
+            _user = await _userManager.FindByEmailAsync(userDto.Email.ToUpper())
                     ?? await _userManager.FindByNameAsync(userDto.Email);
 
-            if (_user == null) return false;
+            if (_user == null || !await _userManager.CheckPasswordAsync(_user, userDto.Password)) return null;
 
-            return await _userManager.CheckPasswordAsync(_user, userDto.Password);
+            return _user;
         }
     }
 }
