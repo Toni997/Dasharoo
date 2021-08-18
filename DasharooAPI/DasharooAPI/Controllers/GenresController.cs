@@ -28,18 +28,24 @@ namespace DasharooAPI.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-        [HttpGet("{genreId:int}", Name = "GetById")]
-        public async Task<IActionResult> GetById(int genreId)
+        [HttpGet("{id:int}", Name = "GetById")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var genre = await _unitOfWork.Genres.GetById(genreId);
+            var genre = await _unitOfWork.Genres.GetById(id);
 
             if (genre == null) return NotFound();
 
             return Ok(genre);
         }
 
+        [HttpGet("{id:int}/with-records")]
+        public async Task<IActionResult> GetByIdWithRecords(int id)
+        {
+            return Ok(await _unitOfWork.Genres.GetByIdWithRecords(id));
+        }
+
         [HttpGet]
-        public async Task<IActionResult> GetAllGenres()
+        public async Task<IActionResult> GetAll()
         {
             return Ok(await _unitOfWork.Genres.GetAll());
         }

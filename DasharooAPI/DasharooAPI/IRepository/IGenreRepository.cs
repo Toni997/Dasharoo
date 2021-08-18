@@ -8,7 +8,6 @@ namespace DasharooAPI.Repository
 {
     public interface IGenreRepository : IGenericRepository<Genre>
     {
-        Task<Genre> GetById(int genreId);
-        Task<Genre> GetByIdWithRecords(int genreId);
+        Task<Genre> GetByIdWithRecords(int id);
     }
 }

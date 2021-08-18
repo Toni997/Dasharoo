@@ -23,6 +23,30 @@ namespace DasharooAPI.Repository
             _db = _context.Set<T>();
         }
 
+        protected IQueryable<T> Query()
+        {
+            return _db as IQueryable<T>;
+        }
+
+        protected IQueryable<T> Include(List<string> includes, IQueryable<T> query)
+        {
+            foreach (var property in includes)
+            {
+                query = query.Include(property);
+            }
+            return query;
+        }
+
+        protected IQueryable<T> OrderBy(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, IQueryable<T> query)
+        {
+            return orderBy(query);
+        }
+
+        protected IQueryable<T> Expression(Expression<Func<T, bool>> expression, IQueryable<T> query)
+        {
+            return query.Where(expression);
+        }
+
         public async Task Delete(int id)
         {
             var entity = await _db.FindAsync(id);
@@ -34,50 +58,37 @@ namespace DasharooAPI.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes)
         {
-            IQueryable<T> query = _db;
-            if (include != null)
-            {
-                query = include(query);
-            }
+            var query = Query();
+            query = Include(includes, query);
 
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
+        public async Task<T> GetById(int id)
+        {
+            return await _db.FindAsync(id);
+        }
+
         public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+            List<string> includes = null)
         {
-            IQueryable<T> query = _db;
+            var query = Query();
 
-            if (expression != null)
-            {
-                query = query.Where(expression);
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
+            query = Expression(expression, query);
+            query = Include(includes, query);
+            query = OrderBy(orderBy, query);
 
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<IPagedList<T>> GetPagedList(RequestParams requestParams, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<IPagedList<T>> GetPagedList(RequestParams requestParams, List<string> includes = null)
         {
-            IQueryable<T> query = _db;
+            var query = Query();
 
-
-            if (include != null)
-            {
-                query = include(query);
-            }
+            query = Include(includes, query);
 
             return await query.AsNoTracking()
                 .ToPagedListAsync(requestParams.PageNumber, requestParams.PageSize);
