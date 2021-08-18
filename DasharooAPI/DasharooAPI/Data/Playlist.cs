@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace DasharooAPI.Data
 {
@@ -14,7 +15,7 @@ namespace DasharooAPI.Data
         public DateTime ReleaseDate { get; set; }
 
         [ForeignKey(nameof(Visibility))]
-        public int VisibilityId { get; set; }
+        public int? VisibilityId { get; set; }
         public Visibility PlaylistVisibility { get; set; }
 
         [ForeignKey(nameof(User))]

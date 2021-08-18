@@ -23,6 +23,7 @@ namespace DasharooAPI.Data
 
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new VisibilityConfiguration());
+            // builder.ApplyConfiguration(new RecordSupportConfiguration());
         }
     }
 }

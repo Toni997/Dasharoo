@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace DasharooAPI.Data
@@ -8,11 +9,18 @@ namespace DasharooAPI.Data
     {
         public string Name { get; set; }
         public string Surname { get; set; }
+        public bool Verified { get; set; }
 
-        public virtual ICollection<Playlist> Playlists { get; set; }
-        public virtual ICollection<Record> Records { get; set; }
+        public ICollection<Playlist> Playlists { get; set; }
+
+        [InverseProperty("Authors")]
+        public ICollection<Record> Records { get; set; }
+
+        [InverseProperty("Supporters")]
+        public virtual ICollection<Record> SupportedRecords { get; set; }
+
         public virtual ICollection<User> Followers { get; set; }
-        public virtual ICollection<User> Following { get; set; }
+        public virtual ICollection<User> Followings { get; set; }
 
     }
 }

@@ -15,6 +15,9 @@ namespace DasharooAPI.Configurations
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, SignupUserDto>().ReverseMap();
             CreateMap<User, LoginUserDto>().ReverseMap();
+
+            CreateMap<Genre, GenreDto>().ReverseMap();
+
         }
     }
 }

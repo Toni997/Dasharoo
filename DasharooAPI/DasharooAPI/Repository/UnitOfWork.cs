@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 
@@ -10,15 +11,18 @@ namespace DasharooAPI.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DasharooDbContext _context;
-        // private IGenericRepository<Country> _countries;
-        // private IGenericRepository<Hotel> _hotels;
+        private readonly IMapper _mapper;
+        private IGenreRepository _genres;
+        // private IGenericRepository<Record> _records;
+        // private IGenericRepository<Playlist> _playlists;
 
         public UnitOfWork(DasharooDbContext context)
         {
             _context = context;
         }
-        // public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_context);
-        // public IGenericRepository<Hotel> Hotels => _hotels ??= new GenericRepository<Hotel>(_context);
+        public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
+        // public IGenericRepository<Record> Records => _records ??= new Repository<Record>(_context);
+        // public IGenericRepository<Playlist> Playlists => _playlists ??= new Repository<Playlist>(_context);
 
         public void Dispose()
         {

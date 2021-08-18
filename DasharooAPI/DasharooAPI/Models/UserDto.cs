@@ -24,8 +24,9 @@ namespace DasharooAPI.Models
     {
         [StringLength(20, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 3)]
         public string UserName { get; set; }
-
+        [MaxLength(50)]
         public string Name { get; set; }
+        [MaxLength(50)]
         public string Surname { get; set; }
 
         [MaxLength(20)]

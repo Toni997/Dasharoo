@@ -19,14 +19,19 @@ namespace DasharooAPI.Data
         public bool IsOfficialRemix { get; set; }
 
         [ForeignKey(nameof(Visibility))]
-        public int VisibilityId { get; set; }
+        public int? VisibilityId { get; set; }
         public virtual Visibility RecordVisibility { get; set; }
 
         [ForeignKey(nameof(Record))]
         public int? OriginalRecordId { get; set; }
         public virtual Record OriginalRecord { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        [InverseProperty("Records")]
+        public ICollection<User> Authors { get; set; }
+
+        [InverseProperty("SupportedRecords")]
+        public virtual ICollection<User> Supporters { get; set; }
+
         public ICollection<Genre> Genres { get; set; }
         public virtual ICollection<Playlist> Playlists { get; set; }
 

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DasharooAPI.Data;
+using DasharooAPI.Repository;
 
 namespace DasharooAPI.IRepository
 {
     public interface IUnitOfWork : IDisposable
     {
-        // IGenericRepository<Country> Countries { get; }
-        // IGenericRepository<Hotel> Hotels { get; }
+        IGenreRepository Genres { get; }
+        // IGenericRepository<Record> Records { get; }
+        // IGenericRepository<Playlist> Playlists { get; }
         Task Save();
     }
 }
