@@ -46,6 +46,8 @@ namespace DasharooAPI
 
             services.AddTransient<IMessageService, EmailService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IRecordRepository, RecordRepository>();
+            services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
 
             services.AddScoped<IAuthManager, AuthManager>();

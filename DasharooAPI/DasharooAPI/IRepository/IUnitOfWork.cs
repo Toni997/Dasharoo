@@ -9,9 +9,9 @@ namespace DasharooAPI.IRepository
 {
     public interface IUnitOfWork : IDisposable
     {
+        IRecordRepository Records { get; }
         IGenreRepository Genres { get; }
-        // IGenericRepository<Record> Records { get; }
-        // IGenericRepository<Playlist> Playlists { get; }
+        IPlaylistRepository Playlists { get; }
         Task Save();
     }
 }

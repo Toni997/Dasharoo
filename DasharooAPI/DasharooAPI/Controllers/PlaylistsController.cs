@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
-using DasharooAPI.Migrations;
 using DasharooAPI.Models;
-using DasharooAPI.Repository;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -18,14 +16,14 @@ namespace DasharooAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GenresController : ControllerBase
+    public class PlaylistsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ILogger<GenresController> _logger;
+        private readonly ILogger<PlaylistsController> _logger;
 
-        public GenresController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<GenresController> logger)
+        public PlaylistsController(IUnitOfWork unitOfWork, IMapper mapper,
+            ILogger<PlaylistsController> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -36,39 +34,25 @@ namespace DasharooAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetAllGenres()
+        public async Task<IActionResult> GetAllPlaylists()
         {
-            var genres = await _unitOfWork.Genres.GetAll();
-            var genresDto = _mapper.Map<IList<GenreDto>>(genres);
-            return Ok(genresDto);
+            var playlists = await _unitOfWork.Playlists.GetAll(includes: new List<string> { "Records" });
+            var playlistsDto = _mapper.Map<IList<PlaylistDto>>(playlists);
+            return Ok(playlistsDto);
         }
 
         // [Authorize(Roles = UserRoles.User)]
-        [HttpGet("{id:int}", Name = "GetGenreById")]
+        [HttpGet("{id:int}", Name = "GetPlaylistById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetGenreById(int id)
+        public async Task<IActionResult> GetPlaylistById(int id)
         {
-            var genre = await _unitOfWork.Genres.GetById(id);
-            if (genre == null) return NotFound();
+            var playlist = await _unitOfWork.Playlists.GetById(id);
+            if (playlist == null) return NotFound();
 
-            var genreDto = _mapper.Map<GenreDto>(genre);
-            return Ok(genreDto);
-        }
-
-        // [Authorize(Roles = UserRoles.User)]
-        [HttpGet("{id:int}/with-records")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetGenreByIdWithRecords(int id)
-        {
-            var genre = await _unitOfWork.Genres.GetByIdWithRecords(id);
-            if (genre == null) return NotFound();
-
-            var genreDto = _mapper.Map<GenreDto>(genre);
-            return Ok(genreDto);
+            var playlistDto = _mapper.Map<PlaylistDto>(playlist);
+            return Ok(playlistDto);
         }
 
         // [Authorize(Roles = UserRoles.Administrator)]
@@ -76,20 +60,20 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDto genreDto)
+        public async Task<IActionResult> CreatePlaylist([FromBody] CreatePlaylistDto playlistDto)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError($"Invalid POST attempt in {nameof(CreateGenre)}");
+                _logger.LogError($"Invalid POST attempt in {nameof(CreatePlaylist)}");
                 return BadRequest(ModelState);
             }
 
-            var genre = _mapper.Map<Genre>(genreDto);
-            await _unitOfWork.Genres.Insert(genre);
+            var playlist = _mapper.Map<Playlist>(playlistDto);
+            await _unitOfWork.Playlists.Insert(playlist);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetGenreById",
-                new { id = genre.Id }, genre);
+            return CreatedAtRoute("GetPlaylistById",
+                new { id = playlist.Id }, playlist);
         }
 
         // [Authorize(Roles = UserRoles.Administrator)]
@@ -98,24 +82,24 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
-        public async Task<IActionResult> UpdateGenre(int id, [FromBody] UpdateGenreDto genreDto)
+        public async Task<IActionResult> UpdatePlaylist(int id, [FromBody] UpdatePlaylistDto playlistDto)
         {
             if (!ModelState.IsValid || id < 1)
             {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateGenre)}");
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
                 return BadRequest(ModelState);
             }
 
-            var genre = await _unitOfWork.Genres.Get(x => x.Id == id);
-            if (genre == null)
+            var playlist = await _unitOfWork.Playlists.Get(x => x.Id == id);
+            if (playlist == null)
             {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateGenre)}");
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
                 return BadRequest(ModelState);
             }
 
-            _mapper.Map(genreDto, genre);
+            _mapper.Map(playlistDto, playlist);
 
-            _unitOfWork.Genres.Update(genre);
+            _unitOfWork.Playlists.Update(playlist);
             await _unitOfWork.Save();
 
             return NoContent();
@@ -125,27 +109,27 @@ namespace DasharooAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> DeleteGenre(int id)
+        public async Task<IActionResult> DeletePlaylist(int id)
         {
             if (id < 1)
             {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
                 return BadRequest(Error.Create(
                     StatusCodes.Status400BadRequest, "Invalid id."
                 ));
             }
 
-            var genre = await _unitOfWork.Genres.Get(x => x.Id == id);
-            if (genre == null)
+            var playlist = await _unitOfWork.Playlists.Get(x => x.Id == id);
+            if (playlist == null)
             {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
                 return BadRequest(Error.Create(
                     StatusCodes.Status400BadRequest,
-                    "Genre with the specified id does not exist."
+                    "Playlist with the specified id does not exist."
                 ));
             }
 
-            await _unitOfWork.Genres.Delete(id);
+            await _unitOfWork.Playlists.Delete(id);
             await _unitOfWork.Save();
 
             return NoContent();

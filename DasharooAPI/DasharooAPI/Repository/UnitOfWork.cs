@@ -11,18 +11,18 @@ namespace DasharooAPI.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DasharooDbContext _context;
-        private readonly IMapper _mapper;
+        private IRecordRepository _records;
+        private IPlaylistRepository _playlists;
         private IGenreRepository _genres;
-        // private IGenericRepository<Record> _records;
-        // private IGenericRepository<Playlist> _playlists;
 
         public UnitOfWork(DasharooDbContext context)
         {
             _context = context;
         }
+
+        public IRecordRepository Records => _records ??= new RecordRepository(_context);
+        public IPlaylistRepository Playlists => _playlists ??= new PlaylistRepository(_context);
         public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
-        // public IGenericRepository<Record> Records => _records ??= new Repository<Record>(_context);
-        // public IGenericRepository<Playlist> Playlists => _playlists ??= new Repository<Playlist>(_context);
 
         public void Dispose()
         {

@@ -18,6 +18,7 @@ namespace DasharooAPI.Models
     public class GenreDto : CreateGenreDto
     {
         public int Id { get; set; }
+        public virtual ICollection<RecordDto> Records { get; set; }
     }
 
     public class UpdateGenreDto : CreateGenreDto
