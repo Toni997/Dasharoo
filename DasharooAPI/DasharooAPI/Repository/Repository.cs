@@ -25,26 +25,25 @@ namespace DasharooAPI.Repository
 
         protected IQueryable<T> Query()
         {
-            return _db as IQueryable<T>;
+            return _db;
         }
 
         protected IQueryable<T> Include(List<string> includes, IQueryable<T> query)
         {
-            foreach (var property in includes)
-            {
-                query = query.Include(property);
-            }
-            return query;
+            return includes != null ?
+                includes.Aggregate(query, (current, property) =>
+                    current.Include(property))
+                : query;
         }
 
         protected IQueryable<T> OrderBy(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, IQueryable<T> query)
         {
-            return orderBy(query);
+            return orderBy != null ? orderBy(query) : query;
         }
 
         protected IQueryable<T> Expression(Expression<Func<T, bool>> expression, IQueryable<T> query)
         {
-            return query.Where(expression);
+            return expression != null ? query.Where(expression) : query;
         }
 
         public async Task Delete(int id)
@@ -58,7 +57,7 @@ namespace DasharooAPI.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes)
+        public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes = null)
         {
             var query = Query();
             query = Include(includes, query);
@@ -84,7 +83,8 @@ namespace DasharooAPI.Repository
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task<IPagedList<T>> GetPagedList(RequestParams requestParams, List<string> includes = null)
+        public async Task<IPagedList<T>> GetPagedList(RequestParams requestParams,
+            List<string> includes = null)
         {
             var query = Query();
 

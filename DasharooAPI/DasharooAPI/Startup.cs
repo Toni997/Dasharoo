@@ -42,7 +42,7 @@ namespace DasharooAPI
 
             services.ConfigureCors();
 
-            services.AddAutoMapper(typeof(AutoMapperConfig));
+            services.AddAutoMapper(typeof(AutoMapperConfiguration));
 
             services.AddTransient<IMessageService, EmailService>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();

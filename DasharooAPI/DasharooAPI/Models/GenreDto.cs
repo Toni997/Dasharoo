@@ -10,15 +10,17 @@ namespace DasharooAPI.Models
 {
     public class CreateGenreDto
     {
-        [Required]
-        [MaxLength(30)]
+        [Required] [MaxLength(30)] public string Name { get; set; }
 
-        public string Name { get; set; }
         public int? ParentGenreId { get; set; }
     }
 
-    public class GenreDto
+    public class GenreDto : CreateGenreDto
     {
         public int Id { get; set; }
+    }
+
+    public class UpdateGenreDto : CreateGenreDto
+    {
     }
 }

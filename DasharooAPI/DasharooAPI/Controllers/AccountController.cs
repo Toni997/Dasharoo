@@ -52,17 +52,15 @@ namespace DasharooAPI.Controllers
 
             var user = await _authManager.ValidateAndReturnUser(userDto);
 
-            if (user == null) return Unauthorized(new Error
-            {
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Message = "Wrong credentials."
-            });
+            if (user == null)
+                return Unauthorized(Error.Create(
+                    StatusCodes.Status401Unauthorized, "Wrong credentials."
+                ));
 
-            if (!user.EmailConfirmed) return Unauthorized(new Error
-            {
-                StatusCode = StatusCodes.Status401Unauthorized,
-                Message = "Account not confirmed."
-            });
+            if (!user.EmailConfirmed)
+                return Unauthorized(Error.Create(
+                    StatusCodes.Status401Unauthorized, "Account not confirmed."
+                ));
 
             return Accepted(new
             {
@@ -100,13 +98,15 @@ namespace DasharooAPI.Controllers
             {
                 Destination = user.Email,
                 Subject = "Dasharoo - Confirm your account",
-                Body = $"Please click <a href=\"https://localhost:44350/api/Account/ConfirmEmail?username={user.UserName}&token={emailConfirmationToken}\">HERE</a> to confirm your account."
+                Body =
+                    $"Please click <a href=\"https://localhost:44350/api/Account/ConfirmEmail?username={user.UserName}&token={emailConfirmationToken}\">HERE</a> to confirm your account."
             };
 
             await _emailService.SendAsync(emailToSend);
 
             return Accepted();
         }
+
         [HttpPut]
         [Route("ConfirmEmail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
