@@ -17,7 +17,6 @@ namespace DasharooAPI.Models
         public bool IsRemix { get; set; }
         public int? VisibilityId { get; set; }
         public int? OriginalRecordId { get; set; }
-
     }
 
     public class CreateRecordDto : BaseRecordDto

@@ -27,6 +27,11 @@ namespace DasharooAPI.IRepository
         Task InsertRange(IEnumerable<T> entities);
         Task Delete(int id);
         void DeleteRange(IEnumerable<T> entities);
+        void Attach(T entity);
+        /// <summary>
+        /// Attaches the entity and sets EntityState to modified.
+        /// </summary>
+        /// <param name="entity"></param>
         void Update(T entity);
     }
 }

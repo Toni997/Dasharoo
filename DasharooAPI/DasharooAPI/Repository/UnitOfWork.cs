@@ -14,6 +14,7 @@ namespace DasharooAPI.Repository
         private IRecordRepository _records;
         private IPlaylistRepository _playlists;
         private IGenreRepository _genres;
+        private IGenericRepository<RecordGenre> _recordGenre;
 
         public UnitOfWork(DasharooDbContext context)
         {
@@ -23,6 +24,7 @@ namespace DasharooAPI.Repository
         public IRecordRepository Records => _records ??= new RecordRepository(_context);
         public IPlaylistRepository Playlists => _playlists ??= new PlaylistRepository(_context);
         public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
+        public IGenericRepository<RecordGenre> RecordGenre => _recordGenre ??= new Repository<RecordGenre>(_context);
 
         public void Dispose()
         {

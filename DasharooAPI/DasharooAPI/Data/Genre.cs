@@ -15,6 +15,6 @@ namespace DasharooAPI.Data
         public int? ParentGenreId { get; set; }
         public Genre ParentGenre { get; set; }
 
-        public virtual ICollection<Record> Records { get; set; }
+        public virtual ICollection<RecordGenre> Records { get; set; }
     }
 }

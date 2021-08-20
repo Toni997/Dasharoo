@@ -68,16 +68,29 @@ namespace DasharooAPI.Controllers
             }
 
             var record = _mapper.Map<Record>(recordDto);
-            record.Genres = new List<Genre>();
+            //record.Genres = new List<Genre>();
+
+            //foreach (var genreId in recordDto.GenresIds)
+            //{
+            //    var genre = await _unitOfWork.Genres.GetById(genreId);
+            //    record.Genres.Add(genre);
+            //}
+
+            await _unitOfWork.Records.Insert(record);
+
+            await _unitOfWork.Save();
 
             foreach (var genreId in recordDto.GenresIds)
             {
-                var genre = await _unitOfWork.Genres.GetById(genreId);
-                record.Genres.Add(genre);
+                await _unitOfWork.RecordGenre.Insert(new RecordGenre
+                {
+                    RecordId = record.Id,
+                    GenreId = genreId,
+                }); ;
             }
 
-            await _unitOfWork.Records.Insert(record);
             await _unitOfWork.Save();
+
 
             return CreatedAtRoute("GetRecordById",
                 new { id = record.Id }, record);
@@ -96,7 +109,7 @@ namespace DasharooAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var record = await _unitOfWork.Records.Get(x => x.Id == id, new List<string> { "Genres" });
+            var record = await _unitOfWork.Records.Get(x => x.Id == id);
             if (record == null)
             {
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateRecord)}");
@@ -104,15 +117,30 @@ namespace DasharooAPI.Controllers
             }
 
             _mapper.Map(recordDto, record);
-            record.Genres = new List<Genre>();
+            //record.Genres ??= new List<Genre>();
+
+            //foreach (var currentGenre in record.Genres)
+            //{
+
+
+            //    _unitOfWork.Genres.Attach(currentGenre);
+            //    if (!recordDto.GenresIds.Contains(currentGenre.Id))
+            //    {
+            //        record.Genres.Remove(currentGenre);
+            //    }
+            //}
+
+            _unitOfWork.Records.Update(record);
 
             foreach (var genreId in recordDto.GenresIds)
             {
-                var genre = await _unitOfWork.Genres.GetById(genreId);
-                record.Genres.Add(genre);
+                await _unitOfWork.RecordGenre.Insert(new RecordGenre
+                {
+                    RecordId = record.Id,
+                    GenreId = genreId,
+                });
             }
 
-            _unitOfWork.Records.Update(record);
             await _unitOfWork.Save();
 
             return NoContent();

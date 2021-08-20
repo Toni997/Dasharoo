@@ -32,7 +32,7 @@ namespace DasharooAPI.Data
         [InverseProperty("SupportedRecords")]
         public virtual ICollection<User> Supporters { get; set; }
 
-        public ICollection<Genre> Genres { get; set; }
+        public ICollection<RecordGenre> Genres { get; set; }
         public virtual ICollection<Playlist> Playlists { get; set; }
 
     }

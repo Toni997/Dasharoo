@@ -107,7 +107,13 @@ namespace DasharooAPI.Repository
         public void Update(T entity)
         {
             _db.Attach(entity);
-            _context.Entry(entity).State = EntityState.Modified;
+            //_context.Entry(entity).State = EntityState.Modified;
+            _context.Update(entity);
+        }
+
+        public void Attach(T entity)
+        {
+            _db.Attach(entity);
         }
     }
 }
