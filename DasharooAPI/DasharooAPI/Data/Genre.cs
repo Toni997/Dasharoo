@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DasharooAPI.Data
 {
@@ -15,6 +12,6 @@ namespace DasharooAPI.Data
         public int? ParentGenreId { get; set; }
         public Genre ParentGenre { get; set; }
 
-        public virtual ICollection<RecordGenre> Records { get; set; }
+        public virtual ICollection<RecordGenre> RecordGenres { get; set; }
     }
 }

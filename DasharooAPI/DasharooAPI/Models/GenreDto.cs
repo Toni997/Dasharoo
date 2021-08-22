@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using DasharooAPI.Data;
 
 namespace DasharooAPI.Models
 {
@@ -15,10 +10,14 @@ namespace DasharooAPI.Models
         public int? ParentGenreId { get; set; }
     }
 
-    public class GenreDto : CreateGenreDto
+    public class GenreOnRecordDto : CreateGenreDto
     {
         public int Id { get; set; }
-        public virtual ICollection<RecordDto> Records { get; set; }
+    }
+
+    public class GenreDto : GenreOnRecordDto
+    {
+        public virtual ICollection<RecordGenreDto> GenreRecords { get; set; }
     }
 
     public class UpdateGenreDto : CreateGenreDto

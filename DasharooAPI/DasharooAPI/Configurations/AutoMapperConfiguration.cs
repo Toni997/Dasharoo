@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.Models;
 
@@ -25,8 +21,14 @@ namespace DasharooAPI.Configurations
             CreateMap<Playlist, UpdatePlaylistDto>().ReverseMap();
 
             CreateMap<Genre, GenreDto>().ReverseMap();
+            CreateMap<Genre, GenreOnRecordDto>().ReverseMap();
             CreateMap<Genre, CreateGenreDto>().ReverseMap();
             CreateMap<Genre, UpdateGenreDto>().ReverseMap();
+
+            // junction tables
+            // CreateMap<RecordGenre, GenreDto>().ReverseMap();
+            // CreateMap<RecordGenre, RecordDto>().ReverseMap();
+            CreateMap<RecordGenre, RecordGenreDto>();
         }
     }
 }

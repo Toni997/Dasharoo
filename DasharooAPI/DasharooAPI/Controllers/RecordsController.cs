@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace DasharooAPI.Controllers
 {
@@ -35,7 +32,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllRecords()
         {
-            var records = await _unitOfWork.Records.GetAll(includes: new List<string> { "Genres", "Supporters" });
+            var records = await _unitOfWork.Records.GetAll(includes: new List<string> { "RecordGenres", "RecordGenres.Genre", "Supporters" });
             var recordsDto = _mapper.Map<IList<RecordDto>>(records);
             return Ok(recordsDto);
         }
@@ -68,13 +65,6 @@ namespace DasharooAPI.Controllers
             }
 
             var record = _mapper.Map<Record>(recordDto);
-            //record.Genres = new List<Genre>();
-
-            //foreach (var genreId in recordDto.GenresIds)
-            //{
-            //    var genre = await _unitOfWork.Genres.GetById(genreId);
-            //    record.Genres.Add(genre);
-            //}
 
             await _unitOfWork.Records.Insert(record);
 
@@ -82,7 +72,7 @@ namespace DasharooAPI.Controllers
 
             foreach (var genreId in recordDto.GenresIds)
             {
-                await _unitOfWork.RecordGenre.Insert(new RecordGenre
+                await _unitOfWork.RecordGenres.Insert(new RecordGenre
                 {
                     RecordId = record.Id,
                     GenreId = genreId,
@@ -90,7 +80,6 @@ namespace DasharooAPI.Controllers
             }
 
             await _unitOfWork.Save();
-
 
             return CreatedAtRoute("GetRecordById",
                 new { id = record.Id }, record);
@@ -117,28 +106,24 @@ namespace DasharooAPI.Controllers
             }
 
             _mapper.Map(recordDto, record);
-            //record.Genres ??= new List<Genre>();
-
-            //foreach (var currentGenre in record.Genres)
-            //{
-
-
-            //    _unitOfWork.Genres.Attach(currentGenre);
-            //    if (!recordDto.GenresIds.Contains(currentGenre.Id))
-            //    {
-            //        record.Genres.Remove(currentGenre);
-            //    }
-            //}
 
             _unitOfWork.Records.Update(record);
 
+            var genresToDelete = await _unitOfWork.RecordGenres.GetAll(x => x.RecordId == id && !recordDto.GenresIds.Contains(x.GenreId));
+
+            _unitOfWork.RecordGenres.DeleteRange(genresToDelete);
+
             foreach (var genreId in recordDto.GenresIds)
             {
-                await _unitOfWork.RecordGenre.Insert(new RecordGenre
+                var recordGenre = await _unitOfWork.RecordGenres.Get(x => x.RecordId == id && x.GenreId == genreId);
+                if (recordGenre == null)
                 {
-                    RecordId = record.Id,
-                    GenreId = genreId,
-                });
+                    await _unitOfWork.RecordGenres.Insert(new RecordGenre
+                    {
+                        RecordId = record.Id,
+                        GenreId = genreId,
+                    });
+                }
             }
 
             await _unitOfWork.Save();

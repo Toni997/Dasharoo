@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DasharooAPI.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace DasharooAPI.Models
 {
@@ -36,7 +31,7 @@ namespace DasharooAPI.Models
         public TimeSpan Duration { get; set; }
 
         public ICollection<UserDto> Authors { get; set; }
-        public ICollection<GenreDto> Genres { get; set; }
+        public ICollection<RecordGenreDto> RecordGenres { get; set; }
         public virtual ICollection<UserDto> Supporters { get; set; }
         // public virtual ICollection<Playlist> Playlists { get; set; }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DasharooAPI.Data
 {
@@ -32,8 +30,7 @@ namespace DasharooAPI.Data
         [InverseProperty("SupportedRecords")]
         public virtual ICollection<User> Supporters { get; set; }
 
-        public ICollection<RecordGenre> Genres { get; set; }
+        public ICollection<RecordGenre> RecordGenres { get; set; }
         public virtual ICollection<Playlist> Playlists { get; set; }
-
     }
 }

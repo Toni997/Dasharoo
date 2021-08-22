@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DasharooAPI.Data;
 using DasharooAPI.Repository;
@@ -12,7 +10,7 @@ namespace DasharooAPI.IRepository
         IRecordRepository Records { get; }
         IGenreRepository Genres { get; }
         IPlaylistRepository Playlists { get; }
-        IGenericRepository<RecordGenre> RecordGenre { get; }
+        IGenericRepository<RecordGenre> RecordGenres { get; }
         Task Save();
     }
 }

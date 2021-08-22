@@ -4,14 +4,16 @@ using DasharooAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DasharooAPI.Migrations
 {
     [DbContext(typeof(DasharooDbContext))]
-    partial class DasharooDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210821155729_RecordGenreV2")]
+    partial class RecordGenreV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace DasharooAPI.Migrations
 
                     b.HasIndex("VisibilityId");
 
-                    b.ToTable("Playlists");
+                    b.ToTable("Playlist");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.Record", b =>
@@ -128,7 +130,7 @@ namespace DasharooAPI.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("RecordGenres");
+                    b.ToTable("RecordGenre");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.User", b =>
@@ -271,22 +273,22 @@ namespace DasharooAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f5f33d45-7b1c-4fe1-a794-28f149ee0109",
-                            ConcurrencyStamp = "701aeed1-d974-4576-8c54-ffa3af53c2bc",
+                            Id = "a28cc53b-3df9-4274-89dd-e991ae7810e9",
+                            ConcurrencyStamp = "0c56d497-5643-4202-b534-5d413f90446f",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "e66d1149-b2a9-4735-a30e-af70294af102",
-                            ConcurrencyStamp = "8e0e51cd-6dc0-490c-b3a5-e4ad15c403ea",
+                            Id = "7e4c3769-39dd-4448-9e34-a4d45cc97afd",
+                            ConcurrencyStamp = "e023779e-ab86-4fa3-97b8-2389ebb918f9",
                             Name = "Premium_User",
                             NormalizedName = "PREMIUM_USER"
                         },
                         new
                         {
-                            Id = "7e535fee-561b-4242-b926-2c4f53fbf61e",
-                            ConcurrencyStamp = "964cdfb6-1edd-4762-b2b4-b51770f33525",
+                            Id = "2f97e5e6-2117-4cb0-b8e9-fefd14fd170a",
+                            ConcurrencyStamp = "469b59a2-3ad2-4352-8537-db407a86d8be",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -498,7 +500,7 @@ namespace DasharooAPI.Migrations
             modelBuilder.Entity("DasharooAPI.Data.RecordGenre", b =>
                 {
                     b.HasOne("DasharooAPI.Data.Genre", "Genre")
-                        .WithMany("RecordGenres")
+                        .WithMany("GenreRecords")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -627,7 +629,7 @@ namespace DasharooAPI.Migrations
 
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
                 {
-                    b.Navigation("RecordGenres");
+                    b.Navigation("GenreRecords");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.Record", b =>

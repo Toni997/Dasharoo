@@ -6,12 +6,9 @@ using DasharooAPI.Repository;
 using DasharooAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 
 namespace DasharooAPI
 {
@@ -49,6 +46,7 @@ namespace DasharooAPI
             services.AddTransient<IRecordRepository, RecordRepository>();
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
+            services.AddTransient<IGenericRepository<RecordGenre>, Repository<RecordGenre>>();
 
             services.AddScoped<IAuthManager, AuthManager>();
 

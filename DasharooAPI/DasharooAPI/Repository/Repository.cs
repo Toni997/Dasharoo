@@ -7,7 +7,6 @@ using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using X.PagedList;
 
 namespace DasharooAPI.Repository
@@ -107,7 +106,6 @@ namespace DasharooAPI.Repository
         public void Update(T entity)
         {
             _db.Attach(entity);
-            //_context.Entry(entity).State = EntityState.Modified;
             _context.Update(entity);
         }
 
