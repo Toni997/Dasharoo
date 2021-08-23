@@ -11,6 +11,10 @@ namespace DasharooAPI.IRepository
         IGenreRepository Genres { get; }
         IPlaylistRepository Playlists { get; }
         IGenericRepository<RecordGenre> RecordGenres { get; }
+        IGenericRepository<RecordPlaylist> RecordPlaylists { get; }
+        IGenericRepository<RecordAuthor> RecordAuthors { get; }
+        IGenericRepository<RecordSupporter> RecordSupporters { get; }
+        IGenericRepository<AuthorFollower> AuthorFollowers { get; }
         Task Save();
     }
 }

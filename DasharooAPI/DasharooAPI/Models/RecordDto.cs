@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DasharooAPI.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace DasharooAPI.Models
 {
@@ -18,6 +20,7 @@ namespace DasharooAPI.Models
 
     public class CreateRecordDto : BaseRecordDto
     {
+        public IFormFile Source { get; set; }
         public ICollection<string> AuthorsIds { get; set; }
         public ICollection<int> GenresIds { get; set; }
     }
@@ -29,9 +32,9 @@ namespace DasharooAPI.Models
         public ulong Plays { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public ICollection<UserDto> Authors { get; set; }
+        public ICollection<RecordAuthor> RecordAuthors { get; set; }
         public ICollection<RecordGenreDto> RecordGenres { get; set; }
-        public virtual ICollection<UserDto> Supporters { get; set; }
+        public virtual ICollection<RecordSupporter> RecordSupporters { get; set; }
         // public virtual ICollection<Playlist> Playlists { get; set; }
     }
 

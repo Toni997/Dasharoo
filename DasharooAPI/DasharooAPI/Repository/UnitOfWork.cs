@@ -12,6 +12,10 @@ namespace DasharooAPI.Repository
         private IPlaylistRepository _playlists;
         private IGenreRepository _genres;
         private IGenericRepository<RecordGenre> _recordGenres;
+        private IGenericRepository<RecordPlaylist> _recordPlaylists;
+        private IGenericRepository<RecordAuthor> _recordAuthors;
+        private IGenericRepository<RecordSupporter> _recordSupporters;
+        private IGenericRepository<AuthorFollower> _authorFollowers;
 
         public UnitOfWork(DasharooDbContext context)
         {
@@ -22,6 +26,10 @@ namespace DasharooAPI.Repository
         public IPlaylistRepository Playlists => _playlists ??= new PlaylistRepository(_context);
         public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
         public IGenericRepository<RecordGenre> RecordGenres => _recordGenres ??= new Repository<RecordGenre>(_context);
+        public IGenericRepository<RecordPlaylist> RecordPlaylists => _recordPlaylists ??= new Repository<RecordPlaylist>(_context);
+        public IGenericRepository<RecordAuthor> RecordAuthors => _recordAuthors ??= new Repository<RecordAuthor>(_context);
+        public IGenericRepository<RecordSupporter> RecordSupporters => _recordSupporters ??= new Repository<RecordSupporter>(_context);
+        public IGenericRepository<AuthorFollower> AuthorFollowers => _authorFollowers ??= new Repository<AuthorFollower>(_context);
 
         public void Dispose()
         {

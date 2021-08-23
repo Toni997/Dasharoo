@@ -15,6 +15,10 @@ namespace DasharooAPI.Data
         public DbSet<Record> Records { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
         public DbSet<RecordGenre> RecordGenres { get; set; }
+        public DbSet<RecordSupporter> RecordSupporters { get; set; }
+        public DbSet<RecordAuthor> RecordAuthors { get; set; }
+        public DbSet<RecordPlaylist> RecordPlaylists { get; set; }
+        public DbSet<AuthorFollower> AuthorFollowers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

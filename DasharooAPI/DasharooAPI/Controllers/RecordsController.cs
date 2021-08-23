@@ -32,7 +32,12 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllRecords()
         {
-            var records = await _unitOfWork.Records.GetAll(includes: new List<string> { "RecordGenres", "RecordGenres.Genre", "RecordSupporters", "RecordSupporters.Supporter" });
+            var records = await _unitOfWork.Records.GetAll(includes: new List<string>
+                {
+                    "RecordAuthors", "RecordAuthors.Author",
+                    "RecordSupporters", "RecordSupporters.Supporter",
+                    "RecordGenres", "RecordGenres.Genre"
+                });
             var recordsDto = _mapper.Map<IList<RecordDto>>(records);
             return Ok(recordsDto);
         }
@@ -79,6 +84,15 @@ namespace DasharooAPI.Controllers
                 }); ;
             }
 
+            foreach (var authorId in recordDto.AuthorsIds)
+            {
+                await _unitOfWork.RecordAuthors.Insert(new RecordAuthor
+                {
+                    RecordId = record.Id,
+                    AuthorId = authorId,
+                }); ;
+            }
+
             await _unitOfWork.Save();
 
             return CreatedAtRoute("GetRecordById",
@@ -110,8 +124,10 @@ namespace DasharooAPI.Controllers
             _unitOfWork.Records.Update(record);
 
             var genresToDelete = await _unitOfWork.RecordGenres.GetAll(x => x.RecordId == id && !recordDto.GenresIds.Contains(x.GenreId));
-
             _unitOfWork.RecordGenres.DeleteRange(genresToDelete);
+
+            var authorsToDelete = await _unitOfWork.RecordAuthors.GetAll(x => x.RecordId == id && !recordDto.AuthorsIds.Contains(x.AuthorId));
+            _unitOfWork.RecordAuthors.DeleteRange(authorsToDelete);
 
             foreach (var genreId in recordDto.GenresIds)
             {
@@ -122,6 +138,19 @@ namespace DasharooAPI.Controllers
                     {
                         RecordId = record.Id,
                         GenreId = genreId,
+                    });
+                }
+            }
+
+            foreach (var authorId in recordDto.AuthorsIds)
+            {
+                var recordAuthor = await _unitOfWork.RecordAuthors.Get(x => x.RecordId == id && x.AuthorId == authorId);
+                if (recordAuthor == null)
+                {
+                    await _unitOfWork.RecordAuthors.Insert(new RecordAuthor
+                    {
+                        RecordId = record.Id,
+                        AuthorId = authorId,
                     });
                 }
             }
