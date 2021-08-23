@@ -32,7 +32,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllRecords()
         {
-            var records = await _unitOfWork.Records.GetAll(includes: new List<string> { "RecordGenres", "RecordGenres.Genre", "Supporters" });
+            var records = await _unitOfWork.Records.GetAll(includes: new List<string> { "RecordGenres", "RecordGenres.Genre", "RecordSupporters", "RecordSupporters.Supporter" });
             var recordsDto = _mapper.Map<IList<RecordDto>>(records);
             return Ok(recordsDto);
         }

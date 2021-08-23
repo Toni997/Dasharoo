@@ -26,8 +26,6 @@ namespace DasharooAPI.Configurations
             CreateMap<Genre, UpdateGenreDto>().ReverseMap();
 
             // junction tables
-            // CreateMap<RecordGenre, GenreDto>().ReverseMap();
-            // CreateMap<RecordGenre, RecordDto>().ReverseMap();
             CreateMap<RecordGenre, RecordGenreDto>();
         }
     }

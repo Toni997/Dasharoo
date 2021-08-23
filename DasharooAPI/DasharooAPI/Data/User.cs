@@ -10,17 +10,13 @@ namespace DasharooAPI.Data
         public string Name { get; set; }
         public string Surname { get; set; }
         public bool Verified { get; set; }
+        public string ImagePath { get; set; }
+        public string BackgroundPath { get; set; }
 
         public ICollection<Playlist> Playlists { get; set; }
-
-        [InverseProperty("Authors")]
-        public ICollection<Record> Records { get; set; }
-
-        [InverseProperty("Supporters")]
-        public virtual ICollection<Record> SupportedRecords { get; set; }
-
-        public virtual ICollection<User> Followers { get; set; }
-        public virtual ICollection<User> Followings { get; set; }
-
+        public ICollection<RecordSupporter> RecordSupporters { get; set; }
+        public ICollection<RecordAuthor> RecordAuthors { get; set; }
+        public virtual ICollection<AuthorFollower> Followers { get; set; }
+        public virtual ICollection<AuthorFollower> Followings { get; set; }
     }
 }

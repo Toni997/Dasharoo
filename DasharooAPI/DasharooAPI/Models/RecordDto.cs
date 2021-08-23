@@ -9,16 +9,15 @@ namespace DasharooAPI.Models
         public string Description { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string SourcePath { get; set; }
+        public string ImagePath { get; set; }
         public bool IsRemix { get; set; }
         public int? VisibilityId { get; set; }
         public int? OriginalRecordId { get; set; }
+        public int? OriginalPlaylistId { get; set; }
     }
 
     public class CreateRecordDto : BaseRecordDto
     {
-        // delete, calculate this on a file
-        public string SourcePath { get; set; }
-
         public ICollection<string> AuthorsIds { get; set; }
         public ICollection<int> GenresIds { get; set; }
     }

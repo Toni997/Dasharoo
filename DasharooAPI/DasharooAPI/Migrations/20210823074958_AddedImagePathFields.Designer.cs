@@ -4,35 +4,22 @@ using DasharooAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DasharooAPI.Migrations
 {
     [DbContext(typeof(DasharooDbContext))]
-    partial class DasharooDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210823074958_AddedImagePathFields")]
+    partial class AddedImagePathFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DasharooAPI.Data.AuthorFollower", b =>
-                {
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FollowerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AuthorId", "FollowerId");
-
-                    b.HasIndex("FollowerId");
-
-                    b.ToTable("AuthorFollower");
-                });
 
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
                 {
@@ -145,21 +132,6 @@ namespace DasharooAPI.Migrations
                     b.ToTable("Records");
                 });
 
-            modelBuilder.Entity("DasharooAPI.Data.RecordAuthor", b =>
-                {
-                    b.Property<int>("RecordId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RecordId", "AuthorId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("RecordAuthor");
-                });
-
             modelBuilder.Entity("DasharooAPI.Data.RecordGenre", b =>
                 {
                     b.Property<int>("RecordId")
@@ -173,36 +145,6 @@ namespace DasharooAPI.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("RecordGenres");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.RecordPlaylist", b =>
-                {
-                    b.Property<int>("RecordId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlaylistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RecordId", "PlaylistId");
-
-                    b.HasIndex("PlaylistId");
-
-                    b.ToTable("RecordPlaylist");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.RecordSupporter", b =>
-                {
-                    b.Property<int>("RecordId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SupporterId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RecordId", "SupporterId");
-
-                    b.HasIndex("SupporterId");
-
-                    b.ToTable("RecordSupporter");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.User", b =>
@@ -351,22 +293,22 @@ namespace DasharooAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dfe97351-cab5-4ff7-94c1-80ed819466b9",
-                            ConcurrencyStamp = "985e4066-6f79-4196-bf3a-17757ba8cc6e",
+                            Id = "8d11514c-e5c0-4ade-a049-ed52bdc9ddfb",
+                            ConcurrencyStamp = "1d7a3701-fbc9-4001-863b-f75af666c053",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "a7bc237d-37c1-41a0-b8d7-d27209b308fe",
-                            ConcurrencyStamp = "b1c0bd48-abb4-4ac3-83ee-f7609e364e32",
+                            Id = "773c2a6d-a377-44fe-bb6c-23ff424a167e",
+                            ConcurrencyStamp = "7b65ec3a-59cc-41de-b885-d9b3bcf700d3",
                             Name = "Premium_User",
                             NormalizedName = "PREMIUM_USER"
                         },
                         new
                         {
-                            Id = "e2a33d33-fd82-4c46-a11b-7882e6607582",
-                            ConcurrencyStamp = "24edc0a8-2360-4a70-aab0-01fa68f66581",
+                            Id = "fa108de1-dfc4-4277-a777-72110ca4f8d3",
+                            ConcurrencyStamp = "fb23a97b-72fd-4eba-b5c9-c7c1b401d4c6",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -476,23 +418,64 @@ namespace DasharooAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DasharooAPI.Data.AuthorFollower", b =>
+            modelBuilder.Entity("PlaylistRecord", b =>
                 {
-                    b.HasOne("DasharooAPI.Data.User", "Author")
-                        .WithMany("Followers")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("PlaylistsId")
+                        .HasColumnType("int");
 
-                    b.HasOne("DasharooAPI.Data.User", "Follower")
-                        .WithMany("Followings")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Property<int>("RecordsId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Author");
+                    b.HasKey("PlaylistsId", "RecordsId");
 
-                    b.Navigation("Follower");
+                    b.HasIndex("RecordsId");
+
+                    b.ToTable("PlaylistRecord");
+                });
+
+            modelBuilder.Entity("RecordUser", b =>
+                {
+                    b.Property<string>("AuthorsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecordsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuthorsId", "RecordsId");
+
+                    b.HasIndex("RecordsId");
+
+                    b.ToTable("RecordUser");
+                });
+
+            modelBuilder.Entity("RecordUser1", b =>
+                {
+                    b.Property<int>("SupportedRecordsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupportersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SupportedRecordsId", "SupportersId");
+
+                    b.HasIndex("SupportersId");
+
+                    b.ToTable("RecordUser1");
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.Property<string>("FollowersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollowingsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FollowersId", "FollowingsId");
+
+                    b.HasIndex("FollowingsId");
+
+                    b.ToTable("UserUser");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
@@ -522,7 +505,7 @@ namespace DasharooAPI.Migrations
             modelBuilder.Entity("DasharooAPI.Data.Record", b =>
                 {
                     b.HasOne("DasharooAPI.Data.Playlist", "OriginalPlaylist")
-                        .WithMany("Records")
+                        .WithMany("OriginalRecords")
                         .HasForeignKey("OriginalPlaylistId");
 
                     b.HasOne("DasharooAPI.Data.Record", "OriginalRecord")
@@ -538,25 +521,6 @@ namespace DasharooAPI.Migrations
                     b.Navigation("OriginalRecord");
 
                     b.Navigation("RecordVisibility");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.RecordAuthor", b =>
-                {
-                    b.HasOne("DasharooAPI.Data.User", "Author")
-                        .WithMany("RecordAuthors")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DasharooAPI.Data.Record", "Record")
-                        .WithMany("RecordAuthors")
-                        .HasForeignKey("RecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Record");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.RecordGenre", b =>
@@ -576,44 +540,6 @@ namespace DasharooAPI.Migrations
                     b.Navigation("Genre");
 
                     b.Navigation("Record");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.RecordPlaylist", b =>
-                {
-                    b.HasOne("DasharooAPI.Data.Playlist", "Playlist")
-                        .WithMany("RecordPlaylists")
-                        .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DasharooAPI.Data.Record", "Record")
-                        .WithMany("RecordPlaylists")
-                        .HasForeignKey("RecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Playlist");
-
-                    b.Navigation("Record");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.RecordSupporter", b =>
-                {
-                    b.HasOne("DasharooAPI.Data.Record", "Record")
-                        .WithMany("RecordSupporters")
-                        .HasForeignKey("RecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DasharooAPI.Data.User", "Supporter")
-                        .WithMany("RecordSupporters")
-                        .HasForeignKey("SupporterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Record");
-
-                    b.Navigation("Supporter");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -667,6 +593,66 @@ namespace DasharooAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PlaylistRecord", b =>
+                {
+                    b.HasOne("DasharooAPI.Data.Playlist", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DasharooAPI.Data.Record", null)
+                        .WithMany()
+                        .HasForeignKey("RecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RecordUser", b =>
+                {
+                    b.HasOne("DasharooAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DasharooAPI.Data.Record", null)
+                        .WithMany()
+                        .HasForeignKey("RecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RecordUser1", b =>
+                {
+                    b.HasOne("DasharooAPI.Data.Record", null)
+                        .WithMany()
+                        .HasForeignKey("SupportedRecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DasharooAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("SupportersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.HasOne("DasharooAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DasharooAPI.Data.User", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
                 {
                     b.Navigation("RecordGenres");
@@ -674,33 +660,17 @@ namespace DasharooAPI.Migrations
 
             modelBuilder.Entity("DasharooAPI.Data.Playlist", b =>
                 {
-                    b.Navigation("RecordPlaylists");
-
-                    b.Navigation("Records");
+                    b.Navigation("OriginalRecords");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.Record", b =>
                 {
-                    b.Navigation("RecordAuthors");
-
                     b.Navigation("RecordGenres");
-
-                    b.Navigation("RecordPlaylists");
-
-                    b.Navigation("RecordSupporters");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.User", b =>
                 {
-                    b.Navigation("Followers");
-
-                    b.Navigation("Followings");
-
                     b.Navigation("Playlists");
-
-                    b.Navigation("RecordAuthors");
-
-                    b.Navigation("RecordSupporters");
                 });
 #pragma warning restore 612, 618
         }

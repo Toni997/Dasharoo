@@ -22,8 +22,13 @@ namespace DasharooAPI.Data
 
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new VisibilityConfiguration());
+
+            // many-to-many
             builder.ApplyConfiguration(new RecordGenreConfiguration());
-            // builder.ApplyConfiguration(new RecordSupportConfiguration());
+            builder.ApplyConfiguration(new RecordSupporterConfiguration());
+            builder.ApplyConfiguration(new RecordAuthorConfiguration());
+            builder.ApplyConfiguration(new RecordPlaylistConfiguration());
+            builder.ApplyConfiguration(new AuthorFollowerConfiguration());
         }
     }
 }

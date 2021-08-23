@@ -4,35 +4,22 @@ using DasharooAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DasharooAPI.Migrations
 {
     [DbContext(typeof(DasharooDbContext))]
-    partial class DasharooDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210823094206_SetUpAllManyToManyTables")]
+    partial class SetUpAllManyToManyTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DasharooAPI.Data.AuthorFollower", b =>
-                {
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FollowerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AuthorId", "FollowerId");
-
-                    b.HasIndex("FollowerId");
-
-                    b.ToTable("AuthorFollower");
-                });
 
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
                 {
@@ -351,22 +338,22 @@ namespace DasharooAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dfe97351-cab5-4ff7-94c1-80ed819466b9",
-                            ConcurrencyStamp = "985e4066-6f79-4196-bf3a-17757ba8cc6e",
+                            Id = "6520e8c8-cc2a-4867-ab30-d75766dd2bf3",
+                            ConcurrencyStamp = "ad4afeaf-c94c-4437-ac52-b4a084fdcf0b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "a7bc237d-37c1-41a0-b8d7-d27209b308fe",
-                            ConcurrencyStamp = "b1c0bd48-abb4-4ac3-83ee-f7609e364e32",
+                            Id = "e519458d-c71d-43f6-8473-f8aa329d3922",
+                            ConcurrencyStamp = "5be4b3ad-4d6a-4c2f-9b0a-7293de8b60e9",
                             Name = "Premium_User",
                             NormalizedName = "PREMIUM_USER"
                         },
                         new
                         {
-                            Id = "e2a33d33-fd82-4c46-a11b-7882e6607582",
-                            ConcurrencyStamp = "24edc0a8-2360-4a70-aab0-01fa68f66581",
+                            Id = "18c60b79-3ffa-44ac-a968-ce3dbebe16cf",
+                            ConcurrencyStamp = "dcdca511-b44b-48e1-ae74-f2733337de4a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -474,25 +461,6 @@ namespace DasharooAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("DasharooAPI.Data.AuthorFollower", b =>
-                {
-                    b.HasOne("DasharooAPI.Data.User", "Author")
-                        .WithMany("Followers")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DasharooAPI.Data.User", "Follower")
-                        .WithMany("Followings")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Follower");
                 });
 
             modelBuilder.Entity("DasharooAPI.Data.Genre", b =>
@@ -692,10 +660,6 @@ namespace DasharooAPI.Migrations
 
             modelBuilder.Entity("DasharooAPI.Data.User", b =>
                 {
-                    b.Navigation("Followers");
-
-                    b.Navigation("Followings");
-
                     b.Navigation("Playlists");
 
                     b.Navigation("RecordAuthors");

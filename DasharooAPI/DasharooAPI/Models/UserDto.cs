@@ -36,6 +36,10 @@ namespace DasharooAPI.Models
 
     public class UserDto : SignupUserDto
     {
+        public string ImagePath { get; set; }
+        public string BackgroundPath { get; set; }
+        public bool Verified { get; set; }
+
         public ICollection<string> Roles { get; set; }
     }
 }

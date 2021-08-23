@@ -18,6 +18,9 @@ namespace DasharooAPI.Models
     public class PlaylistDto : CreatePlaylistDto
     {
         public int Id { get; set; }
+        public string ImagePath { get; set; }
+        public string BackgroundPath { get; set; }
+
         public ICollection<RecordDto> Records { get; set; }
     }
 

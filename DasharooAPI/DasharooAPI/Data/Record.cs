@@ -12,6 +12,7 @@ namespace DasharooAPI.Data
         public TimeSpan Duration { get; set; }
         public ulong Plays { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public string ImagePath { get; set; }
         public string SourcePath { get; set; }
         public bool IsRemix { get; set; }
         public bool IsOfficialRemix { get; set; }
@@ -24,13 +25,13 @@ namespace DasharooAPI.Data
         public int? OriginalRecordId { get; set; }
         public virtual Record OriginalRecord { get; set; }
 
-        [InverseProperty("Records")]
-        public ICollection<User> Authors { get; set; }
+        [ForeignKey(nameof(Playlist))]
+        public int? OriginalPlaylistId { get; set; }
+        public Playlist OriginalPlaylist { get; set; }
 
-        [InverseProperty("SupportedRecords")]
-        public virtual ICollection<User> Supporters { get; set; }
-
+        public ICollection<RecordAuthor> RecordAuthors { get; set; }
+        public ICollection<RecordSupporter> RecordSupporters { get; set; }
         public ICollection<RecordGenre> RecordGenres { get; set; }
-        public virtual ICollection<Playlist> Playlists { get; set; }
+        public virtual ICollection<RecordPlaylist> RecordPlaylists { get; set; }
     }
 }

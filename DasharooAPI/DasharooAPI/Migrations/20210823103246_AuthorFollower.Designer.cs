@@ -4,14 +4,16 @@ using DasharooAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DasharooAPI.Migrations
 {
     [DbContext(typeof(DasharooDbContext))]
-    partial class DasharooDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210823103246_AuthorFollower")]
+    partial class AuthorFollower
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
