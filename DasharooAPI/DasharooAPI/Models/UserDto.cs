@@ -42,4 +42,13 @@ namespace DasharooAPI.Models
 
         public ICollection<string> Roles { get; set; }
     }
+
+    public class UserOnRecordDto
+    {
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public bool Verified { get; set; }
+    }
 }

@@ -6,17 +6,21 @@ using Newtonsoft.Json;
 
 namespace DasharooAPI.Models
 {
-    public class Error
+    public class Error : ResponseDetails
     {
-        public int StatusCode { get; set; }
-        public string Message { get; set; }
-        public override string ToString() => JsonConvert.SerializeObject(this);
+        public Error(int statusCode, string message)
+        {
+            StatusCode = statusCode;
+            Value = message;
+        }
+    }
 
-        public static Error Create(int statusCode, string message) =>
-            new()
-            {
-                StatusCode = statusCode,
-                Message = message
-            };
+    public class Success : ResponseDetails
+    {
+        public Success(int statusCode, string message)
+        {
+            StatusCode = statusCode;
+            Value = message;
+        }
     }
 }

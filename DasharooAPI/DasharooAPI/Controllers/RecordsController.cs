@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
+using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,13 +19,15 @@ namespace DasharooAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<RecordsController> _logger;
+        private readonly IFileService _fileService;
 
         public RecordsController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<RecordsController> logger)
+            ILogger<RecordsController> logger, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _fileService = fileService;
         }
 
         // [Authorize(Roles = UserRoles.User)]
@@ -61,7 +65,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateRecord([FromBody] CreateRecordDto recordDto)
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<IActionResult> CreateRecord([FromForm] CreateRecordDto recordDto)
         {
             if (!ModelState.IsValid)
             {
@@ -71,17 +76,33 @@ namespace DasharooAPI.Controllers
 
             var record = _mapper.Map<Record>(recordDto);
 
-            await _unitOfWork.Records.Insert(record);
+            // uploading audio file
+            if (recordDto.Source == null)
+                return BadRequest(new Error(StatusCodes.Status400BadRequest, "You did not select any audio file."));
+            var resultAudio = await _fileService.UploadFile(recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio);
+            if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
 
+            record.SourcePath = resultAudio.Value;
+
+            // uploading image file
+            if (recordDto.Image != null)
+            {
+                var resultImage = await _fileService.UploadFile(recordDto.Source, _fileService.RecordImagesDir, FileTypes.Image);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                record.ImagePath = resultImage.Value;
+            }
+
+            await _unitOfWork.Records.Insert(record);
             await _unitOfWork.Save();
 
+            // adding related data to junction tables
             foreach (var genreId in recordDto.GenresIds)
             {
                 await _unitOfWork.RecordGenres.Insert(new RecordGenre
                 {
                     RecordId = record.Id,
                     GenreId = genreId,
-                }); ;
+                });
             }
 
             foreach (var authorId in recordDto.AuthorsIds)
@@ -90,7 +111,7 @@ namespace DasharooAPI.Controllers
                 {
                     RecordId = record.Id,
                     AuthorId = authorId,
-                }); ;
+                });
             }
 
             await _unitOfWork.Save();
@@ -169,7 +190,7 @@ namespace DasharooAPI.Controllers
             if (id < 1)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteRecord)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest, "Invalid id."
                 ));
             }
@@ -178,7 +199,7 @@ namespace DasharooAPI.Controllers
             if (record == null)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteRecord)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest,
                     "Record with the specified id does not exist."
                 ));

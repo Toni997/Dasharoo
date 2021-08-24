@@ -71,10 +71,10 @@ namespace DasharooAPI
                         Log.Error($"Something went wrong in the {contextFeature.Error}");
 
                         await context.Response.WriteAsync(new Error
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = "Internal server error. Please try again later."
-                        }.ToString());
+                        (
+                            context.Response.StatusCode,
+                            "Internal server error. Please try again later."
+                        ).ToString());
                     }
                 });
             });

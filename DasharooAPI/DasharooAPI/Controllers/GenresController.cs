@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
@@ -32,12 +33,13 @@ namespace DasharooAPI.Controllers
             _logger = logger;
         }
 
-        // [Authorize(Roles = UserRoles.User)]
+        [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllGenres()
         {
+            var user = User.Identity.Name;
             var genres = await _unitOfWork.Genres.GetAll();
             var genresDto = _mapper.Map<IList<GenreDto>>(genres);
             return Ok(genresDto);
@@ -130,7 +132,7 @@ namespace DasharooAPI.Controllers
             if (id < 1)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest, "Invalid id."
                 ));
             }
@@ -139,7 +141,7 @@ namespace DasharooAPI.Controllers
             if (genre == null)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest,
                     "Genre with the specified id does not exist."
                 ));

@@ -11,6 +11,7 @@ namespace DasharooAPI.Configurations
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, SignupUserDto>().ReverseMap();
             CreateMap<User, LoginUserDto>().ReverseMap();
+            CreateMap<User, UserOnRecordDto>().ReverseMap();
 
             CreateMap<Record, RecordDto>().ReverseMap();
             CreateMap<Record, CreateRecordDto>().ReverseMap();
@@ -27,6 +28,7 @@ namespace DasharooAPI.Configurations
 
             // junction tables
             CreateMap<RecordGenre, RecordGenreDto>();
+            CreateMap<RecordAuthor, RecordAuthorDto>();
         }
     }
 }

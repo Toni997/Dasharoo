@@ -10,8 +10,6 @@ namespace DasharooAPI.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public string SourcePath { get; set; }
-        public string ImagePath { get; set; }
         public bool IsRemix { get; set; }
         public int? VisibilityId { get; set; }
         public int? OriginalRecordId { get; set; }
@@ -21,6 +19,7 @@ namespace DasharooAPI.Models
     public class CreateRecordDto : BaseRecordDto
     {
         public IFormFile Source { get; set; }
+        public IFormFile Image { get; set; }
         public ICollection<string> AuthorsIds { get; set; }
         public ICollection<int> GenresIds { get; set; }
     }
@@ -28,13 +27,15 @@ namespace DasharooAPI.Models
     public class RecordDto : BaseRecordDto
     {
         public int Id { get; set; }
+        public string SourcePath { get; set; }
+        public string ImagePath { get; set; }
         public bool IsOfficialRemix { get; set; }
         public ulong Plays { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public ICollection<RecordAuthor> RecordAuthors { get; set; }
+        public ICollection<RecordAuthorDto> RecordAuthors { get; set; }
         public ICollection<RecordGenreDto> RecordGenres { get; set; }
-        public virtual ICollection<RecordSupporter> RecordSupporters { get; set; }
+        public virtual ICollection<RecordSupporterDto> RecordSupporters { get; set; }
         // public virtual ICollection<Playlist> Playlists { get; set; }
     }
 

@@ -1,5 +1,6 @@
 ﻿using AspNetCoreRateLimit;
 using DasharooAPI.Configurations;
+using DasharooAPI.Controllers;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Repository;
@@ -47,6 +48,10 @@ namespace DasharooAPI
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
             services.AddTransient<IGenericRepository<RecordGenre>, Repository<RecordGenre>>();
+            services.AddTransient<IGenericRepository<RecordAuthor>, Repository<RecordAuthor>>();
+            services.AddTransient<IGenericRepository<RecordPlaylist>, Repository<RecordPlaylist>>();
+            services.AddTransient<IGenericRepository<AuthorFollower>, Repository<AuthorFollower>>();
+            services.AddTransient<IFileService, FileService>();
 
             services.AddScoped<IAuthManager, AuthManager>();
 

@@ -114,7 +114,7 @@ namespace DasharooAPI.Controllers
             if (id < 1)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest, "Invalid id."
                 ));
             }
@@ -123,7 +123,7 @@ namespace DasharooAPI.Controllers
             if (playlist == null)
             {
                 _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
-                return BadRequest(Error.Create(
+                return BadRequest(new Error(
                     StatusCodes.Status400BadRequest,
                     "Playlist with the specified id does not exist."
                 ));

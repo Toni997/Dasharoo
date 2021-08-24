@@ -53,12 +53,12 @@ namespace DasharooAPI.Controllers
             var user = await _authManager.ValidateAndReturnUser(userDto);
 
             if (user == null)
-                return Unauthorized(Error.Create(
+                return Unauthorized(new Error(
                     StatusCodes.Status401Unauthorized, "Wrong credentials."
                 ));
 
             if (!user.EmailConfirmed)
-                return Unauthorized(Error.Create(
+                return Unauthorized(new Error(
                     StatusCodes.Status401Unauthorized, "Account not confirmed."
                 ));
 
