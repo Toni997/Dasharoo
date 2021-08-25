@@ -58,7 +58,8 @@ namespace DasharooAPI.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.UserName)
+                new(ClaimTypes.NameIdentifier, _user.Id),
+                new(ClaimTypes.Name, _user.UserName)
             };
 
             var roles = await _userManager.GetRolesAsync(_user);

@@ -6,8 +6,13 @@ namespace DasharooAPI.Controllers
 {
     public interface IFileService
     {
-        public string RecordSourcesDir { get; }
+        public string RootDir { get; }
+        public string AccountImagesDir { get; }
+        public string AccountBackgroundsDir { get; }
         public string RecordImagesDir { get; }
+        public string RecordSourcesDir { get; }
+        public string PlaylistImagesDir { get; }
+        public string PlaylistBackgroundsDir { get; }
 
         Task<ResponseDetails> UploadFile(IFormFile file, string uploadDir, FileTypes fileType, string fileName = null);
     }

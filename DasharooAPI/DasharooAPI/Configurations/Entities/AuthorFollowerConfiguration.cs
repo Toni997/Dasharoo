@@ -23,7 +23,6 @@ namespace DasharooAPI.Configurations.Entities
                 .WithMany(x => x.Followings)
                 .HasForeignKey(x => x.FollowerId)
                 .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

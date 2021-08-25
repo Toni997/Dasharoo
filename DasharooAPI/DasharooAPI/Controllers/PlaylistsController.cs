@@ -21,13 +21,15 @@ namespace DasharooAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<PlaylistsController> _logger;
+        private readonly IFileService _fileService;
 
         public PlaylistsController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<PlaylistsController> logger)
+            ILogger<PlaylistsController> logger, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
+            _fileService = fileService;
         }
 
         // [Authorize(Roles = UserRoles.User)]
@@ -36,7 +38,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllPlaylists()
         {
-            var playlists = await _unitOfWork.Playlists.GetAll(includes: new List<string> { "Records" });
+            var playlists = await _unitOfWork.Playlists.GetAllWithRecords();
             var playlistsDto = _mapper.Map<IList<PlaylistDto>>(playlists);
             return Ok(playlistsDto);
         }
@@ -48,9 +50,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetPlaylistById(int id)
         {
-            var playlist = await _unitOfWork.Playlists.GetById(id);
+            var playlist = await _unitOfWork.Playlists.GetByIdWithRecords(id);
             if (playlist == null) return NotFound();
-
             var playlistDto = _mapper.Map<PlaylistDto>(playlist);
             return Ok(playlistDto);
         }
@@ -60,7 +61,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreatePlaylist([FromBody] CreatePlaylistDto playlistDto)
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<IActionResult> CreatePlaylist([FromForm] CreatePlaylistDto playlistDto)
         {
             if (!ModelState.IsValid)
             {
@@ -69,6 +71,25 @@ namespace DasharooAPI.Controllers
             }
 
             var playlist = _mapper.Map<Playlist>(playlistDto);
+
+            // uploading cover image file
+            if (playlistDto.Image != null)
+            {
+                var resultImage = await _fileService.UploadFile(
+                    playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                playlist.ImagePath = resultImage.Value;
+            }
+
+            // uploading background image file
+            if (playlistDto.Background != null)
+            {
+                var resultImage = await _fileService.UploadFile(
+                    playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                playlist.BackgroundPath = resultImage.Value;
+            }
+
             await _unitOfWork.Playlists.Insert(playlist);
             await _unitOfWork.Save();
 
@@ -81,9 +102,10 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
-        public async Task<IActionResult> UpdatePlaylist(int id, [FromBody] UpdatePlaylistDto playlistDto)
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<IActionResult> UpdatePlaylist(int id, [FromForm] UpdatePlaylistDto playlistDto)
         {
+            var user = User;
             if (!ModelState.IsValid || id < 1)
             {
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
@@ -96,8 +118,25 @@ namespace DasharooAPI.Controllers
                 _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
                 return BadRequest(ModelState);
             }
+            if (!User.IsCurrentUser(playlist.AuthorId)) return Unauthorized();
 
             _mapper.Map(playlistDto, playlist);
+
+            // uploading cover image file
+            if (playlistDto.Image != null)
+            {
+                var resultImage = await _fileService.UploadFile(playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image, playlist.ImagePath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                playlist.ImagePath = resultImage.Value;
+            }
+
+            // uploading background image file
+            if (playlistDto.Background != null)
+            {
+                var resultImage = await _fileService.UploadFile(playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image, playlist.BackgroundPath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                playlist.BackgroundPath = resultImage.Value;
+            }
 
             _unitOfWork.Playlists.Update(playlist);
             await _unitOfWork.Save();

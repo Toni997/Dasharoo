@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
+using X.PagedList;
 
 namespace DasharooAPI.Controllers
 {
@@ -26,16 +27,19 @@ namespace DasharooAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
         private readonly IMessageService _emailService;
+        private readonly IFileService _fileService;
 
         public AccountController(UserManager<User> userManager,
             ILogger<AccountController> logger, IMapper mapper,
-            IAuthManager authManager, IMessageService emailService)
+            IAuthManager authManager, IMessageService emailService,
+            IFileService fileService)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
             _authManager = authManager;
             _emailService = emailService;
+            _fileService = fileService;
         }
 
         [HttpPost]
@@ -130,5 +134,67 @@ namespace DasharooAPI.Controllers
 
             return Ok();
         }
+
+        // [Authorize(Roles = UserRoles.User)]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var usersDto = _mapper.Map<IList<GetUserDto>>(users);
+            return Ok(usersDto);
+        }
+
+        // [Authorize(Roles = UserRoles.User)]
+        [HttpGet("{id}", Name = "GetUserById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+            var userDto = _mapper.Map<GetUserDto>(user);
+            return Ok(userDto);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<IActionResult> UpdateAccount(string id, [FromForm] UpdateUserDto userDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            _mapper.Map(userDto, user);
+
+            // uploading cover image file
+            if (userDto.Image != null)
+            {
+                var resultImage = await _fileService.UploadFile(
+                    userDto.Image, _fileService.AccountImagesDir, FileTypes.Image, user.ImagePath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                user.ImagePath = resultImage.Value;
+            }
+
+            // uploading background image file
+            if (userDto.Background != null)
+            {
+                var resultImage = await _fileService.UploadFile(
+                    userDto.Background, _fileService.AccountBackgroundsDir, FileTypes.Image, user.BackgroundPath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                user.BackgroundPath = resultImage.Value;
+            }
+
+            await _userManager.UpdateAsync(user);
+            // await _unitOfWork.Save();
+
+            return NoContent();
+        }
+
     }
 }

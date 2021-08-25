@@ -71,14 +71,16 @@ namespace DasharooAPI.Controllers
             var record = _mapper.Map<Record>(recordDto);
 
             // uploading audio file
-            var resultAudio = await _fileService.UploadFile(recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio);
+            var resultAudio = await _fileService.UploadFile(
+                recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio);
             if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
             record.SourcePath = resultAudio.Value;
 
             // uploading image file
             if (recordDto.Image != null)
             {
-                var resultImage = await _fileService.UploadFile(recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image);
+                var resultImage = await _fileService.UploadFile(
+                    recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
                 record.ImagePath = resultImage.Value;
             }
@@ -116,6 +118,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
         public async Task<IActionResult> UpdateRecord(int id, [FromForm] UpdateRecordDto recordDto)
         {
             if (!ModelState.IsValid || id < 1)
@@ -136,7 +139,8 @@ namespace DasharooAPI.Controllers
             // uploading audio file
             if (recordDto.Source != null)
             {
-                var resultAudio = await _fileService.UploadFile(recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio, record.SourcePath);
+                var resultAudio = await _fileService.UploadFile(
+                    recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio, record.SourcePath);
                 if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
                 record.SourcePath = resultAudio.Value;
             }
@@ -144,7 +148,8 @@ namespace DasharooAPI.Controllers
             // uploading image file
             if (recordDto.Image != null)
             {
-                var resultImage = await _fileService.UploadFile(recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image, record.ImagePath);
+                var resultImage = await _fileService.UploadFile(
+                    recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image, record.ImagePath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
                 record.ImagePath = resultImage.Value;
             }

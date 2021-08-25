@@ -56,13 +56,13 @@ namespace DasharooAPI.Controllers
         }
 
         // file extensions
-        public const string Mp3 = ".mp3";
-        public const string Wav = ".wav";
-        public const string Png = ".png";
-        public const string Jpg = ".jpg";
-        public const string Jpeg = ".jpeg";
-        public const string Audio = "audio";
-        public const string Image = "image";
+        private const string Mp3 = ".mp3";
+        private const string Wav = ".wav";
+        private const string Png = ".png";
+        private const string Jpg = ".jpg";
+        private const string Jpeg = ".jpeg";
+        private const string Audio = "audio";
+        private const string Image = "image";
 
         //20 megabytes in bytes
         public const int TwentyMegabytes = 20000000;
