@@ -12,5 +12,24 @@ namespace DasharooAPI.Repository
         public RecordRepository(DasharooDbContext context) : base(context)
         {
         }
+
+        public Task<Record> GetByIdWithAuthorsGenresSupporters(int id)
+        {
+            return Get(x => x.Id == id, new List<string>{
+                "RecordAuthors", "RecordAuthors.Author",
+                "RecordSupporters", "RecordSupporters.Supporter",
+                "RecordGenres", "RecordGenres.Genre"
+            });
+        }
+
+        public Task<IList<Record>> GetAllWithAuthorsGenresSupporters()
+        {
+            return GetAll(includes: new List<string>
+            {
+                "RecordAuthors", "RecordAuthors.Author",
+                "RecordSupporters", "RecordSupporters.Supporter",
+                "RecordGenres", "RecordGenres.Genre"
+            });
+        }
     }
 }

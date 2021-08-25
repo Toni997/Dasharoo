@@ -8,5 +8,7 @@ namespace DasharooAPI.IRepository
 {
     public interface IRecordRepository : IGenericRepository<Record>
     {
+        Task<Record> GetByIdWithAuthorsGenresSupporters(int id);
+        Task<IList<Record>> GetAllWithAuthorsGenresSupporters();
     }
 }

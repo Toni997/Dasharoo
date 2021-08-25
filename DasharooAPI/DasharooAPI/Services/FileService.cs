@@ -31,12 +31,12 @@ namespace DasharooAPI.Controllers
             switch (fileType)
             {
                 case FileTypes.Image:
-                    if (IsImageNotValid(file.FileName, file.ContentType))
+                    if (IsImageNotValid(file.FileName, file.ContentType, file.Length))
                         return new Error(StatusCodes.Status415UnsupportedMediaType,
                                 "Only .jpg, .jpeg and .png images up to 20MB are supported.");
                     break;
                 case FileTypes.Audio:
-                    if (IsAudioNotValid(file.FileName, file.ContentType))
+                    if (IsAudioNotValid(file.FileName, file.ContentType, file.Length))
                         return new Error(StatusCodes.Status415UnsupportedMediaType,
                                 "Only .wav and .mp3 audio files up to 20MB are supported.");
                     break;
@@ -69,14 +69,14 @@ namespace DasharooAPI.Controllers
 
 
         //helper functions
-        private static bool IsImageNotValid(string fileName, string contentType)
+        private static bool IsImageNotValid(string fileName, string contentType, long fileSize)
         {
-            return IsNotImage(contentType) || IsNotSupportedImageExtension(fileName);
+            return IsNotImage(contentType) || IsNotSupportedImageExtension(fileName) || IsTooLarge(fileSize);
         }
 
-        private static bool IsAudioNotValid(string fileName, string contentType)
+        private static bool IsAudioNotValid(string fileName, string contentType, long fileSize)
         {
-            return IsNotAudio(contentType) || IsNotSupportedAudioExtension(fileName);
+            return IsNotAudio(contentType) || IsNotSupportedAudioExtension(fileName) || IsTooLarge(fileSize);
         }
 
         private static bool IsNotSupportedImageExtension(string fileName)

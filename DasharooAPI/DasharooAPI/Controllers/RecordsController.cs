@@ -36,12 +36,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllRecords()
         {
-            var records = await _unitOfWork.Records.GetAll(includes: new List<string>
-                {
-                    "RecordAuthors", "RecordAuthors.Author",
-                    "RecordSupporters", "RecordSupporters.Supporter",
-                    "RecordGenres", "RecordGenres.Genre"
-                });
+            var records = await _unitOfWork.Records.GetAllWithAuthorsGenresSupporters();
             var recordsDto = _mapper.Map<IList<RecordDto>>(records);
             return Ok(recordsDto);
         }
@@ -53,9 +48,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetRecordById(int id)
         {
-            var record = await _unitOfWork.Records.GetById(id);
+            var record = await _unitOfWork.Records.GetByIdWithAuthorsGenresSupporters(id);
             if (record == null) return NotFound();
-
             var recordDto = _mapper.Map<RecordDto>(record);
             return Ok(recordDto);
         }
