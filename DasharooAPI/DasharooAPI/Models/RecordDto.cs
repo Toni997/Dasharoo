@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using DasharooAPI.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Razor.Language;
 
 namespace DasharooAPI.Models
 {
     public class BaseRecordDto
     {
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime ReleaseDate { get; set; }
@@ -18,6 +21,7 @@ namespace DasharooAPI.Models
 
     public class CreateRecordDto : BaseRecordDto
     {
+        [Required]
         public IFormFile Source { get; set; }
         public IFormFile Image { get; set; }
         public ICollection<string> AuthorsIds { get; set; }
@@ -41,5 +45,6 @@ namespace DasharooAPI.Models
 
     public class UpdateRecordDto : CreateRecordDto
     {
+        public new IFormFile Source { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace DasharooAPI.Controllers
 {
     public class FileService : IFileService
     {
-        //constants
+        //dirs
         public string RootDir { get; } = @"C:\DasharooStorage";
         public string AccountImagesDir { get; } = @"C:\DasharooStorage\Accounts\Images";
         public string AccountBackgroundsDir { get; } = @"C:\DasharooStorage\Accounts\Backgrounds";

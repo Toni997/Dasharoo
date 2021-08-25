@@ -77,17 +77,14 @@ namespace DasharooAPI.Controllers
             var record = _mapper.Map<Record>(recordDto);
 
             // uploading audio file
-            if (recordDto.Source == null)
-                return BadRequest(new Error(StatusCodes.Status400BadRequest, "You did not select any audio file."));
             var resultAudio = await _fileService.UploadFile(recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio);
             if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
-
             record.SourcePath = resultAudio.Value;
 
             // uploading image file
             if (recordDto.Image != null)
             {
-                var resultImage = await _fileService.UploadFile(recordDto.Source, _fileService.RecordImagesDir, FileTypes.Image);
+                var resultImage = await _fileService.UploadFile(recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
                 record.ImagePath = resultImage.Value;
             }
@@ -125,7 +122,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> UpdateRecord(int id, [FromBody] UpdateRecordDto recordDto)
+        public async Task<IActionResult> UpdateRecord(int id, [FromForm] UpdateRecordDto recordDto)
         {
             if (!ModelState.IsValid || id < 1)
             {
@@ -142,8 +139,25 @@ namespace DasharooAPI.Controllers
 
             _mapper.Map(recordDto, record);
 
+            // uploading audio file
+            if (recordDto.Source != null)
+            {
+                var resultAudio = await _fileService.UploadFile(recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio, record.SourcePath);
+                if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
+                record.SourcePath = resultAudio.Value;
+            }
+
+            // uploading image file
+            if (recordDto.Image != null)
+            {
+                var resultImage = await _fileService.UploadFile(recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image, record.ImagePath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                record.ImagePath = resultImage.Value;
+            }
+
             _unitOfWork.Records.Update(record);
 
+            // updating related data
             var genresToDelete = await _unitOfWork.RecordGenres.GetAll(x => x.RecordId == id && !recordDto.GenresIds.Contains(x.GenreId));
             _unitOfWork.RecordGenres.DeleteRange(genresToDelete);
 
