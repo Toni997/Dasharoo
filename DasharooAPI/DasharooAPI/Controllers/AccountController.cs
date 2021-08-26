@@ -125,7 +125,6 @@ namespace DasharooAPI.Controllers
             if (user == null) return NotFound();
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
-
             if (!result.Succeeded) return BadRequest();
 
             user.EmailConfirmed = true;

@@ -33,7 +33,7 @@ namespace DasharooAPI.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = UserRoles.User)]
+        // [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

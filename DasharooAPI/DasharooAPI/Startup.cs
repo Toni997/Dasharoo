@@ -32,7 +32,7 @@ namespace DasharooAPI
             services.ConfigureRateLimiting();
             services.AddHttpContextAccessor();
 
-            services.ConfigureHttpCacheHeaders();
+            // services.ConfigureHttpCacheHeaders();
 
             services.AddAuthentication();
             services.ConfigureIdentity();
@@ -78,8 +78,8 @@ namespace DasharooAPI
 
             app.UseCors();
 
-            app.UseResponseCaching();
-            app.UseHttpCacheHeaders();
+            // app.UseResponseCaching();
+            // app.UseHttpCacheHeaders();
             app.UseIpRateLimiting();
 
             app.UseRouting();
