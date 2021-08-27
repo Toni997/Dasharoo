@@ -30,6 +30,10 @@ namespace DasharooAPI.Data
         public int? OriginalPlaylistId { get; set; }
         public Playlist OriginalPlaylist { get; set; }
 
+        [ForeignKey(nameof(User))]
+        public string CreatedById { get; set; }
+        public User CreatedBy { get; set; }
+
         public ICollection<RecordAuthor> RecordAuthors { get; set; }
         public ICollection<RecordSupporter> RecordSupporters { get; set; }
         public ICollection<RecordGenre> RecordGenres { get; set; }

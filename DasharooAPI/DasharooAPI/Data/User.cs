@@ -13,6 +13,7 @@ namespace DasharooAPI.Data
         public string ImagePath { get; set; }
         public string BackgroundPath { get; set; }
 
+        public ICollection<Record> Records { get; set; }
         public ICollection<Playlist> Playlists { get; set; }
         public ICollection<RecordSupporter> RecordSupporters { get; set; }
         public ICollection<RecordAuthor> RecordAuthors { get; set; }
