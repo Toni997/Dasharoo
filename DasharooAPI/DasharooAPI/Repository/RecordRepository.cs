@@ -21,7 +21,8 @@ namespace DasharooAPI.Repository
             "RecordSupporters",
             "RecordSupporters.Supporter",
             "RecordGenres",
-            "RecordGenres.Genre"
+            "RecordGenres.Genre",
+            "CreatedBy"
         };
 
         public Task<Record> GetByIdWithAuthorsGenresSupporters(int id)

@@ -36,6 +36,7 @@ namespace DasharooAPI.Models
         public bool IsOfficialRemix { get; set; }
         public ulong Plays { get; set; }
         public TimeSpan Duration { get; set; }
+        public GetUserDto CreatedBy { get; set; }
 
         public ICollection<RecordAuthorDto> RecordAuthors { get; set; }
         public ICollection<RecordGenreDto> RecordGenres { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
@@ -8,6 +9,8 @@ using DasharooAPI.Models;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DasharooAPI.Controllers
@@ -222,6 +225,36 @@ namespace DasharooAPI.Controllers
             await _unitOfWork.Save();
 
             return NoContent();
+        }
+
+        [HttpGet("Streams")]
+        public async Task<IActionResult> GetRecordSource([FromQuery] string source)
+        {
+            var path = Path.Combine(_fileService.RecordSourcesDir, source);
+            if (!System.IO.File.Exists(path)) return NotFound();
+
+            var filedata = await System.IO.File.ReadAllBytesAsync(path);
+
+            Response.Headers.Add("Accept-Ranges", "bytes");
+
+            return File(filedata, "application/octet-stream");
+
+            // var path = Path.Combine(_fileService.RecordSourcesDir, source);
+            // if (!System.IO.File.Exists(path)) return NotFound();
+            //
+            // var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
+            // return File(stream, "application/octet-stream");
+        }
+
+        [HttpGet("Images")]
+        public async Task<IActionResult> GetRecordImage([FromQuery] string image)
+        {
+            var path = Path.Combine(_fileService.RecordImagesDir, image);
+            if (!System.IO.File.Exists(path)) return NotFound();
+
+            var filedata = await System.IO.File.ReadAllBytesAsync(path);
+
+            return File(filedata, "application/octet-stream");
         }
     }
 }
