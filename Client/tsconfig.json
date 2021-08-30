@@ -1,0 +1,21 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/tsc-out",
+    "baseUrl": "src",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": ["es6", "es7", "dom"],
+    "noImplicitAny": false,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "declaration": false,
+    "noResolve": false
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "dasharoo",
+  "version": "0.0.1",
+  "private": true,
+  "sasslintConfig": ".sass-lint.yml",
+  "scripts": {
+    "clea": "clea",
+    "start": "clea serve",
+    "build": "clea build",
+    "build:prod": "clea build --target production --doc",
+    "test": "clea test",
+    "lint": "clea lint",
+    "sonar:reporters": "sreporter"
+  },
+  "dependencies": {
+    "@uirouter/angularjs": "^1.0.5",
+    "angular": "^1.7.0",
+    "angular-animate": "^1.7.0",
+    "angular-aria": "^1.7.0",
+    "angular-cookies": "^1.7.0",
+    "angular-messages": "^1.7.0",
+    "angular-resource": "^1.7.0",
+    "angular-sanitize": "^1.7.0",
+    "oclazyload": "^1.1.0",
+    "restangular": "^1.6.1"
+  },
+  "devDependencies": {
+    "@clea/cli": "^1.1.0",
+    "@types/angular": "^1.6.55",
+    "@types/angular-mocks": "^1.7.0",
+    "@types/jasmine": "^2.5.43",
+    "@types/node": "~8.9.4",
+    "@types/oclazyload": "^0.0.32",
+    "@types/restangular": "^1.5.44",
+    "@types/webpack": "^3.0.0",
+    "angular-mocks": "^1.7.0",
+    "autoprefixer": "^9.6.1",
+    "karma-chrome-launcher": "^3.0.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^4.0.2",
+    "sonar-web-frontend-reporters": "^3.4.0",
+    "typescript": "~3.5.3"
+  }
+}
