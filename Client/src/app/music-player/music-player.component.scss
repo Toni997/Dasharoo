@@ -1,0 +1,96 @@
+//----------------------------------------
+//  musicPlayer
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+.control-button:hover,
+.timeline:hover {
+  cursor: pointer;
+}
+
+.musicPlayer {
+  border-top: 1px solid $primary-color;
+  height: 130px;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  padding: 15px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  .left-panel {
+    display: flex;
+    .author-image {
+      margin-right: 15px;
+    }
+    .author-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      justify-items: stretch;
+      align-self: center;
+      gap: 5px;
+      .record-name {
+        font-weight: 300;
+      }
+      .record-author {
+        color: $secondary-text-color;
+        .author-name {
+          color: $primary-color;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+  .center-panel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 800px;
+    .controls-top {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+
+      .play-button {
+        transition: 0.3s;
+      }
+      .play-button:hover {
+        transform: scale(1.05);
+      }
+    }
+    .controls-bottom {
+      display: flex;
+      gap: 10px;
+      .timeline {
+        height: 5px;
+        width: 100%;
+        background-color: #6e6e6e;
+        align-self: center;
+        .current-time {
+          height: 100%;
+          background-color: $text-color;
+        }
+      }
+    }
+  }
+  .right-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .volume-bar {
+      width: 160px;
+      height: 5px;
+      background-color: #6e6e6e;
+    }
+  }
+}
+
+.record-author,
+.record-name {
+  margin: 0;
+}

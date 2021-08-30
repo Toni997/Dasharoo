@@ -1,4 +1,18 @@
 //----------------------------------------
 //  dasharoo
 //----------------------------------------
+@import "../styles/abstracts/variables";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap");
 
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  background: $background-color !important;
+  font-family: "Roboto", sans-serif;
+  color: $text-color;
+  font-weight: 400;
+}

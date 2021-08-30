@@ -1,0 +1,80 @@
+<audio ng-ref="$ctrl.musicPlayer">
+  <source src="assets/Avicii - For A Better Day.mp3" />
+</audio>
+<div class="musicPlayer">
+  <div class="left-panel">
+    <div class="author-image">
+      <img src="assets/avatar.png" alt="Profile image" />
+    </div>
+    <div class="author-details">
+      <h2 class="record-name">For A Better Day</h2>
+      <h4 class="record-author">
+        By <a href="#" class="author-name">Avicii</a>
+      </h4>
+    </div>
+  </div>
+  <div class="center-panel">
+    <div class="controls-top">
+      <img
+        class="control-button"
+        src="assets/icons/random.svg"
+        alt="Profile image"
+      />
+      <img
+        class="control-button"
+        src="assets/icons/previous.svg"
+        alt="Profile image"
+      />
+      <img
+        ng-click="$ctrl.playOrPause()"
+        class="control-button play-button"
+        src="assets/icons/play.svg"
+        alt="Profile image"
+      />
+      <img
+        class="control-button"
+        src="assets/icons/next.svg"
+        alt="Profile image"
+      />
+      <img
+        class="control-button"
+        src="assets/icons/loop.svg"
+        alt="Profile image"
+      />
+    </div>
+    <div class="controls-bottom">
+      <div class="current-duration">1:56</div>
+      <div
+        ng-click="$ctrl.changeTime($event)"
+        class="timeline"
+        ng-ref="$ctrl.timeline"
+      >
+        <div
+          class="current-time"
+          ng-style="{
+            width:
+              ($ctrl.musicPlayer[0].currentTime /
+                $ctrl.musicPlayer[0].duration) *
+                100 +
+              '%'
+          }"
+        ></div>
+      </div>
+      <div class="total-duration">3:52</div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <img
+      class="control-button play-button"
+      src="assets/icons/queue.svg"
+      alt="Profile image"
+    />
+    <img
+      class="control-button"
+      src="assets/icons/volume-mid.svg"
+      alt="Profile image"
+    />
+    <div class="volume-bar"></div>
+  </div>
+</div>
+{{ $ctrl.currentPercentage }}

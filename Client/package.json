@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "@uirouter/angularjs": "^1.0.5",
-    "angular": "^1.7.0",
-    "angular-animate": "^1.7.0",
-    "angular-aria": "^1.7.0",
-    "angular-cookies": "^1.7.0",
-    "angular-messages": "^1.7.0",
-    "angular-resource": "^1.7.0",
-    "angular-sanitize": "^1.7.0",
+    "angular": "^1.8.2",
+    "angular-animate": "^1.8.2",
+    "angular-aria": "^1.8.2",
+    "angular-cookies": "^1.8.2",
+    "angular-messages": "^1.8.2",
+    "angular-resource": "^1.8.2",
+    "angular-sanitize": "^1.8.2",
     "oclazyload": "^1.1.0",
     "restangular": "^1.6.1"
   },
@@ -42,6 +42,6 @@
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^4.0.2",
     "sonar-web-frontend-reporters": "^3.4.0",
-    "typescript": "~3.5.3"
+    "typescript": "^3.5.3"
   }
 }
