@@ -9,10 +9,31 @@
 *::before {
   box-sizing: border-box;
 }
-
-body {
+html {
+  height: 100%;
   background: $background-color !important;
+}
+body {
   font-family: "Roboto", sans-serif;
   color: $text-color;
   font-weight: 400;
+  // background-color: $background-color;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
+
+.content {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient(rgba(158, 207, 167, 0.2), rgba(0, 0, 0, 0));
+  // opacity: 0.2;
 }

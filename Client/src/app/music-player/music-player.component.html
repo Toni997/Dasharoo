@@ -1,6 +1,8 @@
-<audio ng-ref="$ctrl.musicPlayer">
+<audio ng-on-timeupdate="$ctrl.updateProgressBar()" ng-on-ended="$ctrl.onEnded($event)" preload="auto" ng-ref="$ctrl.musicPlayerRef">
   <source src="assets/Avicii - For A Better Day.mp3" />
 </audio>
+<input ng-ref="$ctrl.volumeBar" type="range" min="0" max="1" step="0.01" value="1" ng-model="$ctrl.mp.volume"/>
+<!-- <input class="scrubBar" ng-ref="$ctrl.scrubBar" type="range" min="0" max="{{$ctrl.duration}}" step="1" ng-model="$ctrl.currentTime" ng-change="$ctrl.updateRecord()"/> -->
 <div class="musicPlayer">
   <div class="left-panel">
     <div class="author-image">
@@ -16,65 +18,68 @@
   <div class="center-panel">
     <div class="controls-top">
       <img
+        width="18"
         class="control-button"
         src="assets/icons/random.svg"
         alt="Profile image"
       />
       <img
+        width="18"
         class="control-button"
         src="assets/icons/previous.svg"
         alt="Profile image"
       />
       <img
+        width="70"
         ng-click="$ctrl.playOrPause()"
         class="control-button play-button"
-        src="assets/icons/play.svg"
+        ng-src="assets/icons/{{ $ctrl.centerButtonIcon }}.svg"
         alt="Profile image"
       />
       <img
+        width="18"
         class="control-button"
         src="assets/icons/next.svg"
         alt="Profile image"
       />
       <img
+        width="18"
         class="control-button"
         src="assets/icons/loop.svg"
         alt="Profile image"
       />
     </div>
     <div class="controls-bottom">
-      <div class="current-duration">1:56</div>
+      <div class="current-time">{{$ctrl.currentTimeString}}</div>
       <div
         ng-click="$ctrl.changeTime($event)"
         class="timeline"
         ng-ref="$ctrl.timeline"
+        ng-mouseover="$ctrl.showCircle()"
+        ng-mouseout="$ctrl.hideCircle()"
       >
-        <div
-          class="current-time"
-          ng-style="{
-            width:
-              ($ctrl.musicPlayer[0].currentTime /
-                $ctrl.musicPlayer[0].duration) *
-                100 +
-              '%'
-          }"
-        ></div>
+        <div ng-style="{'left': $ctrl.currentPercentage + '%'}" ng-ref="$ctrl.circle" ng-click="$ctrl.doNothing($event)"
+          draggable="true" ng-on-dragstart="$ctrl.onDragStartCircle($event)" 
+          ng-on-dragend="$ctrl.onDragEndCircle($event)" ng-on-drag="$ctrl.onBeingDraggedCircle($event)" class="draggable display-none">
+        </div>
+        <div ng-ref="$ctrl.scrubBar" class="current-time" ng-style="{'width': $ctrl.currentPercentage + '%'}">
+        </div>
       </div>
-      <div class="total-duration">3:52</div>
+      <div class="duration">{{$ctrl.durationString}}</div>
     </div>
   </div>
-  <div class="right-panel">
-    <img
-      class="control-button play-button"
-      src="assets/icons/queue.svg"
-      alt="Profile image"
-    />
-    <img
-      class="control-button"
-      src="assets/icons/volume-mid.svg"
-      alt="Profile image"
-    />
-    <div class="volume-bar"></div>
+    <div class="right-panel">
+      <img
+        class="control-button play-button"
+        src="assets/icons/queue.svg"
+        alt="Profile image"
+      />
+      <img
+        class="control-button"
+        src="assets/icons/volume-mid.svg"
+        alt="Profile image"
+      />
+      <div class="volume-bar"></div>
+    </div>
   </div>
 </div>
-{{ $ctrl.currentPercentage }}

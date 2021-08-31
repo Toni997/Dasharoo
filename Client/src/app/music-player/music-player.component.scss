@@ -9,10 +9,21 @@
   cursor: pointer;
 }
 
+// .scrubBar {
+//   appearance: none;
+//   background-color: #6e6e6e;
+//   width: 200px;
+//   height: 5px;
+// }
+
+// .scrubBar::progre
+
 .musicPlayer {
+  background-color: $background-color;
+  display: flex;
+  gap: 15px;
   border-top: 1px solid $primary-color;
   height: 130px;
-  display: flex;
   justify-content: space-between;
   position: fixed;
   padding: 15px;
@@ -27,9 +38,7 @@
     .author-details {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      justify-items: stretch;
-      align-self: center;
+      justify-content: center;
       gap: 5px;
       .record-name {
         font-weight: 300;
@@ -48,8 +57,9 @@
   }
   .center-panel {
     display: flex;
-    justify-content: center;
+    align-self: space-between;
     flex-direction: column;
+    justify-content: space-between;
     width: 800px;
     .controls-top {
       display: flex;
@@ -65,15 +75,27 @@
     }
     .controls-bottom {
       display: flex;
+      align-items: center;
       gap: 10px;
       .timeline {
+        position: relative;
         height: 5px;
         width: 100%;
         background-color: #6e6e6e;
-        align-self: center;
         .current-time {
           height: 100%;
           background-color: $text-color;
+        }
+        .draggable {
+          position: absolute;
+          background-color: $primary-color;
+          width: 15px;
+          height: 15px;
+          border-radius: 100%;
+          transform: translate(-7.5px, -5px);
+          &:active {
+            cursor: grab;
+          }
         }
       }
     }
@@ -82,6 +104,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 10;
     .volume-bar {
       width: 160px;
       height: 5px;
