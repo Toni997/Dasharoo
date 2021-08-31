@@ -1,13 +1,12 @@
 import "./music-player.component.scss";
 
 export class MusicPlayerController {
-  musicPlayerRef: any[];
-  mp: any;
+  musicPlayerRef: HTMLAudioElement[];
+  mp: HTMLAudioElement;
   timeline: HTMLDivElement[];
   centerButtonIcon: "play" | "pause" = "play";
-  scope: any;
   currentPercentage: number = 0;
-  volumeBar: any;
+  volumeBar: HTMLDivElement[];
   currentTime = 0;
   duration = 0;
   currentTimeString = "0:00";
@@ -29,30 +28,23 @@ export class MusicPlayerController {
     };
   }
 
-  onDragStartCircle(e: any) {
-    e.dataTransfer.effectAllowed = "copyMove";
-    e.dataTransfer.dropEffect = "move";
-    this.dragStartX = e.x;
-    this.dragStartCurrentProgress =
-      (this.currentPercentage / 100) * this.timeline[0].offsetWidth;
-  }
-
-  onBeingDraggedCircle(e: any) {
-    // console.log(this.dragStartX, e.x);
-    let currentProgressWidth =
-      (this.currentPercentage / 100) * this.timeline[0].offsetWidth;
-    let howMuchToMove = e.x - this.dragStartX;
-    currentProgressWidth = this.dragStartCurrentProgress + howMuchToMove;
-    console.log(currentProgressWidth);
-
-    this.currentPercentage =
-      (currentProgressWidth / this.timeline[0].offsetWidth) * 100;
-  }
-
-  onDragEndCircle(e: any) {}
-
   updateRecord() {
     // this.mp.currentTime = this.scrubBar[0].value;
+  }
+
+  onDragStart(e: any) {
+    e.dataTransfer.setData("text/plain", "This text may be dragged");
+    e.dataTransfer.dropEffect = "move";
+    e.dataTransfer.effectAllowed = "move";
+    // e.dataTransfer.setData;
+  }
+
+  onDragOver(e: any) {
+    console.log(e.target);
+
+    e.target.style.background = "red";
+
+    e.preventDefault();
   }
 
   showCircle() {

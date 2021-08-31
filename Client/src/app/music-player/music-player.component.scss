@@ -18,6 +18,31 @@
 
 // .scrubBar::progre
 
+.range {
+  height: 80px;
+  width: 380px;
+  background: #fff;
+  border-radius: 10px;
+  input {
+    appearance: none;
+    height: 5px;
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    &::-webkit-slider-thumb {
+      appearance: none;
+      height: 10px;
+      width: 10px;
+      background-color: red;
+      border-radius: 50%;
+      border: 1px solid blue;
+      cursor: pointer;
+    }
+  }
+}
+
 .musicPlayer {
   background-color: $background-color;
   display: flex;
@@ -32,6 +57,7 @@
   bottom: 0;
   .left-panel {
     display: flex;
+    width: 300px;
     .author-image {
       margin-right: 15px;
     }
@@ -93,6 +119,7 @@
           height: 15px;
           border-radius: 100%;
           transform: translate(-7.5px, -5px);
+          cursor: pointer;
           &:active {
             cursor: grab;
           }
@@ -105,8 +132,10 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 10;
+    width: 300px;
     .volume-bar {
-      width: 160px;
+      width: 100%;
+      min-width: 70px;
       height: 5px;
       background-color: #6e6e6e;
     }
