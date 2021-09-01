@@ -8,5 +8,6 @@ import "angular-cookies";
 import "@uirouter/angularjs";
 import "restangular";
 import "oclazyload";
+import "ng-redux";
 
 /// <reference path="custom-typings.d.ts" />

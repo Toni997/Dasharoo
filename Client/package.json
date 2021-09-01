@@ -21,7 +21,11 @@
     "angular-messages": "^1.8.2",
     "angular-resource": "^1.8.2",
     "angular-sanitize": "^1.8.2",
+    "ng-redux": "^4.4.3",
     "oclazyload": "^1.1.0",
+    "redux": "^4.1.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
     "restangular": "^1.6.1"
   },
   "devDependencies": {

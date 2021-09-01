@@ -1,3 +1,4 @@
+import restangular = require("restangular");
 import "./music-player.component.scss";
 
 export class MusicPlayerController {
@@ -7,20 +8,34 @@ export class MusicPlayerController {
   centerButtonIcon: "play" | "pause" = "play";
   currentPercentage: number = 0;
   volumeBar: HTMLDivElement[];
+  volumeBarContainer: HTMLDivElement[];
   currentTime = 0;
   duration = 0;
   currentTimeString = "0:00";
   durationString = "0:00";
   scrubBar: HTMLDivElement[];
-  circle: HTMLDivElement[];
+  volumeProgressBar: HTMLDivElement[];
+  circleTimeline: HTMLDivElement[];
+  circleVolume: HTMLDivElement[];
   dragStartX: number;
-  dragStartCurrentProgress: number;
+  dragStartVolume: number;
+  volumeIcon: "volume-mid" | "muted" = "volume-mid";
+  playButtonTooltip: "Play" | "Pause" = "Play";
+  redux;
+  rest: restangular.IService;
 
-  constructor() {
+  constructor($ngRedux, Restangular: restangular.IService) {
     ("ngInject");
-  }
 
-  $onInit() {}
+    this.redux = $ngRedux;
+    this.rest = Restangular;
+  }
+  async $onInit() {
+    console.log(this.redux);
+    console.log(this.rest);
+    let records = await this.rest.all("records").getList();
+    console.log(records);
+  }
 
   $postLink() {
     this.musicPlayerRef[0].onloadedmetadata = () => {
@@ -32,29 +47,24 @@ export class MusicPlayerController {
     // this.mp.currentTime = this.scrubBar[0].value;
   }
 
-  onDragStart(e: any) {
-    e.dataTransfer.setData("text/plain", "This text may be dragged");
-    e.dataTransfer.dropEffect = "move";
-    e.dataTransfer.effectAllowed = "move";
-    // e.dataTransfer.setData;
+  showCircleTimeline() {
+    this.circleTimeline[0].classList.remove("display-none");
+    this.circleTimeline[0].classList.add("display-block");
   }
 
-  onDragOver(e: any) {
-    console.log(e.target);
-
-    e.target.style.background = "red";
-
-    e.preventDefault();
+  hideCircleTimeline() {
+    this.circleTimeline[0].classList.remove("display-block");
+    this.circleTimeline[0].classList.add("display-none");
   }
 
-  showCircle() {
-    this.circle[0].classList.remove("display-none");
-    this.circle[0].classList.add("display-block");
+  showCircleVolume() {
+    this.circleVolume[0].classList.remove("display-none");
+    this.circleVolume[0].classList.add("display-block");
   }
 
-  hideCircle() {
-    this.circle[0].classList.remove("display-block");
-    this.circle[0].classList.add("display-none");
+  hideCircleVolume() {
+    this.circleVolume[0].classList.remove("display-block");
+    this.circleVolume[0].classList.add("display-none");
   }
 
   doNothing(e: any) {
@@ -86,6 +96,30 @@ export class MusicPlayerController {
     );
   }
 
+  onMouseDownVolume(e: MouseEvent) {
+    this.volumeBarContainer[0].onmouseleave = () => {
+      this.volumeBarContainer[0].onmousemove = null;
+      this.volumeBarContainer[0].onmouseleave = null;
+    };
+    this.changeVolume(e);
+    this.volumeBarContainer[0].onmousemove = ($event: MouseEvent) => {
+      this.onMouseMovedVolume($event);
+      e.preventDefault();
+    };
+    this.volumeBarContainer[0].onmouseup = () => {
+      this.volumeBarContainer[0].onmousemove = null;
+    };
+    e.preventDefault();
+  }
+
+  onMouseMovedVolume(e: MouseEvent) {
+    let sliderWidth: number = this.volumeBar[0].offsetWidth;
+    let newVolume: number = e.offsetX / sliderWidth;
+    newVolume = newVolume > 1 ? 1 : newVolume < 0 ? 0 : newVolume;
+    newVolume = parseFloat(newVolume.toFixed(2));
+    this.mp.volume = newVolume;
+  }
+
   updateProgressBar() {
     this.currentPercentage = (this.mp.currentTime / this.mp.duration) * 100;
     let currentTime = Math.floor(this.mp.currentTime);
@@ -115,9 +149,38 @@ export class MusicPlayerController {
     if (this.mp.paused) {
       this.mp.play();
       this.centerButtonIcon = "pause";
+      this.playButtonTooltip = "Pause";
     } else {
       this.mp.pause();
       this.centerButtonIcon = "play";
+      this.playButtonTooltip = "Play";
+    }
+  }
+
+  mute() {
+    if (this.mp.muted) {
+      this.mp.muted = false;
+      this.volumeIcon = "volume-mid";
+    } else {
+      this.mp.muted = true;
+      this.volumeIcon = "muted";
+    }
+  }
+
+  changeVolume(e: any) {
+    let totalWidth = this.volumeBar[0].offsetWidth;
+    let offsetWidth = e.offsetX;
+    this.mp.volume = offsetWidth / totalWidth;
+  }
+
+  loop(e: any) {
+    const el: HTMLImageElement = e.target;
+    if (this.mp.loop) {
+      this.mp.loop = false;
+      el.classList.remove("control-selected");
+    } else {
+      this.mp.loop = true;
+      el.classList.add("control-selected");
     }
   }
 }

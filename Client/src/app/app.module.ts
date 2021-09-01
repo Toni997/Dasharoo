@@ -17,6 +17,7 @@ let module: ng.IModule = angular.module("dasharoo", [
   "ui.router",
   "restangular",
   "oc.lazyLoad",
+  "ngRedux",
 ]);
 
 module.constant("ENVIRONMENT", ENV);
