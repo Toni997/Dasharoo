@@ -1,4 +1,5 @@
-import restangular = require("restangular");
+import { RecordActionsService } from "app/record-actions.service";
+import { RecordsService } from "app/records.service";
 import "./music-player.component.scss";
 
 export class MusicPlayerController {
@@ -22,25 +23,39 @@ export class MusicPlayerController {
   volumeIcon: "volume-mid" | "muted" = "volume-mid";
   playButtonTooltip: "Play" | "Pause" = "Play";
   redux;
-  rest: restangular.IService;
+  recordsService: RecordsService;
+  recordActions: RecordActionsService;
+  records: any;
+  $scope: any;
+  currentRecordIndex: number = 0;
+  bezveze: any;
 
-  constructor($ngRedux, Restangular: restangular.IService) {
+  constructor(
+    $scope: any,
+    $ngRedux: any,
+    recordsService: RecordsService,
+    recordActionsService: RecordActionsService
+  ) {
     ("ngInject");
 
+    this.$scope = $scope;
     this.redux = $ngRedux;
-    this.rest = Restangular;
+    this.recordsService = recordsService;
+    this.recordActions = recordActionsService;
+    this.$scope.queue = null;
+    this.redux.subscribe(() => {
+      this.$scope.records = this.redux.getState().records;
+      this.$scope.$apply();
+      console.log($scope.records);
+    });
   }
   async $onInit() {
-    console.log(this.redux);
-    console.log(this.rest);
-    let records = await this.rest.all("records").getList();
-    console.log(records);
+    console.log(this.bezveze);
+    // this.redux.dispatch(this.recordActions.listRecords());
   }
 
   $postLink() {
-    this.musicPlayerRef[0].onloadedmetadata = () => {
-      this.mp = this.musicPlayerRef[0];
-    };
+    this.mp = this.musicPlayerRef[0];
   }
 
   updateRecord() {
@@ -55,16 +70,6 @@ export class MusicPlayerController {
   hideCircleTimeline() {
     this.circleTimeline[0].classList.remove("display-block");
     this.circleTimeline[0].classList.add("display-none");
-  }
-
-  showCircleVolume() {
-    this.circleVolume[0].classList.remove("display-none");
-    this.circleVolume[0].classList.add("display-block");
-  }
-
-  hideCircleVolume() {
-    this.circleVolume[0].classList.remove("display-block");
-    this.circleVolume[0].classList.add("display-none");
   }
 
   doNothing(e: any) {
@@ -96,29 +101,29 @@ export class MusicPlayerController {
     );
   }
 
-  onMouseDownVolume(e: MouseEvent) {
-    this.volumeBarContainer[0].onmouseleave = () => {
-      this.volumeBarContainer[0].onmousemove = null;
-      this.volumeBarContainer[0].onmouseleave = null;
-    };
-    this.changeVolume(e);
-    this.volumeBarContainer[0].onmousemove = ($event: MouseEvent) => {
-      this.onMouseMovedVolume($event);
-      e.preventDefault();
-    };
-    this.volumeBarContainer[0].onmouseup = () => {
-      this.volumeBarContainer[0].onmousemove = null;
-    };
-    e.preventDefault();
-  }
+  // onMouseDownVolume(e: MouseEvent) {
+  //   this.volumeBarContainer[0].onmouseleave = () => {
+  //     this.volumeBarContainer[0].onmousemove = null;
+  //     this.volumeBarContainer[0].onmouseleave = null;
+  //   };
+  //   this.changeVolume(e);
+  //   this.volumeBarContainer[0].onmousemove = ($event: MouseEvent) => {
+  //     this.onMouseMovedVolume($event);
+  //     e.preventDefault();
+  //   };
+  //   this.volumeBarContainer[0].onmouseup = () => {
+  //     this.volumeBarContainer[0].onmousemove = null;
+  //   };
+  //   e.preventDefault();
+  // }
 
-  onMouseMovedVolume(e: MouseEvent) {
-    let sliderWidth: number = this.volumeBar[0].offsetWidth;
-    let newVolume: number = e.offsetX / sliderWidth;
-    newVolume = newVolume > 1 ? 1 : newVolume < 0 ? 0 : newVolume;
-    newVolume = parseFloat(newVolume.toFixed(2));
-    this.mp.volume = newVolume;
-  }
+  // onMouseMovedVolume(e: MouseEvent) {
+  //   let sliderWidth: number = this.volumeBar[0].offsetWidth;
+  //   let newVolume: number = e.offsetX / sliderWidth;
+  //   newVolume = newVolume > 1 ? 1 : newVolume < 0 ? 0 : newVolume;
+  //   newVolume = parseFloat(newVolume.toFixed(2));
+  //   this.mp.volume = newVolume;
+  // }
 
   updateProgressBar() {
     this.currentPercentage = (this.mp.currentTime / this.mp.duration) * 100;
@@ -188,4 +193,7 @@ export class MusicPlayerController {
 export const MusicPlayerComponent: ng.IComponentOptions = {
   template: require("./music-player.component.html").default,
   controller: MusicPlayerController,
+  bindings: {
+    bezveze: "=",
+  },
 };

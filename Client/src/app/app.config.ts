@@ -1,7 +1,9 @@
 import thunk from "redux-thunk";
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import { userDetailsReducer } from "./reducers/userDetailsReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
+
+import { userDetailsReducer } from "./reducers/userDetailsReducer";
+import { queueReducer } from "./reducers/queueReducer";
 
 export class AppConfig {
   constructor(
@@ -15,7 +17,10 @@ export class AppConfig {
   ) {
     "ngInject";
 
-    const reducer = combineReducers({ userDetails: userDetailsReducer });
+    const reducer = combineReducers({
+      userDetails: userDetailsReducer,
+      records: queueReducer,
+    });
     const middleware = [thunk];
 
     $ngReduxProvider.createStore((/*middlewares, enhancers*/) => {

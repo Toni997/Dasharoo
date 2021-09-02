@@ -1,0 +1,20 @@
+//----------------------------------------
+//  rightSidebar
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+.right-sidebar {
+  position: fixed;
+  height: calc(100% - 130px);
+  right: 0;
+  width: $sidebar-width;
+  background: $background-color;
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

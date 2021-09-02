@@ -34,8 +34,12 @@
   </head>
 
   <body>
-    <ui-view></ui-view>
-    <music-player></music-player>
+    <div class="container">
+      <left-sidebar></left-sidebar>
+      <ui-view></ui-view>
+      <right-sidebar></right-sidebar>
+    </div>
+    <music-player bezveze="'bezze'"></music-player>
     <noscript>
       <h1>This website requires JavaScript.</h1>
     </noscript>

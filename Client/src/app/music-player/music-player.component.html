@@ -1,11 +1,11 @@
-<audio ng-on-timeupdate="$ctrl.updateProgressBar()"
-  ng-on-ended="$ctrl.onEnded($event)" preload="auto"
-  ng-ref="$ctrl.musicPlayerRef">
-  <source src="assets/Avicii - For A Better Day.mp3" />
+<audio
+  ng-on-timeupdate="$ctrl.updateProgressBar()"
+  ng-on-ended="$ctrl.onEnded($event)"
+  preload="auto"
+  ng-ref="$ctrl.musicPlayerRef"
+>
+  <source src="" />
 </audio>
-
-
-<!-- <input class="scrubBar" ng-ref="$ctrl.scrubBar" type="range" min="0" max="{{$ctrl.duration}}" step="1" ng-model="$ctrl.currentTime" ng-change="$ctrl.updateRecord()"/> -->
 <div class="musicPlayer">
   <div class="left-panel">
     <div class="author-image">
@@ -14,64 +14,105 @@
     <div class="author-details">
       <h2 class="record-name">For A Better Day</h2>
       <h4 class="record-author">
-        By <a href="#" class="author-name">Avicii</a>
+        By
+        <a href="#" class="author-name">Avicii</a>
       </h4>
     </div>
   </div>
   <div class="center-panel">
     <div class="controls-top">
-      <img width="18" class="control-button" src="assets/icons/random.svg"
-        alt="Shuffle" title="Enable shuffling" draggable="false"/>
-      <img width="18" class="control-button" src="assets/icons/previous.svg"
-        alt="Previous" title="Previous" draggable="false"/>
-      <img width="70" ng-click="$ctrl.playOrPause()"
+      <img
+        width="18"
+        class="control-button"
+        src="assets/icons/random.svg"
+        alt="Shuffle"
+        title="Enable shuffling"
+        draggable="false"
+      />
+      <img
+        width="18"
+        class="control-button"
+        src="assets/icons/previous.svg"
+        alt="Previous"
+        title="Previous"
+        draggable="false"
+      />
+      <img
+        width="70"
+        ng-click="$ctrl.playOrPause()"
         class="control-button play-button"
         ng-src="assets/icons/{{ $ctrl.centerButtonIcon }}.svg"
-        alt="Play/Pause" title="{{$ctrl.playButtonTooltip}}" draggable="false"/>
-      <img width="18" class="control-button" src="assets/icons/next.svg"
-        alt="Next" title="next" draggable="false"/>
-      <img ng-click="$ctrl.loop($event)" width="18" class="control-button" src="assets/icons/loop.svg"
-        alt="Loop" title="Enable looping" draggable="false"/>
+        alt="Play/Pause"
+        title="{{ $ctrl.playButtonTooltip }}"
+        draggable="false"
+      />
+      <img
+        width="18"
+        class="control-button"
+        src="assets/icons/next.svg"
+        alt="Next"
+        title="next"
+        draggable="false"
+      />
+      <img
+        ng-click="$ctrl.loop($event)"
+        width="18"
+        class="control-button"
+        src="assets/icons/loop.svg"
+        alt="Loop"
+        title="Enable looping"
+        draggable="false"
+      />
     </div>
     <div class="controls-bottom">
-      <div class="current-time">{{$ctrl.currentTimeString}}</div>
-      <div class="slider" ng-click="$ctrl.changeTime($event)" 
-        ng-ref="$ctrl.timeline" ng-mouseover="$ctrl.showCircleTimeline()"
-        ng-mouseout="$ctrl.hideCircleTimeline()">
-        <div ng-style="{'left': $ctrl.currentPercentage + '%'}"
-          ng-ref="$ctrl.circleTimeline" ng-click="$ctrl.doNothing($event)"
-          
-          
-          
-          class="circle display-none">
-        </div>
-        <div ng-ref="$ctrl.scrubBar" class="slider-progress"
-          ng-style="{'width': $ctrl.currentPercentage + '%'}">
-        </div>
+      <div class="current-time">{{ $ctrl.currentTimeString }}</div>
+      <div
+        class="slider"
+        ng-click="$ctrl.changeTime($event)"
+        ng-ref="$ctrl.timeline"
+        ng-mouseover="$ctrl.showCircleTimeline()"
+        ng-mouseout="$ctrl.hideCircleTimeline()"
+      >
+        <div
+          ng-style="{ left: $ctrl.currentPercentage + '%' }"
+          ng-ref="$ctrl.circleTimeline"
+          ng-click="$ctrl.doNothing($event)"
+          class="circle display-none"
+        ></div>
+        <div
+          ng-ref="$ctrl.scrubBar"
+          class="slider-progress"
+          ng-style="{ width: $ctrl.currentPercentage + '%' }"
+        ></div>
       </div>
-      <div class="duration">{{$ctrl.durationString}}</div>
+      <div class="duration">{{ $ctrl.durationString }}</div>
     </div>
   </div>
   <div class="right-panel">
-    <img class="control-button play-button" src="assets/icons/queue.svg"
-      alt="queue" title="Queue" draggable="false"/>
-    <img ng-click="$ctrl.mute()" class="control-button" ng-src="assets/icons/{{$ctrl.volumeIcon}}.svg"
-      alt="volume bar" title="Mute" draggable="false"/>
-      
-        <input class="range" ng-ref="$ctrl.volumeBar" type="range" min="0" max="1" step="0.01"
-          value="1" ng-model="$ctrl.mp.volume" />
-        
-      <!-- <div class="slider volume-bar" 
-        ng-ref="$ctrl.volumeBar" ng-mouseover="$ctrl.showCircleVolume()"
-        ng-mouseout="$ctrl.hideCircleVolume()" 
-        >
-        <div ng-style="{'left': $ctrl.mp.volume*100 + '%'}"
-          ng-ref="$ctrl.circleVolume" class="circle display-none">
-        </div>
-        <div ng-ref="$ctrl.volumeProgressBar" class="slider-progress"
-          ng-style="{'width': $ctrl.mp.volume*100 + '%'}">
-        </div>
-      </div> -->
+    <img
+      class="control-button play-button"
+      src="assets/icons/queue.svg"
+      alt="queue"
+      title="Queue"
+      draggable="false"
+    />
+    <img
+      ng-click="$ctrl.mute()"
+      class="control-button"
+      ng-src="assets/icons/{{ $ctrl.volumeIcon }}.svg"
+      alt="volume bar"
+      title="Mute"
+      draggable="false"
+    />
+    <input
+      class="range"
+      ng-ref="$ctrl.volumeBar"
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value="1"
+      ng-model="$ctrl.mp.volume"
+    />
   </div>
-</div>
 </div>

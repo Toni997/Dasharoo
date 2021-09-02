@@ -1,0 +1,35 @@
+//----------------------------------------
+//  separator
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+.separator {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  img {
+    margin-left: 15px;
+    cursor: pointer;
+  }
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid $text-color;
+  opacity: 20%;
+}
+
+.separator:not(:empty)::before {
+  margin-right: 1em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: 1em;
+}
