@@ -1,0 +1,11 @@
+//----------------------------------------
+//  recommendedForYou
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+.playlists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}

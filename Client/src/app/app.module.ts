@@ -11,6 +11,12 @@ import { RecordActionsService } from "./record-actions.service";
 import { LeftSidebarComponent } from './left-sidebar/left-sidebar.component';
 import { SeparatorComponent } from './separator/separator.component';
 import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
+import { QuickPlayComponent } from './quick-play/quick-play.component';
+import { SingleArtistComponent } from './single-artist/single-artist.component';
+import { RecommendedForYouComponent } from './recommended-for-you/recommended-for-you.component';
+import { SinglePlaylistComponent } from './single-playlist/single-playlist.component';
+import { IconComponent } from './icon/icon.component';
+import { HomeHeaderComponent } from './home-header/home-header.component';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -38,5 +44,11 @@ module.service("recordActionsService", RecordActionsService);
 module.component('leftSidebar', LeftSidebarComponent);
 module.component('separator', SeparatorComponent);
 module.component('rightSidebar', RightSidebarComponent);
+module.component('quickPlay', QuickPlayComponent);
+module.component('singleArtist', SingleArtistComponent);
+module.component('recommendedForYou', RecommendedForYouComponent);
+module.component('singlePlaylist', SinglePlaylistComponent);
+module.component('icon', IconComponent);
+module.component('homeHeader', HomeHeaderComponent);
 
 export const AppModule = module.name;

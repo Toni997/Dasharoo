@@ -28,7 +28,6 @@ export class MusicPlayerController {
   records: any;
   $scope: any;
   currentRecordIndex: number = 0;
-  bezveze: any;
 
   constructor(
     $scope: any,
@@ -50,7 +49,6 @@ export class MusicPlayerController {
     });
   }
   async $onInit() {
-    console.log(this.bezveze);
     // this.redux.dispatch(this.recordActions.listRecords());
   }
 
@@ -101,30 +99,6 @@ export class MusicPlayerController {
     );
   }
 
-  // onMouseDownVolume(e: MouseEvent) {
-  //   this.volumeBarContainer[0].onmouseleave = () => {
-  //     this.volumeBarContainer[0].onmousemove = null;
-  //     this.volumeBarContainer[0].onmouseleave = null;
-  //   };
-  //   this.changeVolume(e);
-  //   this.volumeBarContainer[0].onmousemove = ($event: MouseEvent) => {
-  //     this.onMouseMovedVolume($event);
-  //     e.preventDefault();
-  //   };
-  //   this.volumeBarContainer[0].onmouseup = () => {
-  //     this.volumeBarContainer[0].onmousemove = null;
-  //   };
-  //   e.preventDefault();
-  // }
-
-  // onMouseMovedVolume(e: MouseEvent) {
-  //   let sliderWidth: number = this.volumeBar[0].offsetWidth;
-  //   let newVolume: number = e.offsetX / sliderWidth;
-  //   newVolume = newVolume > 1 ? 1 : newVolume < 0 ? 0 : newVolume;
-  //   newVolume = parseFloat(newVolume.toFixed(2));
-  //   this.mp.volume = newVolume;
-  // }
-
   updateProgressBar() {
     this.currentPercentage = (this.mp.currentTime / this.mp.duration) * 100;
     let currentTime = Math.floor(this.mp.currentTime);
@@ -144,6 +118,8 @@ export class MusicPlayerController {
   }
 
   changeTime(e: any) {
+    if (!this.mp.src) return;
+
     let totalWidth = this.timeline[0].offsetWidth;
     let offsetWidth = e.offsetX;
     this.currentPercentage = (offsetWidth / totalWidth) * 100;
@@ -151,6 +127,7 @@ export class MusicPlayerController {
   }
 
   playOrPause() {
+    if (!this.mp.src) return;
     if (this.mp.paused) {
       this.mp.play();
       this.centerButtonIcon = "pause";
@@ -193,7 +170,4 @@ export class MusicPlayerController {
 export const MusicPlayerComponent: ng.IComponentOptions = {
   template: require("./music-player.component.html").default,
   controller: MusicPlayerController,
-  bindings: {
-    bezveze: "=",
-  },
 };

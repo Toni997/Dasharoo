@@ -21,22 +21,21 @@
   </div>
   <div class="center-panel">
     <div class="controls-top">
-      <img
+      <icon
         width="18"
         class="control-button"
-        src="assets/icons/random.svg"
-        alt="Shuffle"
-        title="Enable shuffling"
-        draggable="false"
-      />
-      <img
+        src="'random'"
+        tooltip="'Enable shuffling'"
+        ng-click="$ctrl.playOrPause()"
+      >
+      </icon>
+      <icon
         width="18"
         class="control-button"
-        src="assets/icons/previous.svg"
-        alt="Previous"
-        title="Previous"
-        draggable="false"
-      />
+        src="'previous'"
+        alt="'Previous'"
+        tooltip="'Previous'"
+      ></icon>
       <img
         width="70"
         ng-click="$ctrl.playOrPause()"
@@ -90,7 +89,7 @@
   </div>
   <div class="right-panel">
     <img
-      class="control-button play-button"
+      class="control-button"
       src="assets/icons/queue.svg"
       alt="queue"
       title="Queue"

@@ -1,0 +1,41 @@
+//----------------------------------------
+//  single-artist
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+single-artist {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  border-radius: 5px;
+  flex-basis: 350px;
+  flex-grow: 1;
+  transition: 0.8s;
+  background-image: linear-gradient(
+    rgba(52, 62, 41, 0),
+    rgba(158, 207, 167, 0.2)
+  );
+  &:hover {
+    background-color: rgba(158, 207, 167, 0.1);
+  }
+}
+
+.artist-image {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 5px 0 0 5px;
+  img {
+    height: inherit;
+  }
+}
+
+.artist-name {
+  padding: 30px;
+  h2 {
+    cursor: pointer;
+    font-weight: 300;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  }
+}

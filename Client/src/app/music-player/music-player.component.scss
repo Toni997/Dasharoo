@@ -61,18 +61,9 @@
       .record-name {
         font-weight: 300;
       }
-      .record-author {
-        color: $secondary-text-color;
-        .author-name {
-          color: $primary-color;
-          text-decoration: none;
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-      }
     }
   }
+
   .center-panel {
     display: flex;
     align-self: space-between;
@@ -90,11 +81,16 @@
       .play-button:hover {
         transform: scale(1.05);
       }
+      icon {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
     }
     .controls-bottom {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
     }
   }
   .right-panel {

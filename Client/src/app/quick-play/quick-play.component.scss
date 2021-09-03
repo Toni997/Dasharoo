@@ -1,0 +1,11 @@
+//----------------------------------------
+//  quickPlay
+//----------------------------------------
+
+@import "../../styles/abstracts/variables";
+
+.artists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
