@@ -12,9 +12,9 @@
   font-weight: 700;
   margin-top: 15px;
   margin-bottom: 15px;
-  img {
-    margin-left: 15px;
+  .expander {
     cursor: pointer;
+    margin-left: 15px;
   }
 }
 
@@ -32,4 +32,7 @@
 
 .separator:not(:empty)::after {
   margin-left: 1em;
+}
+
+.expander:hover {
 }

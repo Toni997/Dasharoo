@@ -123,3 +123,11 @@ ui-view {
     }
   }
 }
+
+@keyframes rotate180 {
+  0% {
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
