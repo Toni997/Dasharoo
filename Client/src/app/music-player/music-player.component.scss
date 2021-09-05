@@ -47,19 +47,26 @@
   left: 0;
   right: 0;
   bottom: 0;
+  & > div {
+    flex: 1;
+  }
   .left-panel {
     display: flex;
-    width: 300px;
     .author-image {
       margin-right: 15px;
     }
     .author-details {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 5px;
       .record-name {
         font-weight: 300;
+      }
+      .record-author {
       }
     }
   }
@@ -69,7 +76,8 @@
     align-self: space-between;
     flex-direction: column;
     justify-content: space-between;
-    width: 800px;
+    max-width: 800px;
+    flex-grow: 2;
     .controls-top {
       display: flex;
       justify-content: center;
@@ -111,6 +119,7 @@
   transform: translate(-7.5px, -5px);
   cursor: default;
 }
+
 .draggable:active {
   cursor: grab;
 }
