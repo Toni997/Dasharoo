@@ -18,6 +18,16 @@
         <a href="#" class="author-name">Avicii</a>
       </h4>
     </div>
+    <div class="play-button-left-panel">
+      <icon
+        width="70"
+        class="control-button play-button"
+        src="$ctrl.centerButtonIcon"
+        alt="$ctrl.playButtonTooltip"
+        tooltip="$ctrl.playButtonTooltip"
+        ng-click="$ctrl.playOrPause()"
+      ></icon>
+    </div>
   </div>
   <div class="center-panel">
     <div class="controls-top">
@@ -36,32 +46,29 @@
         alt="'Previous'"
         tooltip="'Previous'"
       ></icon>
-      <img
+      <icon
         width="70"
-        ng-click="$ctrl.playOrPause()"
         class="control-button play-button"
-        ng-src="assets/icons/{{ $ctrl.centerButtonIcon }}.svg"
-        alt="Play/Pause"
-        title="{{ $ctrl.playButtonTooltip }}"
-        draggable="false"
-      />
-      <img
+        src="$ctrl.centerButtonIcon"
+        alt="$ctrl.playButtonTooltip"
+        tooltip="$ctrl.playButtonTooltip"
+        ng-click="$ctrl.playOrPause()"
+      ></icon>
+      <icon
         width="18"
         class="control-button"
-        src="assets/icons/next.svg"
-        alt="Next"
-        title="next"
-        draggable="false"
-      />
-      <img
+        src="'next'"
+        alt="'Next'"
+        tooltip="'Next'"
+      ></icon>
+      <icon
+        width="18"
+        class="control-button"
+        src="'loop'"
+        alt="'Loop'"
+        tooltip="'Enable looping'"
         ng-click="$ctrl.loop($event)"
-        width="18"
-        class="control-button"
-        src="assets/icons/loop.svg"
-        alt="Loop"
-        title="Enable looping"
-        draggable="false"
-      />
+      ></icon>
     </div>
     <div class="controls-bottom">
       <div class="current-time">{{ $ctrl.currentTimeString }}</div>

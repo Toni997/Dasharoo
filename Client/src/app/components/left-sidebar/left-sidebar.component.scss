@@ -2,7 +2,15 @@
 //  leftSidebar
 //----------------------------------------
 
-@import "../../styles/abstracts/variables";
+@import "../../../styles/abstracts/variables";
+
+.close-left-sidebar {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 5;
+}
 
 .left-sidebar {
   position: fixed;
@@ -15,30 +23,6 @@
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  nav {
-    user-select: none;
-    ul {
-      list-style-type: none;
-      li {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-        padding: 15px 30px;
-        transition: 0.3s;
-        cursor: pointer;
-        &:hover {
-          background: rgb(27, 27, 27);
-        }
-      }
-      a {
-        font-size: 1.5em;
-        text-decoration: none;
-        color: #aaa;
-        transition: 0.3s;
-      }
-    }
   }
 }
 .logo {
@@ -56,4 +40,22 @@
   color: $primary-color;
   font-weight: 400;
   font-size: 2.7em;
+}
+
+@media (min-width: $breakpoint-sm) {
+  .close-left-sidebar {
+    display: none;
+  }
+  left-sidebar {
+    display: block !important;
+  }
+  ui-view {
+    margin-left: $sidebar-width !important;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  left-sidebar {
+    display: none;
+  }
 }

@@ -2,11 +2,22 @@
 //  home-header
 //----------------------------------------
 
-@import "../../styles/abstracts/variables";
+@import "../../../styles/abstracts/variables";
 
 home-header {
   display: flex;
+  gap: 5px;
   justify-content: space-between;
+}
+
+@media (min-width: $breakpoint-sm) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger {
+  cursor: pointer;
 }
 
 .message {

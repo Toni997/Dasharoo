@@ -9,8 +9,8 @@ export class SeparatorController {
 
   $onInit() {}
 
-  onClick(e: any) {
-    e.target.style.animation = "rotate180 0.5s forwards";
+  onClick() {
+    // e.target.style.animation = "rotate180 0.5s forwards";
   }
 }
 
