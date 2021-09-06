@@ -11,7 +11,13 @@ home-header {
 }
 
 @media (min-width: $breakpoint-sm) {
-  .hamburger {
+  hamburger {
+    display: none;
+  }
+}
+
+@media (max-width: $breakpoint-lg) {
+  .get-premium-container {
     display: none;
   }
 }
@@ -24,7 +30,7 @@ home-header {
   margin-bottom: 50px;
 }
 
-.get-premium-btn {
+.get-premium {
   text-decoration: none;
   cursor: pointer;
   border-radius: 20px;

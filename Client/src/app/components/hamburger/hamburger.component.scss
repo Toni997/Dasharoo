@@ -1,9 +1,15 @@
 //----------------------------------------
-//  components/navigation
+//  components/hamburger
 //----------------------------------------
 
 @import "../../../styles/abstracts/variables";
 
-.active {
-  color: $text-color;
+@media (min-width: $breakpoint-sm) {
+  .hamburger {
+    display: none;
+  }
+}
+
+.hamburger {
+  cursor: pointer;
 }

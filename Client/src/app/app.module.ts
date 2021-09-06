@@ -18,7 +18,11 @@ import { SinglePlaylistComponent } from "./components/single-playlist/single-pla
 import { IconComponent } from "./components/icon/icon.component";
 import { HomeHeaderComponent } from "./components/home-header/home-header.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
-import { PlaylistsPanelComponent } from './components/playlists-panel/playlists-panel.component';
+import { PlaylistsPanelComponent } from "./components/playlists-panel/playlists-panel.component";
+import { SearchViewComponent } from "./views/search-view/search-view.component";
+import { MyAccountViewComponent } from './views/my-account-view/my-account-view.component';
+import { HamburgerComponent } from './components/hamburger/hamburger.component';
+import { SidebarsService } from './services/sidebars.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -53,6 +57,10 @@ module.component("singlePlaylist", SinglePlaylistComponent);
 module.component("icon", IconComponent);
 module.component("homeHeader", HomeHeaderComponent);
 module.component("navigation", NavigationComponent);
-module.component('playlistsPanel', PlaylistsPanelComponent);
+module.component("playlistsPanel", PlaylistsPanelComponent);
+module.component("searchView", SearchViewComponent);
+module.component('myAccountView', MyAccountViewComponent);
+module.component('hamburger', HamburgerComponent);
+module.service('sidebarsService', SidebarsService);
 
 export const AppModule = module.name;

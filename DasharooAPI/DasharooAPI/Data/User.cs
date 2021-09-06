@@ -9,6 +9,7 @@ namespace DasharooAPI.Data
     {
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string ArtistName { get; set; }
         public bool Verified { get; set; }
         public string ImagePath { get; set; }
         public string BackgroundPath { get; set; }

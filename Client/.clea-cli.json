@@ -4,7 +4,8 @@
   "root": "src",
   "main": "app/app.module.ts",
   "styles": [
-    "styles/main.scss"
+    "styles/main.scss",
+    "styles/abstracts/_variables.scss"
   ],
   "environmentSource": "config/config.json",
   "environments": {

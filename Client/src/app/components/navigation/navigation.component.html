@@ -1,18 +1,30 @@
 <nav>
   <ul>
-    <a href="#">
+    <a
+      href="/"
+      ng-class="{ active: $ctrl.$scope.isActive('/') }"
+      ng-click="$ctrl.closeLeftSidebar()"
+    >
       <li>
         <icon src="'home'"></icon>
         <span>Home</span>
       </li>
     </a>
-    <a href="#">
+    <a
+      href="/search"
+      ng-class="{ active: $ctrl.$scope.isActive('/search') }"
+      ng-click="$ctrl.closeLeftSidebar()"
+    >
       <li>
         <icon src="'search'"></icon>
         <span>Search</span>
       </li>
     </a>
-    <a href="#">
+    <a
+      href="/my-account"
+      ng-class="{ active: $ctrl.$scope.isActive('/my-account') }"
+      ng-click="$ctrl.closeLeftSidebar()"
+    >
       <li>
         <icon src="'my-account'"></icon>
         <span>My Account</span>

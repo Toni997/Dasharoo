@@ -7,40 +7,14 @@
 *,
 *::after,
 *::before {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-ul,
 body {
-  margin: 0;
-  padding: 0;
   cursor: default;
   user-select: none;
-}
-
-h1 {
-  font-size: 2em;
-}
-h2 {
-  font-size: 1.5em;
-}
-h3 {
-  font-size: 1.17em;
-}
-h4 {
-  font-size: 1.12em;
-}
-h5 {
-  font-size: 0.83em;
-}
-h6 {
-  font-size: 0.75em;
 }
 
 img {
@@ -51,16 +25,19 @@ img {
   -ms-user-select: none;
 }
 
-body {
-  font-family: "Roboto", sans-serif;
-  color: $text-color;
-  font-weight: 300;
+html {
   background-color: $background-color;
   background-image: linear-gradient(
     rgba(158, 207, 167, 0.2),
     rgba(52, 62, 41, 0) 85%
   );
   background-repeat: repeat-x;
+  height: 100%;
+}
+body {
+  font-family: "Roboto", sans-serif;
+  color: $text-color;
+  font-weight: 300;
 }
 
 .container {
@@ -133,12 +110,7 @@ ui-view {
   }
 }
 
-// .rotate180 {
-//   transform
-// }
-
 .hide-sidebar {
-  // transform: translateX(-100%);
   display: none;
 }
 
@@ -147,7 +119,6 @@ ui-view {
 }
 
 .show-sidebar {
-  // transform: translateX(100%);
   display: block;
 }
 

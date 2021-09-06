@@ -29,7 +29,8 @@ namespace DasharooAPI.Models
         public string Name { get; set; }
         [MaxLength(50)]
         public string Surname { get; set; }
-
+        [MaxLength(50)]
+        public string ArtistName { get; set; }
         [MaxLength(20)]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
@@ -48,9 +49,7 @@ namespace DasharooAPI.Models
     public class UserOnRecordDto
     {
         public string Id { get; set; }
-        public string UserName { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public string ArtistName { get; set; }
         public bool Verified { get; set; }
     }
 
@@ -60,6 +59,7 @@ namespace DasharooAPI.Models
         public string UserName { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string ArtistName { get; set; }
         public bool Verified { get; set; }
         public string ImagePath { get; set; }
         public string BackgroundPath { get; set; }
@@ -73,6 +73,8 @@ namespace DasharooAPI.Models
         public string Name { get; set; }
         [MaxLength(50)]
         public string Surname { get; set; }
+        [MaxLength(50)]
+        public string ArtistName { get; set; }
         [MaxLength(20)]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
