@@ -72,6 +72,7 @@ namespace DasharooAPI.Controllers
             }
 
             var record = _mapper.Map<Record>(recordDto);
+            record.CreatedById = "8a0226d4-e503-4e7d-90c6-f4efc84bff6b";
 
             // uploading audio file
             var resultAudio = await _fileService.UploadFile(
@@ -227,34 +228,6 @@ namespace DasharooAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("Streams")]
-        public async Task<IActionResult> GetRecordSource([FromQuery] string source)
-        {
-            var path = Path.Combine(_fileService.RecordSourcesDir, source);
-            if (!System.IO.File.Exists(path)) return NotFound();
 
-            var filedata = await System.IO.File.ReadAllBytesAsync(path);
-
-            Response.Headers.Add("Accept-Ranges", "bytes");
-
-            return File(filedata, "application/octet-stream");
-
-            // var path = Path.Combine(_fileService.RecordSourcesDir, source);
-            // if (!System.IO.File.Exists(path)) return NotFound();
-            //
-            // var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
-            // return File(stream, "application/octet-stream");
-        }
-
-        [HttpGet("Images")]
-        public async Task<IActionResult> GetRecordImage([FromQuery] string image)
-        {
-            var path = Path.Combine(_fileService.RecordImagesDir, image);
-            if (!System.IO.File.Exists(path)) return NotFound();
-
-            var filedata = await System.IO.File.ReadAllBytesAsync(path);
-
-            return File(filedata, "application/octet-stream");
-        }
     }
 }

@@ -18,9 +18,7 @@ export class LeftSidebarController {
     this.closeLeftSidebar = this.sidebarsService.useCloseLeftSidebar();
   }
 
-  $onInit() {
-    console.log(this.$document.find("navigation")[0]);
-  }
+  $onInit() {}
 }
 
 export const LeftSidebarComponent: ng.IComponentOptions = {

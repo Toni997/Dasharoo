@@ -14,19 +14,20 @@ namespace DasharooAPI.Repository
         {
         }
 
-        public List<string> IncludeRecords { get; } = new()
+        public List<string> Includes { get; } = new()
         {
-            "Records"
+            "Records",
+            "Author"
         };
 
-        public Task<Playlist> GetByIdWithRecords(int id)
+        public Task<Playlist> GetByIdWithRecordsAndAuthor(int id)
         {
-            return Get(x => x.Id == id, includes: IncludeRecords);
+            return Get(x => x.Id == id, includes: Includes);
 
         }
         public Task<IList<Playlist>> GetAllWithRecords()
         {
-            return GetAll(includes: IncludeRecords);
+            return GetAll(includes: Includes);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetPlaylistById(int id)
         {
-            var playlist = await _unitOfWork.Playlists.GetByIdWithRecords(id);
+            var playlist = await _unitOfWork.Playlists.GetByIdWithRecordsAndAuthor(id);
             if (playlist == null) return NotFound();
             var playlistDto = _mapper.Map<PlaylistDto>(playlist);
             return Ok(playlistDto);
@@ -71,6 +71,7 @@ namespace DasharooAPI.Controllers
             }
 
             var playlist = _mapper.Map<Playlist>(playlistDto);
+            playlist.AuthorId = "8a0226d4-e503-4e7d-90c6-f4efc84bff6b";
 
             // uploading cover image file
             if (playlistDto.Image != null)

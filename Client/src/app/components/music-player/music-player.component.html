@@ -1,21 +1,28 @@
 <audio
   ng-on-timeupdate="$ctrl.updateProgressBar()"
-  ng-on-ended="$ctrl.onEnded($event)"
+  ng-on-ended="$ctrl.playNext($event)"
   preload="auto"
   ng-ref="$ctrl.musicPlayerRef"
 >
   <source src="" />
 </audio>
-<div class="musicPlayer">
+<div
+  class="musicPlayer"
+  ng-if="$ctrl.$scope.records && $ctrl.$scope.records.queue.length > 0"
+>
   <div class="left-panel">
     <div class="author-image">
-      <img draggable="false" src="assets/avatar.png" alt="Profile image" />
+      <img
+        draggable="false"
+        src="{{ $ctrl.$scope.recordImage }}"
+        alt="Profile image"
+      />
     </div>
     <div class="author-details">
-      <h2 class="record-name">For A Better Day</h2>
+      <h2 class="record-name">{{ $ctrl.$scope.recordTitle }}</h2>
       <h4 class="record-author">
         By
-        <a href="#" class="author-name">Avicii</a>
+        <a href="#" class="author-name">{{ $ctrl.$scope.recordAuthor }}</a>
       </h4>
     </div>
     <div class="play-button-left-panel">
@@ -36,7 +43,7 @@
         class="control-button"
         src="'random'"
         tooltip="'Enable shuffling'"
-        ng-click="$ctrl.playOrPause()"
+        ng-click="$ctrl.shuffle($event)"
       >
       </icon>
       <icon
@@ -45,6 +52,7 @@
         src="'previous'"
         alt="'Previous'"
         tooltip="'Previous'"
+        ng-click="$ctrl.playPrevious()"
       ></icon>
       <icon
         width="70"
@@ -60,6 +68,7 @@
         src="'next'"
         alt="'Next'"
         tooltip="'Next'"
+        ng-click="$ctrl.playNext()"
       ></icon>
       <icon
         width="18"

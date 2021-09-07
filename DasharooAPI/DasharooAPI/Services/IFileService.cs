@@ -6,7 +6,6 @@ namespace DasharooAPI.Controllers
 {
     public interface IFileService
     {
-        public string RootDir { get; }
         public string AccountImagesDir { get; }
         public string AccountBackgroundsDir { get; }
         public string RecordImagesDir { get; }

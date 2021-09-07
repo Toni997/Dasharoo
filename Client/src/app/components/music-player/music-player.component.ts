@@ -28,27 +28,44 @@ export class MusicPlayerController {
   records: any;
   $scope: any;
   currentRecordIndex: number = 0;
+  self;
+  config;
+  audioPath: string;
+  imagePath: string;
+  currentQueueIndex: number;
+  shuffleEnabled: boolean = false;
 
   constructor(
     $scope: any,
     $ngRedux: any,
     recordsService: RecordsService,
-    recordActionsService: RecordActionsService
+    recordActionsService: RecordActionsService,
+    CONFIG
   ) {
     ("ngInject");
+
+    this.config = CONFIG;
+    this.audioPath = this.config.BASE_URL + "Files/Records/Sources?source=";
+    this.imagePath = this.config.BASE_URL + "Files/Records/Images?source=";
+
+    this.currentQueueIndex = 0;
 
     this.$scope = $scope;
     this.redux = $ngRedux;
     this.recordsService = recordsService;
     this.recordActions = recordActionsService;
-    this.$scope.queue = null;
+    this.$scope.records = null;
     this.redux.subscribe(() => {
       this.$scope.records = this.redux.getState().records;
-      this.$scope.$apply();
-      console.log($scope.records);
+      if (this.$scope.records.queue.length !== 0) this.updateMusicPlayer();
     });
   }
   async $onInit() {
+    console.log(this.audioPath);
+    this.$scope.recordTitle = "No music in queue";
+    this.$scope.recordAuthor = "Dasharoo";
+    this.$scope.recordSrc = "";
+    this.$scope.recordImage = this.imagePath + "no-image.png";
     // this.redux.dispatch(this.recordActions.listRecords());
   }
 
@@ -113,8 +130,44 @@ export class MusicPlayerController {
     }
   }
 
-  onEnded() {
-    this.centerButtonIcon = "play";
+  playPrevious() {
+    if (
+      !this.$scope.records ||
+      this.$scope.records.queue.length === 0 ||
+      this.currentQueueIndex === 0
+    )
+      return;
+
+    // this.centerButtonIcon = "play";
+    this.currentQueueIndex--;
+    this.updateMusicPlayer();
+    this.mp.play();
+  }
+
+  randomNum(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min)) + min; // You can remove the Math.floor if you don't want it to be an integer
+  }
+
+  playNext() {
+    if (
+      !this.$scope.records ||
+      this.$scope.records.queue.length === 0 ||
+      this.currentQueueIndex === this.$scope.records.queue.length - 1
+    )
+      return;
+
+    // this.centerButtonIcon = "play";
+    if (!this.shuffleEnabled) {
+      this.currentQueueIndex++;
+    } else {
+      this.currentQueueIndex = this.randomNum(
+        0,
+        this.$scope.records.queue.length - 1
+      );
+      console.log("SHUFFLE UKLJUCEN");
+    }
+    this.updateMusicPlayer();
+    this.mp.play();
   }
 
   changeTime(e: any) {
@@ -127,7 +180,13 @@ export class MusicPlayerController {
   }
 
   playOrPause() {
-    if (!this.mp.src) return;
+    if (!this.$scope.records || this.$scope.records.queue.length === 0) return;
+
+    let queue = this.$scope.records.queue;
+    if (!this.mp.src) {
+      this.mp.src = this.audioPath + queue[this.currentQueueIndex].sourcePath;
+      this.updateMusicPlayer();
+    }
     if (this.mp.paused) {
       this.mp.play();
       this.centerButtonIcon = "pause";
@@ -137,6 +196,16 @@ export class MusicPlayerController {
       this.centerButtonIcon = "play";
       this.playButtonTooltip = "Play";
     }
+  }
+
+  updateMusicPlayer() {
+    let queue = this.$scope.records.queue;
+    let nextInQueue = queue[this.currentQueueIndex];
+    this.$scope.recordTitle = nextInQueue.name;
+    this.$scope.recordAuthor = nextInQueue.createdBy.artistName;
+    this.$scope.recordSrc = this.audioPath + nextInQueue.sourcePath;
+    this.$scope.recordImage = this.imagePath + nextInQueue.imagePath;
+    this.mp.src = this.audioPath + nextInQueue.sourcePath;
   }
 
   mute() {
@@ -149,11 +218,11 @@ export class MusicPlayerController {
     }
   }
 
-  changeVolume(e: any) {
-    let totalWidth = this.volumeBar[0].offsetWidth;
-    let offsetWidth = e.offsetX;
-    this.mp.volume = offsetWidth / totalWidth;
-  }
+  // changeVolume(e: any) {
+  //   let totalWidth = this.volumeBar[0].offsetWidth;
+  //   let offsetWidth = e.offsetX;
+  //   this.mp.volume = offsetWidth / totalWidth;
+  // }
 
   loop(e: any) {
     const el: HTMLImageElement = e.target;
@@ -162,6 +231,17 @@ export class MusicPlayerController {
       el.classList.remove("control-selected");
     } else {
       this.mp.loop = true;
+      el.classList.add("control-selected");
+    }
+  }
+
+  shuffle(e: any) {
+    const el: HTMLImageElement = e.target;
+    this.shuffleEnabled = !this.shuffleEnabled;
+    console.log(this.shuffleEnabled);
+    if (!this.shuffleEnabled) {
+      el.classList.remove("control-selected");
+    } else {
       el.classList.add("control-selected");
     }
   }

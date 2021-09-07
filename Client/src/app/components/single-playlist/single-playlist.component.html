@@ -1,11 +1,17 @@
 <div class="playlist-container">
   <div class="playlist-image">
-    <img draggable="false" src="assets/{{ $ctrl.image }}" alt="profile image" />
+    <img
+      draggable="false"
+      src="https://localhost:44350/api/Files/Playlists/Images?source={{
+        $ctrl.image
+      }}"
+      alt="profile image"
+    />
   </div>
   <div class="playlist-details">
-    <h2>{{ $ctrl.details.title }}</h2>
+    <h2>{{ $ctrl.title }}</h2>
     <h3 class="record-author">
-      By <span class="author-name">{{ $ctrl.details.artists[0].name }}</span>
+      By <span class="author-name">{{ $ctrl.author }}</span>
     </h3>
   </div>
 </div>

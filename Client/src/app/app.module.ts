@@ -23,6 +23,8 @@ import { SearchViewComponent } from "./views/search-view/search-view.component";
 import { MyAccountViewComponent } from './views/my-account-view/my-account-view.component';
 import { HamburgerComponent } from './components/hamburger/hamburger.component';
 import { SidebarsService } from './services/sidebars.service';
+import { PlaylistsService } from './services/playlists.service';
+import { ReduxService } from './services/redux.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -62,5 +64,7 @@ module.component("searchView", SearchViewComponent);
 module.component('myAccountView', MyAccountViewComponent);
 module.component('hamburger', HamburgerComponent);
 module.service('sidebarsService', SidebarsService);
+module.service('playlistsService', PlaylistsService);
+module.service('reduxService', ReduxService);
 
 export const AppModule = module.name;

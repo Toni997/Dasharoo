@@ -15,6 +15,7 @@ namespace DasharooAPI.Data
         public DateTime ReleaseDate { get; set; }
         public string ImagePath { get; set; }
         public string BackgroundPath { get; set; }
+        public ulong Listens { get; set; }
 
         [ForeignKey(nameof(Visibility))]
         public int? VisibilityId { get; set; }

@@ -15,11 +15,11 @@ namespace DasharooAPI.Controllers
     public class FileService : IFileService
     {
         //dirs
-        public string RootDir { get; } = @"C:\DasharooStorage";
-        public string AccountImagesDir { get; } = @"C:\DasharooStorage\Accounts\Images";
-        public string AccountBackgroundsDir { get; } = @"C:\DasharooStorage\Accounts\Backgrounds";
-        public string RecordImagesDir { get; } = @"C:\DasharooStorage\Records\Images";
-        public string RecordSourcesDir { get; } = @"C:\DasharooStorage\Records\Sources";
+        public static string rootDir = @"C:\DasharooStorage";
+        public string AccountImagesDir { get; } = $@"{rootDir}\Accounts\Images";
+        public string AccountBackgroundsDir { get; } = $@"{rootDir}\Accounts\Backgrounds";
+        public string RecordImagesDir { get; } = $@"{rootDir}\Records\Images";
+        public string RecordSourcesDir { get; } = $@"{rootDir}\Records\Sources";
         public string PlaylistImagesDir { get; } = @"C:\DasharooStorage\Playlists\Images";
         public string PlaylistBackgroundsDir { get; } = @"C:\DasharooStorage\Playlists\Backgrounds";
 

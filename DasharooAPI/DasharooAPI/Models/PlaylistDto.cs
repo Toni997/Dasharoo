@@ -27,8 +27,10 @@ namespace DasharooAPI.Models
         public string AuthorId { get; set; }
         public string ImagePath { get; set; }
         public string BackgroundPath { get; set; }
+        public ulong Listens { get; set; }
 
         public ICollection<RecordDto> Records { get; set; }
+        public UserOnRecordDto Author { get; set; }
     }
 
     public class UpdatePlaylistDto : CreatePlaylistDto

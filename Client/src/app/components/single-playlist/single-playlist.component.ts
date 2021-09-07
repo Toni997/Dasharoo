@@ -2,7 +2,8 @@ import "./single-playlist.component.scss";
 
 export class SinglePlaylistController {
   image: string = "";
-  details: any;
+  title: string = "";
+  author: string = "";
 
   constructor() {
     "ngInject";
@@ -16,6 +17,7 @@ export const SinglePlaylistComponent: ng.IComponentOptions = {
   controller: SinglePlaylistController,
   bindings: {
     image: "<",
-    details: "<",
+    title: "<",
+    author: "<",
   },
 };

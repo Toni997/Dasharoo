@@ -12,7 +12,7 @@ export class RecordActionsService {
 
     this.recordsService = recordsService;
   }
-  listRecords() {
+  listProducts() {
     const self = this;
     return async function (dispatch) {
       try {

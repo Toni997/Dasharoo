@@ -9,31 +9,12 @@
 </h2>
 <div class="playlists">
   <single-playlist
-    image="'avicii.jpg'"
-    title="'Stories'"
-    details="{title: 'Stories', artists: [{name: 'Avicii'}]}"
+    ng-click="$ctrl.onClick($event)"
+    ng-repeat="playlist in $ctrl.$scope.playlists"
+    image="playlist.imagePath"
+    title="playlist.name"
+    author="playlist.author.artistName"
   >
   </single-playlist>
-  <single-playlist
-    image="'avicii.jpg'"
-    title="'Stories'"
-    details="{title: 'Stories', artists: [{name: 'Avicii'}]}"
-  >
-  </single-playlist>
-  <single-playlist
-    image="'avicii.jpg'"
-    title="'Stories'"
-    details="{title: 'Stories', artists: [{name: 'Avicii'}]}"
-  ></single-playlist>
-  <single-playlist
-    image="'avicii.jpg'"
-    title="'Stories'"
-    details="{title: 'Stories', artists: [{name: 'Avicii'}]}"
-  ></single-playlist>
-  <single-playlist
-    image="'avicii.jpg'"
-    title="'Stories'"
-    details="{title: 'Stories', artists: [{name: 'Avicii'}]}"
-  ></single-playlist>
 </div>
 <div class="see-more"><span>SEE MORE</span></div>
