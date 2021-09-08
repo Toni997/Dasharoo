@@ -3,7 +3,7 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import { userDetailsReducer } from "./reducers/userDetailsReducer";
-import { queueReducer } from "./reducers/queueReducer";
+import { recordsReducer } from "./reducers/recordsReducer";
 
 export class AppConfig {
   constructor(
@@ -19,7 +19,7 @@ export class AppConfig {
 
     const reducer = combineReducers({
       userDetails: userDetailsReducer,
-      records: queueReducer,
+      records: recordsReducer,
     });
     const middleware = [thunk];
 

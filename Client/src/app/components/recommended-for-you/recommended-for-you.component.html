@@ -9,10 +9,11 @@
 </h2>
 <div class="playlists">
   <single-playlist
-    ng-click="$ctrl.onClick($event)"
     ng-repeat="playlist in $ctrl.$scope.playlists"
+    ng-click="$ctrl.onClick(playlist.id)"
     image="playlist.imagePath"
-    title="playlist.name"
+    playlistTitle="playlist.name"
+    tooltip="playlist.name"
     author="playlist.author.artistName"
   >
   </single-playlist>

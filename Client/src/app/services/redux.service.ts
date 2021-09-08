@@ -1,3 +1,4 @@
+import QueueAddType from "app/queueAddType.enum";
 import { RecordActionsService } from "app/record-actions.service";
 import { RecordsService } from "app/records.service";
 
@@ -20,8 +21,8 @@ export class ReduxService {
   dispatch() {
     const self = this;
     return {
-      addAllRecords() {
-        self.redux.dispatch(self.recordActions.listProducts());
+      addToQueue(id: number, type: QueueAddType = null) {
+        self.redux.dispatch(self.recordActions.addToQueue(id, type));
       },
     };
   }

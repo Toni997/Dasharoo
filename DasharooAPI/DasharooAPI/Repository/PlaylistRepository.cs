@@ -17,6 +17,7 @@ namespace DasharooAPI.Repository
         public List<string> Includes { get; } = new()
         {
             "Records",
+            "Records.CreatedBy",
             "Author"
         };
 

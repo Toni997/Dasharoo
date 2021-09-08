@@ -11,6 +11,9 @@ single-playlist {
   flex-basis: 220px;
   flex-wrap: wrap;
   flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 150px;
+
   transition: 0.8s;
   background-image: linear-gradient(
     rgba(52, 62, 41, 0),

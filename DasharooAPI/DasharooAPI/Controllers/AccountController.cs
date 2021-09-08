@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.Models;
@@ -98,12 +99,14 @@ namespace DasharooAPI.Controllers
 
             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+            var tokenHtmlVersion = HttpUtility.UrlEncode(emailConfirmationToken);
+
             var emailToSend = new MessageToSend
             {
                 Destination = user.Email,
                 Subject = "Dasharoo - Confirm your account",
                 Body =
-                    $"Please click <a href=\"https://localhost:44350/api/Account/ConfirmEmail?username={user.UserName}&token={emailConfirmationToken}\">HERE</a> to confirm your account."
+                    $"Please click <a href=\"https://localhost:44350/api/Account/ConfirmEmail?username={user.UserName}&token={tokenHtmlVersion}\">HERE</a> to confirm your account."
             };
 
             await _emailService.SendAsync(emailToSend);

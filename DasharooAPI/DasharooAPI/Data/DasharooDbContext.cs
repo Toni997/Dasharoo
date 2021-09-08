@@ -1,4 +1,6 @@
-﻿using DasharooAPI.Configurations.Entities;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using DasharooAPI.Configurations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +35,11 @@ namespace DasharooAPI.Data
             builder.ApplyConfiguration(new RecordAuthorConfiguration());
             builder.ApplyConfiguration(new RecordPlaylistConfiguration());
             builder.ApplyConfiguration(new AuthorFollowerConfiguration());
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

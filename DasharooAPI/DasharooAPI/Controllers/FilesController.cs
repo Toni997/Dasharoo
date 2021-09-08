@@ -21,6 +21,9 @@ namespace DasharooAPI.Controllers
         }
 
         [HttpGet("{dir}/{type}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status206PartialContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetFile(
             [FromQuery] string source, string dir, string type)
         {

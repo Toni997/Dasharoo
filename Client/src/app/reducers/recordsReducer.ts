@@ -5,12 +5,12 @@ import {
   RECORDS_RESET,
 } from "../constants/recordConstants";
 
-export const queueReducer = (state = { queue: [] }, action) => {
+export const recordsReducer = (state = { queue: [] }, action) => {
   switch (action.type) {
     case RECORDS_REQUEST:
       return { loading: true, queue: [...state.queue] };
     case RECORDS_SUCCESS:
-      return { loading: false, queue: [...state.queue, ...action.payload] };
+      return { loading: false, queue: [...action.payload, ...state.queue] };
     case RECORDS_FAIL:
       return { loading: false, error: action.payload };
     case RECORDS_RESET:

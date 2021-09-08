@@ -4,6 +4,7 @@ export class SinglePlaylistController {
   image: string = "";
   title: string = "";
   author: string = "";
+  tooltip: string = "";
 
   constructor() {
     "ngInject";
@@ -19,5 +20,6 @@ export const SinglePlaylistComponent: ng.IComponentOptions = {
     image: "<",
     title: "<",
     author: "<",
+    tooltip: "<",
   },
 };

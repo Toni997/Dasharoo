@@ -71,7 +71,7 @@ namespace DasharooAPI.Controllers
             }
 
             var playlist = _mapper.Map<Playlist>(playlistDto);
-            playlist.AuthorId = "8a0226d4-e503-4e7d-90c6-f4efc84bff6b";
+            playlist.AuthorId = "f2fc5610-1830-451a-ad1b-3732c32b2970";
 
             // uploading cover image file
             if (playlistDto.Image != null)

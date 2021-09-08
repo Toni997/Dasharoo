@@ -57,7 +57,8 @@ export class MusicPlayerController {
     this.$scope.records = null;
     this.redux.subscribe(() => {
       this.$scope.records = this.redux.getState().records;
-      if (this.$scope.records.queue.length !== 0) this.updateMusicPlayer();
+      if (this.$scope.records && this.$scope.records.queue.length !== 0)
+        this.updateMusicPlayer();
     });
   }
   async $onInit() {
@@ -66,7 +67,11 @@ export class MusicPlayerController {
     this.$scope.recordAuthor = "Dasharoo";
     this.$scope.recordSrc = "";
     this.$scope.recordImage = this.imagePath + "no-image.png";
-    // this.redux.dispatch(this.recordActions.listRecords());
+
+    this.$scope.$watch("$ctrl.mp.paused", () => {
+      this.centerButtonIcon = this.mp.paused ? "play" : "pause";
+      this.playButtonTooltip = this.mp.paused ? "Play" : "Pause";
+    });
   }
 
   $postLink() {
@@ -138,7 +143,6 @@ export class MusicPlayerController {
     )
       return;
 
-    // this.centerButtonIcon = "play";
     this.currentQueueIndex--;
     this.updateMusicPlayer();
     this.mp.play();
@@ -156,7 +160,6 @@ export class MusicPlayerController {
     )
       return;
 
-    // this.centerButtonIcon = "play";
     if (!this.shuffleEnabled) {
       this.currentQueueIndex++;
     } else {
@@ -164,7 +167,6 @@ export class MusicPlayerController {
         0,
         this.$scope.records.queue.length - 1
       );
-      console.log("SHUFFLE UKLJUCEN");
     }
     this.updateMusicPlayer();
     this.mp.play();
@@ -189,12 +191,8 @@ export class MusicPlayerController {
     }
     if (this.mp.paused) {
       this.mp.play();
-      this.centerButtonIcon = "pause";
-      this.playButtonTooltip = "Pause";
     } else {
       this.mp.pause();
-      this.centerButtonIcon = "play";
-      this.playButtonTooltip = "Play";
     }
   }
 
@@ -206,6 +204,7 @@ export class MusicPlayerController {
     this.$scope.recordSrc = this.audioPath + nextInQueue.sourcePath;
     this.$scope.recordImage = this.imagePath + nextInQueue.imagePath;
     this.mp.src = this.audioPath + nextInQueue.sourcePath;
+    this.mp.play();
   }
 
   mute() {
@@ -217,12 +216,6 @@ export class MusicPlayerController {
       this.volumeIcon = "muted";
     }
   }
-
-  // changeVolume(e: any) {
-  //   let totalWidth = this.volumeBar[0].offsetWidth;
-  //   let offsetWidth = e.offsetX;
-  //   this.mp.volume = offsetWidth / totalWidth;
-  // }
 
   loop(e: any) {
     const el: HTMLImageElement = e.target;

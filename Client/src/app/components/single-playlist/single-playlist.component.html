@@ -1,4 +1,4 @@
-<div class="playlist-container">
+<div class="playlist-container" title="{{ $ctrl.tooltip }}">
   <div class="playlist-image">
     <img
       draggable="false"
@@ -9,7 +9,7 @@
     />
   </div>
   <div class="playlist-details">
-    <h2>{{ $ctrl.title }}</h2>
+    <h2>{{ $ctrl.tooltip }}</h2>
     <h3 class="record-author">
       By <span class="author-name">{{ $ctrl.author }}</span>
     </h3>

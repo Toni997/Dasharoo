@@ -72,7 +72,7 @@ namespace DasharooAPI.Controllers
             }
 
             var record = _mapper.Map<Record>(recordDto);
-            record.CreatedById = "8a0226d4-e503-4e7d-90c6-f4efc84bff6b";
+            record.CreatedById = "f2fc5610-1830-451a-ad1b-3732c32b2970";
 
             // uploading audio file
             var resultAudio = await _fileService.UploadFile(
