@@ -22,7 +22,10 @@
       <h2 class="record-name">{{ $ctrl.$scope.recordTitle }}</h2>
       <h4 class="record-author">
         By
-        <a href="#" class="author-name">{{ $ctrl.$scope.recordAuthor }}</a>
+        <span ng-repeat="author in $ctrl.$scope.recordAuthors"
+          ><a href="#" class="author-name"> {{ author.author.artistName }}</a
+          ><span>{{ $last ? "" : ", " }}</span></span
+        >
       </h4>
     </div>
     <div class="play-button-left-panel">

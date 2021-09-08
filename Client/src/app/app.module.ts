@@ -25,6 +25,7 @@ import { HamburgerComponent } from './components/hamburger/hamburger.component';
 import { SidebarsService } from './services/sidebars.service';
 import { PlaylistsService } from './services/playlists.service';
 import { ReduxService } from './services/redux.service';
+import { DinputComponent } from './components/dinput/dinput.component';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -66,5 +67,6 @@ module.component('hamburger', HamburgerComponent);
 module.service('sidebarsService', SidebarsService);
 module.service('playlistsService', PlaylistsService);
 module.service('reduxService', ReduxService);
+module.component('dinput', DinputComponent);
 
 export const AppModule = module.name;

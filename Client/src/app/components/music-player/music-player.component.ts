@@ -64,7 +64,7 @@ export class MusicPlayerController {
   async $onInit() {
     console.log(this.audioPath);
     this.$scope.recordTitle = "No music in queue";
-    this.$scope.recordAuthor = "Dasharoo";
+    this.$scope.recordAuthors = "Dasharoo";
     this.$scope.recordSrc = "";
     this.$scope.recordImage = this.imagePath + "no-image.png";
 
@@ -200,7 +200,7 @@ export class MusicPlayerController {
     let queue = this.$scope.records.queue;
     let nextInQueue = queue[this.currentQueueIndex];
     this.$scope.recordTitle = nextInQueue.name;
-    this.$scope.recordAuthor = nextInQueue.createdBy.artistName;
+    this.$scope.recordAuthors = nextInQueue.recordAuthors;
     this.$scope.recordSrc = this.audioPath + nextInQueue.sourcePath;
     this.$scope.recordImage = this.imagePath + nextInQueue.imagePath;
     this.mp.src = this.audioPath + nextInQueue.sourcePath;

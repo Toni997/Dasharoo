@@ -18,6 +18,8 @@ namespace DasharooAPI.Repository
         {
             "Records",
             "Records.CreatedBy",
+            "Records.RecordAuthors",
+            "Records.RecordAuthors.Author",
             "Author"
         };
 

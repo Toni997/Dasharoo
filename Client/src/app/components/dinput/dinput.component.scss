@@ -1,0 +1,23 @@
+//----------------------------------------
+//  components/DInput
+//----------------------------------------
+
+@import "../../../styles/abstracts/variables";
+
+.input {
+  padding: 10px;
+  border-radius: 15px;
+  border: 3px solid $primary-color;
+  transition: 0.5s;
+  background: $text-color;
+  color: $background-color;
+  width: 100%;
+  background: url("../../../public/assets/icons/search.svg") no-repeat;
+  &:focus {
+    outline: none;
+    border-color: $text-color;
+  }
+  &::placeholder {
+    margin-left: 10px;
+  }
+}
