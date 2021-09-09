@@ -99,8 +99,8 @@ namespace DasharooAPI
                 new RateLimitRule
                 {
                     Endpoint = "*",
-                    Limit = 20,
-                    Period = "5s"
+                    Limit = 1000,
+                    Period = "1s"
                 }
             };
             services.Configure<IpRateLimitOptions>(opt => { opt.GeneralRules = rateLimitRules; });

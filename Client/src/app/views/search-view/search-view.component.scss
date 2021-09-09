@@ -2,3 +2,14 @@
 //  views/searchView
 //----------------------------------------
 
+@import "../../../styles/abstracts/variables";
+
+a {
+  text-decoration: none;
+  list-style: none;
+  color: $text-color;
+}
+
+li:hover {
+  text-decoration: underline;
+}

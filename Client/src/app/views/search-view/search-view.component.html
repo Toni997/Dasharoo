@@ -1,2 +1,17 @@
 <home-header></home-header>
-<dinput></dinput>
+<dinput iconName="'search'"></dinput>
+<div class="explore-genres">
+  <h2>Explore genres</h2>
+  <loader ng-if="!$ctrl.$scope.genres"></loader>
+  <ul>
+    <a href="#"
+      ><li
+        ng-repeat="genre in $ctrl.$scope.genres"
+        ng-if="genre.parentGenreId === null"
+      >
+        {{ parentGenreId !== null ? genre.name : "" }}
+      </li></a
+    >
+  </ul>
+  {{ $ctrl.$scope.genresStructured | json }}
+</div>

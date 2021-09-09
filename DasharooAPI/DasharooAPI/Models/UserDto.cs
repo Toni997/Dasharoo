@@ -81,4 +81,9 @@ namespace DasharooAPI.Models
         public IFormFile Image { get; set; }
         public IFormFile Background { get; set; }
     }
+
+    public class UserImage
+    {
+        [Required] public IFormFile File { get; set; }
+    }
 }

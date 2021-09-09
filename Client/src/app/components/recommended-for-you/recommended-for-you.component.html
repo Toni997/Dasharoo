@@ -7,6 +7,9 @@
   >
   </icon>
 </h2>
+<loader
+  ng-if="!$ctrl.$scope.playlists || $ctrl.$scope.playlists.length === 0"
+></loader>
 <div class="playlists">
   <single-playlist
     ng-repeat="playlist in $ctrl.$scope.playlists"

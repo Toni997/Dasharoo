@@ -2,7 +2,18 @@
 //  components/DInput
 //----------------------------------------
 
-@import "../../../styles/abstracts/variables";
+@import "../../../../styles/abstracts/variables";
+
+.dinput-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dinput-icon {
+  position: absolute;
+  margin-left: 10px;
+}
 
 .input {
   padding: 10px;
@@ -12,7 +23,7 @@
   background: $text-color;
   color: $background-color;
   width: 100%;
-  background: url("../../../public/assets/icons/search.svg") no-repeat;
+  padding-left: 40px;
   &:focus {
     outline: none;
     border-color: $text-color;

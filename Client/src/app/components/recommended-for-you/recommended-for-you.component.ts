@@ -6,7 +6,6 @@ import "./recommended-for-you.component.scss";
 export class RecommendedForYouController {
   $scope: any;
   playlistsService: PlaylistsService;
-  playlists: any[];
   reduxService: ReduxService;
   dispatch: any;
 
@@ -24,11 +23,14 @@ export class RecommendedForYouController {
   }
 
   async $onInit() {
-    console.log("aaaa");
-
     this.$scope.playlists = await this.playlistsService.getAll();
     this.$scope.$apply();
     this.dispatch = this.reduxService.dispatch();
+
+    this.reduxService.redux.subscribe(() => {
+      this.$scope.records = this.reduxService.redux.getState().records;
+      console.log();
+    });
   }
 
   onClick(id: number) {

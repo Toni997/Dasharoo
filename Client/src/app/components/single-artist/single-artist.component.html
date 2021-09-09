@@ -1,5 +1,10 @@
 <div class="artist-image">
-  <img ng-src="assets/{{ $ctrl.image }}" alt="profile image" />
+  <img
+    src="https://localhost:44350/api/Files/Accounts/Images?source={{
+      $ctrl.image
+    }}"
+    alt="profile image"
+  />
 </div>
 <div class="artist-name">
   <h2>{{ $ctrl.name }}</h2>

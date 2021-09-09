@@ -198,5 +198,32 @@ namespace DasharooAPI.Controllers
             return NoContent();
         }
 
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        public async Task<IActionResult> UpdateUserImage(string id, [FromForm] UserImage userImage)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            // _mapper.Map(userDto, user);
+
+            // uploading profile image file
+            if (userImage.File != null)
+            {
+                var resultImage = await _fileService.UploadFile(
+                    userImage.File, _fileService.AccountImagesDir, FileTypes.Image, user.ImagePath);
+                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
+                user.ImagePath = resultImage.Value;
+            }
+
+            await _userManager.UpdateAsync(user);
+            // await _unitOfWork.Save();
+
+            return NoContent();
+        }
     }
 }

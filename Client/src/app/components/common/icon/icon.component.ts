@@ -9,7 +9,9 @@ export class IconController {
     "ngInject";
   }
 
-  $onInit() {}
+  $onInit() {
+    // console.log(this.src);
+  }
 }
 
 export const IconComponent: ng.IComponentOptions = {

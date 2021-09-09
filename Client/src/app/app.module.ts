@@ -15,17 +15,20 @@ import { QuickPlayComponent } from "./components/quick-play/quick-play.component
 import { SingleArtistComponent } from "./components/single-artist/single-artist.component";
 import { RecommendedForYouComponent } from "./components/recommended-for-you/recommended-for-you.component";
 import { SinglePlaylistComponent } from "./components/single-playlist/single-playlist.component";
-import { IconComponent } from "./components/icon/icon.component";
+import { IconComponent } from "./components/common/icon/icon.component";
 import { HomeHeaderComponent } from "./components/home-header/home-header.component";
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { PlaylistsPanelComponent } from "./components/playlists-panel/playlists-panel.component";
 import { SearchViewComponent } from "./views/search-view/search-view.component";
-import { MyAccountViewComponent } from './views/my-account-view/my-account-view.component';
-import { HamburgerComponent } from './components/hamburger/hamburger.component';
-import { SidebarsService } from './services/sidebars.service';
-import { PlaylistsService } from './services/playlists.service';
-import { ReduxService } from './services/redux.service';
-import { DinputComponent } from './components/dinput/dinput.component';
+import { MyAccountViewComponent } from "./views/my-account-view/my-account-view.component";
+import { HamburgerComponent } from "./components/hamburger/hamburger.component";
+import { SidebarsService } from "./services/sidebars.service";
+import { PlaylistsService } from "./services/playlists.service";
+import { ReduxService } from "./services/redux.service";
+import { DinputComponent } from "./components/common/dinput/dinput.component";
+import { UsersService } from "./services/users.service";
+import { LoaderComponent } from "./components/common/loader/loader.component";
+import { GenresService } from './services/genres.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -62,11 +65,14 @@ module.component("homeHeader", HomeHeaderComponent);
 module.component("navigation", NavigationComponent);
 module.component("playlistsPanel", PlaylistsPanelComponent);
 module.component("searchView", SearchViewComponent);
-module.component('myAccountView', MyAccountViewComponent);
-module.component('hamburger', HamburgerComponent);
-module.service('sidebarsService', SidebarsService);
-module.service('playlistsService', PlaylistsService);
-module.service('reduxService', ReduxService);
-module.component('dinput', DinputComponent);
+module.component("myAccountView", MyAccountViewComponent);
+module.component("hamburger", HamburgerComponent);
+module.service("sidebarsService", SidebarsService);
+module.service("playlistsService", PlaylistsService);
+module.service("reduxService", ReduxService);
+module.component("dinput", DinputComponent);
+module.service("usersService", UsersService);
+module.component("loader", LoaderComponent);
+module.service('genresService', GenresService);
 
 export const AppModule = module.name;
