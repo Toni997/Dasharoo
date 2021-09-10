@@ -23,7 +23,11 @@
       <h4 class="record-author">
         By
         <span ng-repeat="author in $ctrl.$scope.recordAuthors"
-          ><a href="#" class="author-name"> {{ author.author.artistName }}</a
+          ><a
+            ui-sref="account-details({id: author.author.id})"
+            class="author-name"
+          >
+            {{ author.author.artistName }}</a
           ><span>{{ $last ? "" : ", " }}</span></span
         >
       </h4>

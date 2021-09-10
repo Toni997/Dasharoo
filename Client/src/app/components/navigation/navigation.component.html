@@ -1,8 +1,8 @@
 <nav>
   <ul>
     <a
-      href="/"
-      ng-class="{ active: $ctrl.$scope.isActive('/') }"
+      ui-sref="app()"
+      ui-sref-active="active"
       ng-click="$ctrl.closeLeftSidebar()"
     >
       <li>
@@ -11,8 +11,8 @@
       </li>
     </a>
     <a
-      href="/search"
-      ng-class="{ active: $ctrl.$scope.isActive('/search') }"
+      ui-sref="search()"
+      ui-sref-active="active"
       ng-click="$ctrl.closeLeftSidebar()"
     >
       <li>
@@ -21,8 +21,8 @@
       </li>
     </a>
     <a
-      href="/my-account"
-      ng-class="{ active: $ctrl.$scope.isActive('/my-account') }"
+      ui-sref="my-account()"
+      ui-sref-active="active"
       ng-click="$ctrl.closeLeftSidebar()"
     >
       <li>

@@ -79,7 +79,7 @@ namespace DasharooAPI.Controllers
                 var resultImage = await _fileService.UploadFile(
                     playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.ImagePath = resultImage.Value;
+                playlist.ImagePath = (string)resultImage.Value;
             }
 
             // uploading background image file
@@ -88,7 +88,7 @@ namespace DasharooAPI.Controllers
                 var resultImage = await _fileService.UploadFile(
                     playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.BackgroundPath = resultImage.Value;
+                playlist.BackgroundPath = (string)resultImage.Value;
             }
 
             await _unitOfWork.Playlists.Insert(playlist);
@@ -128,7 +128,7 @@ namespace DasharooAPI.Controllers
             {
                 var resultImage = await _fileService.UploadFile(playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image, playlist.ImagePath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.ImagePath = resultImage.Value;
+                playlist.ImagePath = (string)resultImage.Value;
             }
 
             // uploading background image file
@@ -136,7 +136,7 @@ namespace DasharooAPI.Controllers
             {
                 var resultImage = await _fileService.UploadFile(playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image, playlist.BackgroundPath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.BackgroundPath = resultImage.Value;
+                playlist.BackgroundPath = (string)resultImage.Value;
             }
 
             _unitOfWork.Playlists.Update(playlist);

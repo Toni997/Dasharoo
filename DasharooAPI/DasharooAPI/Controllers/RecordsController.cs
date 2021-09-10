@@ -6,6 +6,7 @@ using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
+using DasharooAPI.Services.Records;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,16 @@ namespace DasharooAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<RecordsController> _logger;
         private readonly IFileService _fileService;
+        private readonly IRecordService _recordService;
 
         public RecordsController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<RecordsController> logger, IFileService fileService)
+            ILogger<RecordsController> logger, IFileService fileService, IRecordService recordService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
             _fileService = fileService;
+            _recordService = recordService;
         }
 
         // [Authorize(Roles = UserRoles.User)]
@@ -39,8 +42,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAllRecords()
         {
-            var records = await _unitOfWork.Records.GetAllWithAuthorsGenresSupporters();
-            var recordsDto = _mapper.Map<IList<RecordDto>>(records);
+            var recordsDto = await _recordService.GetAllWithAuthorsGenresSupporters();
             return Ok(recordsDto);
         }
 
@@ -51,9 +53,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetRecordById(int id)
         {
-            var record = await _unitOfWork.Records.GetByIdWithAuthorsGenresSupporters(id);
-            if (record == null) return NotFound();
-            var recordDto = _mapper.Map<RecordDto>(record);
+            var recordDto = await _recordService.GetByIdWithAuthorsGenresSupporters(id);
+            if (recordDto == null) return NotFound();
             return Ok(recordDto);
         }
 
@@ -65,56 +66,17 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
         public async Task<IActionResult> CreateRecord([FromForm] CreateRecordDto recordDto)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Invalid POST attempt in {nameof(CreateRecord)}");
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var record = _mapper.Map<Record>(recordDto);
-            record.CreatedById = "f2fc5610-1830-451a-ad1b-3732c32b2970";
+            var responseDetails = await _recordService.TryCreateAndReturnResponseDetails(recordDto);
 
-            // uploading audio file
-            var resultAudio = await _fileService.UploadFile(
-                recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio);
-            if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
-            record.SourcePath = resultAudio.Value;
+            if (!responseDetails.Succeeded)
+                return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
-            // uploading image file
-            if (recordDto.Image != null)
-            {
-                var resultImage = await _fileService.UploadFile(
-                    recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                record.ImagePath = resultImage.Value;
-            }
-
-            await _unitOfWork.Records.Insert(record);
-            await _unitOfWork.Save();
-
-            // adding related data to junction tables
-            foreach (var genreId in recordDto.GenresIds)
-            {
-                await _unitOfWork.RecordGenres.Insert(new RecordGenre
-                {
-                    RecordId = record.Id,
-                    GenreId = genreId,
-                });
-            }
-
-            foreach (var authorId in recordDto.AuthorsIds)
-            {
-                await _unitOfWork.RecordAuthors.Insert(new RecordAuthor
-                {
-                    RecordId = record.Id,
-                    AuthorId = authorId,
-                });
-            }
-
-            await _unitOfWork.Save();
+            var createdRecord = (Record)responseDetails.Value;
 
             return CreatedAtRoute("GetRecordById",
-                new { id = record.Id }, record);
+                new { id = createdRecord.Id }, createdRecord);
         }
 
         // [Authorize(Roles = UserRoles.Administrator)]
@@ -125,75 +87,11 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
         public async Task<IActionResult> UpdateRecord(int id, [FromForm] UpdateRecordDto recordDto)
         {
-            if (!ModelState.IsValid || id < 1)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateRecord)}");
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid || id < 1) return BadRequest(ModelState);
 
-            var record = await _unitOfWork.Records.Get(x => x.Id == id);
-            if (record == null)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateRecord)}");
-                return BadRequest(ModelState);
-            }
-
-            _mapper.Map(recordDto, record);
-
-            // uploading audio file
-            if (recordDto.Source != null)
-            {
-                var resultAudio = await _fileService.UploadFile(
-                    recordDto.Source, _fileService.RecordSourcesDir, FileTypes.Audio, record.SourcePath);
-                if (resultAudio.StatusCode != StatusCodes.Status200OK) return StatusCode(resultAudio.StatusCode, resultAudio);
-                record.SourcePath = resultAudio.Value;
-            }
-
-            // uploading image file
-            if (recordDto.Image != null)
-            {
-                var resultImage = await _fileService.UploadFile(
-                    recordDto.Image, _fileService.RecordImagesDir, FileTypes.Image, record.ImagePath);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                record.ImagePath = resultImage.Value;
-            }
-
-            _unitOfWork.Records.Update(record);
-
-            // updating related data
-            var genresToDelete = await _unitOfWork.RecordGenres.GetAll(x => x.RecordId == id && !recordDto.GenresIds.Contains(x.GenreId));
-            _unitOfWork.RecordGenres.DeleteRange(genresToDelete);
-
-            var authorsToDelete = await _unitOfWork.RecordAuthors.GetAll(x => x.RecordId == id && !recordDto.AuthorsIds.Contains(x.AuthorId));
-            _unitOfWork.RecordAuthors.DeleteRange(authorsToDelete);
-
-            foreach (var genreId in recordDto.GenresIds)
-            {
-                var recordGenre = await _unitOfWork.RecordGenres.Get(x => x.RecordId == id && x.GenreId == genreId);
-                if (recordGenre == null)
-                {
-                    await _unitOfWork.RecordGenres.Insert(new RecordGenre
-                    {
-                        RecordId = record.Id,
-                        GenreId = genreId,
-                    });
-                }
-            }
-
-            foreach (var authorId in recordDto.AuthorsIds)
-            {
-                var recordAuthor = await _unitOfWork.RecordAuthors.Get(x => x.RecordId == id && x.AuthorId == authorId);
-                if (recordAuthor == null)
-                {
-                    await _unitOfWork.RecordAuthors.Insert(new RecordAuthor
-                    {
-                        RecordId = record.Id,
-                        AuthorId = authorId,
-                    });
-                }
-            }
-
-            await _unitOfWork.Save();
+            var responseDetails = await _recordService.TryUpdateAndReturnResponseDetails(id, recordDto);
+            if (!responseDetails.Succeeded)
+                return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
             return NoContent();
         }
@@ -204,30 +102,13 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> DeleteRecord(int id)
         {
-            if (id < 1)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteRecord)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest, "Invalid id."
-                ));
-            }
+            if (id < 1) return BadRequest(new Error(
+                    StatusCodes.Status400BadRequest, "Invalid id."));
 
-            var record = await _unitOfWork.Records.Get(x => x.Id == id);
-            if (record == null)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteRecord)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest,
-                    "Record with the specified id does not exist."
-                ));
-            }
-
-            await _unitOfWork.Records.Delete(id);
-            await _unitOfWork.Save();
+            var isDeleted = await _recordService.TryDeleteAndReturnBool(id);
+            if (!isDeleted) return NotFound();
 
             return NoContent();
         }
-
-
     }
 }

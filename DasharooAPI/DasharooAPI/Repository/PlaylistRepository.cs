@@ -8,7 +8,7 @@ using DasharooAPI.IRepository;
 
 namespace DasharooAPI.Repository
 {
-    public class PlaylistRepository : Repository<Playlist>, IPlaylistRepository
+    public class PlaylistRepository : GenericRepository<Playlist>, IPlaylistRepository
     {
         public PlaylistRepository(DasharooDbContext context) : base(context)
         {

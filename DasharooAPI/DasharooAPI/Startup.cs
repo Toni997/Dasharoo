@@ -5,6 +5,7 @@ using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Repository;
 using DasharooAPI.Services;
+using DasharooAPI.Services.Records;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -47,11 +48,12 @@ namespace DasharooAPI
             services.AddTransient<IRecordRepository, RecordRepository>();
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
-            services.AddTransient<IGenericRepository<RecordGenre>, Repository<RecordGenre>>();
-            services.AddTransient<IGenericRepository<RecordAuthor>, Repository<RecordAuthor>>();
-            services.AddTransient<IGenericRepository<RecordPlaylist>, Repository<RecordPlaylist>>();
-            services.AddTransient<IGenericRepository<AuthorFollower>, Repository<AuthorFollower>>();
+            services.AddTransient<IGenericRepository<RecordGenre>, GenericRepository<RecordGenre>>();
+            services.AddTransient<IGenericRepository<RecordAuthor>, GenericRepository<RecordAuthor>>();
+            services.AddTransient<IGenericRepository<RecordPlaylist>, GenericRepository<RecordPlaylist>>();
+            services.AddTransient<IGenericRepository<AuthorFollower>, GenericRepository<AuthorFollower>>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IRecordService, RecordService>();
 
             services.AddScoped<IAuthManager, AuthManager>();
 

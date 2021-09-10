@@ -24,7 +24,9 @@ namespace DasharooAPI.Models
         [Required]
         public IFormFile Source { get; set; }
         public IFormFile Image { get; set; }
+        [Required]
         public ICollection<string> AuthorsIds { get; set; }
+        [Required]
         public ICollection<int> GenresIds { get; set; }
     }
 

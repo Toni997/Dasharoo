@@ -25,11 +25,11 @@ namespace DasharooAPI.Repository
         public IRecordRepository Records => _records ??= new RecordRepository(_context);
         public IPlaylistRepository Playlists => _playlists ??= new PlaylistRepository(_context);
         public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
-        public IGenericRepository<RecordGenre> RecordGenres => _recordGenres ??= new Repository<RecordGenre>(_context);
-        public IGenericRepository<RecordPlaylist> RecordPlaylists => _recordPlaylists ??= new Repository<RecordPlaylist>(_context);
-        public IGenericRepository<RecordAuthor> RecordAuthors => _recordAuthors ??= new Repository<RecordAuthor>(_context);
-        public IGenericRepository<RecordSupporter> RecordSupporters => _recordSupporters ??= new Repository<RecordSupporter>(_context);
-        public IGenericRepository<AuthorFollower> AuthorFollowers => _authorFollowers ??= new Repository<AuthorFollower>(_context);
+        public IGenericRepository<RecordGenre> RecordGenres => _recordGenres ??= new GenericRepository<RecordGenre>(_context);
+        public IGenericRepository<RecordPlaylist> RecordPlaylists => _recordPlaylists ??= new GenericRepository<RecordPlaylist>(_context);
+        public IGenericRepository<RecordAuthor> RecordAuthors => _recordAuthors ??= new GenericRepository<RecordAuthor>(_context);
+        public IGenericRepository<RecordSupporter> RecordSupporters => _recordSupporters ??= new GenericRepository<RecordSupporter>(_context);
+        public IGenericRepository<AuthorFollower> AuthorFollowers => _authorFollowers ??= new GenericRepository<AuthorFollower>(_context);
 
         public void Dispose()
         {

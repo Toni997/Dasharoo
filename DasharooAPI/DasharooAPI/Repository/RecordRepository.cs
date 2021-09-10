@@ -5,10 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
+using DasharooAPI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DasharooAPI.Repository
 {
-    public class RecordRepository : Repository<Record>, IRecordRepository
+    public class RecordRepository : GenericRepository<Record>, IRecordRepository
     {
         public RecordRepository(DasharooDbContext context) : base(context)
         {

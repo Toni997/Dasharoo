@@ -21,10 +21,6 @@ export class NavigationController {
     this.$location = $location;
     this.sidebarsService = sidebarsService;
     this.closeLeftSidebar = this.sidebarsService.useCloseLeftSidebar();
-
-    this.$scope.isActive = (path: string): boolean => {
-      return path === this.$location.path();
-    };
   }
 
   $onInit() {}

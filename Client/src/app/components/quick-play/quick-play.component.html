@@ -5,6 +5,7 @@
     ng-repeat="artist in $ctrl.$scope.users"
     name="artist.artistName"
     image="artist.imagePath"
+    ui-sref="account-details({id: artist.id})"
   ></single-artist>
 </div>
 <div class="see-more"><span>SEE MORE</span></div>

@@ -13,7 +13,7 @@ export class UsersService {
     return await this.restangular.all("account").getList();
   }
 
-  async getOne(id: number) {
+  async getOne(id: string) {
     return await this.restangular.one("account", id).get();
   }
 }

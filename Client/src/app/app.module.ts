@@ -29,6 +29,7 @@ import { DinputComponent } from "./components/common/dinput/dinput.component";
 import { UsersService } from "./services/users.service";
 import { LoaderComponent } from "./components/common/loader/loader.component";
 import { GenresService } from './services/genres.service';
+import { AccountDetailsComponent } from './views/account-details/account-details.component';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -74,5 +75,6 @@ module.component("dinput", DinputComponent);
 module.service("usersService", UsersService);
 module.component("loader", LoaderComponent);
 module.service('genresService', GenresService);
+module.component('accountDetails', AccountDetailsComponent);
 
 export const AppModule = module.name;

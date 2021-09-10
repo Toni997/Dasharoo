@@ -11,14 +11,16 @@ using X.PagedList;
 
 namespace DasharooAPI.Repository
 {
-    public class Repository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly DasharooDbContext _context;
-        private readonly DbSet<T> _db;
+        protected readonly DasharooDbContext _context;
+        // protected readonly IUnitOfWork _unitOfWork;
+        protected readonly DbSet<T> _db;
 
-        public Repository(DasharooDbContext context)
+        public GenericRepository(DasharooDbContext context)
         {
             _context = context;
+            // _unitOfWork = unitOfWork;
             _db = _context.Set<T>();
         }
 

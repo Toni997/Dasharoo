@@ -180,7 +180,7 @@ namespace DasharooAPI.Controllers
                 var resultImage = await _fileService.UploadFile(
                     userDto.Image, _fileService.AccountImagesDir, FileTypes.Image, user.ImagePath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                user.ImagePath = resultImage.Value;
+                user.ImagePath = (string)resultImage.Value;
             }
 
             // uploading background image file
@@ -189,7 +189,7 @@ namespace DasharooAPI.Controllers
                 var resultImage = await _fileService.UploadFile(
                     userDto.Background, _fileService.AccountBackgroundsDir, FileTypes.Image, user.BackgroundPath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                user.BackgroundPath = resultImage.Value;
+                user.BackgroundPath = (string)resultImage.Value;
             }
 
             await _userManager.UpdateAsync(user);
@@ -217,7 +217,7 @@ namespace DasharooAPI.Controllers
                 var resultImage = await _fileService.UploadFile(
                     userImage.File, _fileService.AccountImagesDir, FileTypes.Image, user.ImagePath);
                 if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                user.ImagePath = resultImage.Value;
+                user.ImagePath = (string)resultImage.Value;
             }
 
             await _userManager.UpdateAsync(user);
