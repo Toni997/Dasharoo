@@ -11,6 +11,8 @@ using DasharooAPI.IRepository;
 using DasharooAPI.Migrations;
 using DasharooAPI.Models;
 using DasharooAPI.Repository;
+using DasharooAPI.Services.Genres;
+using DasharooAPI.Services.Records;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -21,27 +23,28 @@ namespace DasharooAPI.Controllers
     [ApiController]
     public class GenresController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly ILogger<GenresController> _logger;
+        private readonly IGenreService _genreService;
 
-        public GenresController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<GenresController> logger)
+
+        public GenresController(ILogger<GenresController> logger, IGenreService genreService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _logger = logger;
+            _genreService = genreService;
         }
+
+        public const string InvalidIdMessage = "Invalid id.";
+
 
         // [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllGenres()
         {
-            var user = User.Identity.Name;
-            var genres = await _unitOfWork.Genres.GetAll();
-            var genresDto = _mapper.Map<IList<GenreDto>>(genres);
+            // var user = User.Identity.Name;
+            var genresDto = await _genreService.GetAll();
             return Ok(genresDto);
         }
 
@@ -50,12 +53,12 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetGenreById(int id)
         {
-            var genre = await _unitOfWork.Genres.GetById(id);
-            if (genre == null) return NotFound();
+            var genreDto = await _genreService.GetById(id);
+            if (genreDto == null) return NotFound();
 
-            var genreDto = _mapper.Map<GenreDto>(genre);
             return Ok(genreDto);
         }
 
@@ -64,12 +67,12 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetGenreByIdWithRecords(int id)
         {
-            var genre = await _unitOfWork.Genres.GetByIdWithRecords(id);
-            if (genre == null) return NotFound();
+            var genreDto = await _genreService.GetByIdWithRecords(id);
+            if (genreDto == null) return NotFound();
 
-            var genreDto = _mapper.Map<GenreDto>(genre);
             return Ok(genreDto);
         }
 
@@ -78,20 +81,16 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateGenre([FromBody] CreateGenreDto genreDto)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Invalid POST attempt in {nameof(CreateGenre)}");
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var genre = _mapper.Map<Genre>(genreDto);
-            await _unitOfWork.Genres.Insert(genre);
-            await _unitOfWork.Save();
+            var responseDetails = await _genreService.TryCreateAndReturnResponseDetails(genreDto);
+            var createdGenre = (Genre)responseDetails.Value;
 
             return CreatedAtRoute("GetGenreById",
-                new { id = genre.Id }, genre);
+                new { id = createdGenre.Id }, createdGenre);
         }
 
         // [Authorize(Roles = UserRoles.Administrator)]
@@ -99,26 +98,15 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
         public async Task<IActionResult> UpdateGenre(int id, [FromBody] UpdateGenreDto genreDto)
         {
-            if (!ModelState.IsValid || id < 1)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateGenre)}");
-                return BadRequest(ModelState);
-            }
+            if (!ModelState.IsValid || id < 1) return BadRequest(ModelState);
 
-            var genre = await _unitOfWork.Genres.Get(x => x.Id == id);
-            if (genre == null)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateGenre)}");
-                return BadRequest(ModelState);
-            }
-
-            _mapper.Map(genreDto, genre);
-
-            _unitOfWork.Genres.Update(genre);
-            await _unitOfWork.Save();
+            var responseDetails = await _genreService.TryUpdateAndReturnResponseDetails(id, genreDto);
+            if (!responseDetails.Succeeded)
+                return NotFound();
 
             return NoContent();
         }
@@ -127,28 +115,14 @@ namespace DasharooAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteGenre(int id)
         {
-            if (id < 1)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest, "Invalid id."
-                ));
-            }
+            if (id < 1) return BadRequest(new Error(
+                StatusCodes.Status400BadRequest, InvalidIdMessage));
 
-            var genre = await _unitOfWork.Genres.Get(x => x.Id == id);
-            if (genre == null)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteGenre)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest,
-                    "Genre with the specified id does not exist."
-                ));
-            }
-
-            await _unitOfWork.Genres.Delete(id);
-            await _unitOfWork.Save();
+            var isDeleted = await _genreService.TryDeleteAndReturnBool(id);
+            if (!isDeleted) return NotFound();
 
             return NoContent();
         }

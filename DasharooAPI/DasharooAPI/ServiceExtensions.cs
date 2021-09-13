@@ -113,7 +113,7 @@ namespace DasharooAPI
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(o => o.AddDefaultPolicy(b =>
-                b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+                b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:8080")));
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)

@@ -6,7 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using DasharooAPI.Data;
+using DasharooAPI.IRepository;
+using DasharooAPI.Repository;
+using DasharooAPI.Services.Genres;
 using DasharooAPI.Utilities;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace DasharooAPI
@@ -15,6 +21,9 @@ namespace DasharooAPI
     {
         public static void Main(string[] args)
         {
+            
+
+
             Logger.Initialize();
 
             try
@@ -29,6 +38,16 @@ namespace DasharooAPI
             finally
             {
                 Log.CloseAndFlush();
+            }
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<GenreService>().As<IGenreService>();
+            var container = containerBuilder.Build();
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var genreService = container.Resolve<IGenreService>();
+
             }
         }
 

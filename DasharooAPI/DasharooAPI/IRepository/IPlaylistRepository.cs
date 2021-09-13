@@ -10,6 +10,6 @@ namespace DasharooAPI.IRepository
     public interface IPlaylistRepository : IGenericRepository<Playlist>
     {
         Task<Playlist> GetByIdWithRecordsAndAuthor(int id);
-        Task<IList<Playlist>> GetAllWithRecords();
+        Task<IList<Playlist>> GetAllWithRecordsAndAuthor();
     }
 }

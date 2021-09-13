@@ -20,6 +20,9 @@ namespace DasharooAPI.Controllers
             _fileService = fileService;
         }
 
+        //messages
+        public const string WrongPathMessage = "The path does not exist.";
+
         [HttpGet("{dir}/{type}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status206PartialContent)]
@@ -27,49 +30,14 @@ namespace DasharooAPI.Controllers
         public IActionResult GetFile(
             [FromQuery] string source, string dir, string type)
         {
-            var src = "";
-            switch (dir)
-            {
-                case "Accounts":
-                    src = type switch
-                    {
-                        "Images" => _fileService.AccountImagesDir,
-                        "Backgrounds" => _fileService.AccountBackgroundsDir,
-                        _ => src
-                    };
-                    break;
-                case "Playlists":
-                    src = type switch
-                    {
-                        "Images" => _fileService.PlaylistImagesDir,
-                        "Backgrounds" => _fileService.PlaylistBackgroundsDir,
-                        _ => src
-                    };
-                    break;
-
-                case "Records":
-                    src = type switch
-                    {
-                        "Images" => _fileService.RecordImagesDir,
-                        "Sources" => _fileService.RecordSourcesDir,
-                        _ => src
-                    };
-                    break;
-                default: return BadRequest(new Error(StatusCodes.Status400BadRequest, "The path is not correct."));
-            }
-
-            var path = Path.Combine(src, source);
-            if (!System.IO.File.Exists(path)) return NotFound();
-
-            // var filedata = await System.IO.File.ReadAllBytesAsync(path);
-
             Response.Headers.Add("Accept-Ranges", "bytes");
 
-            var stream = new FileStream(
-                path, FileMode.Open, FileAccess.Read, FileShare.Read,
-                4096, FileOptions.Asynchronous);
+            var stream = _fileService.GetFileStreamOrNull(source, dir, type);
+
+            if (stream == null) return NotFound(new Error(
+                StatusCodes.Status404NotFound, WrongPathMessage));
+
             return File(stream, "application/octet-stream");
         }
-
     }
 }

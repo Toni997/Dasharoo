@@ -13,6 +13,7 @@
     "sonar:reporters": "sreporter"
   },
   "dependencies": {
+    "@microsoft/signalr": "^5.0.9",
     "@uirouter/angularjs": "^1.0.5",
     "angular": "^1.8.2",
     "angular-animate": "^1.8.2",

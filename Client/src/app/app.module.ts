@@ -30,6 +30,7 @@ import { UsersService } from "./services/users.service";
 import { LoaderComponent } from "./components/common/loader/loader.component";
 import { GenresService } from './services/genres.service';
 import { AccountDetailsComponent } from './views/account-details/account-details.component';
+import { HubConfigService } from './services/hub-config.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -76,5 +77,6 @@ module.service("usersService", UsersService);
 module.component("loader", LoaderComponent);
 module.service('genresService', GenresService);
 module.component('accountDetails', AccountDetailsComponent);
+module.service('hubConfigService', HubConfigService);
 
 export const AppModule = module.name;

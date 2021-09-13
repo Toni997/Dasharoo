@@ -1,4 +1,5 @@
-﻿using DasharooAPI.Models;
+﻿using System.IO;
+using DasharooAPI.Models;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
@@ -14,5 +15,6 @@ namespace DasharooAPI.Controllers
         public string PlaylistBackgroundsDir { get; }
 
         Task<ResponseDetails> UploadFile(IFormFile file, string uploadDir, FileTypes fileType, string fileName = null);
+        FileStream GetFileStreamOrNull(string source, string dir, string type);
     }
 }

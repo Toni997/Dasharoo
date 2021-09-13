@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DasharooAPI.Models;
 using DasharooAPI.Utilities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Hosting;
 
 namespace DasharooAPI.Controllers
@@ -23,6 +24,56 @@ namespace DasharooAPI.Controllers
         public string PlaylistImagesDir { get; } = @"C:\DasharooStorage\Playlists\Images";
         public string PlaylistBackgroundsDir { get; } = @"C:\DasharooStorage\Playlists\Backgrounds";
 
+        // messages
+        public const string ErrorMessageImage = "Only.jpg, .jpeg and.png images up to 20MB are supported.";
+        public const string ErrorMessageAudio = "Only .wav and .mp3 audio files up to 20MB are supported.";
+
+
+        public FileStream GetFileStreamOrNull(string source, string dir, string type)
+        {
+            var src = "";
+            switch (dir)
+            {
+                case "Accounts":
+                    src = type switch
+                    {
+                        "Images" => AccountImagesDir,
+                        "Backgrounds" => AccountBackgroundsDir,
+                        _ => src
+                    };
+                    break;
+                case "Playlists":
+                    src = type switch
+                    {
+                        "Images" => PlaylistImagesDir,
+                        "Backgrounds" => PlaylistBackgroundsDir,
+                        _ => src
+                    };
+                    break;
+
+                case "Records":
+                    src = type switch
+                    {
+                        "Images" => RecordImagesDir,
+                        "Sources" => RecordSourcesDir,
+                        _ => src
+                    };
+                    break;
+                default:
+                    return null;
+            }
+
+            var path = Path.Combine(src, source);
+
+            if (!File.Exists(path)) return null;
+
+            var stream = new FileStream(
+                path, FileMode.Open, FileAccess.Read, FileShare.Read,
+                4096, FileOptions.Asynchronous);
+
+            return stream;
+        }
+
         //upload functions
         public async Task<ResponseDetails> UploadFile(
             IFormFile file, string uploadDir, FileTypes fileType, string fileName = null)
@@ -33,12 +84,12 @@ namespace DasharooAPI.Controllers
                 case FileTypes.Image:
                     if (IsImageNotValid(file.FileName, file.ContentType, file.Length))
                         return new Error(StatusCodes.Status415UnsupportedMediaType,
-                                "Only .jpg, .jpeg and .png images up to 20MB are supported.");
+                            ErrorMessageImage);
                     break;
                 case FileTypes.Audio:
                     if (IsAudioNotValid(file.FileName, file.ContentType, file.Length))
                         return new Error(StatusCodes.Status415UnsupportedMediaType,
-                                "Only .wav and .mp3 audio files up to 20MB are supported.");
+                            ErrorMessageAudio);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fileType), fileType, null);

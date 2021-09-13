@@ -87,7 +87,7 @@ namespace DasharooAPI.Services
             return new Success(StatusCodes.Status201Created, record);
         }
 
-        public async Task CreateRelatedData(Record record, CreateRecordDto recordDto)
+        private async Task CreateRelatedData(Record record, CreateRecordDto recordDto)
         {
             foreach (var genreId in recordDto.GenresIds)
             {
@@ -142,7 +142,7 @@ namespace DasharooAPI.Services
             return new Success(StatusCodes.Status204NoContent, null);
         }
 
-        public async Task UpdateRelatedData(Record record, UpdateRecordDto recordDto)
+        private async Task UpdateRelatedData(Record record, UpdateRecordDto recordDto)
         {
             var genresToDelete = await _unitOfWork.RecordGenres.GetAll(
                 x => x.RecordId == record.Id
@@ -184,7 +184,5 @@ namespace DasharooAPI.Services
                 }
             }
         }
-
-
     }
 }

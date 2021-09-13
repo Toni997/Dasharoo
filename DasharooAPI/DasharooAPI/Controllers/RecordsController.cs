@@ -20,26 +20,23 @@ namespace DasharooAPI.Controllers
     [ApiController]
     public class RecordsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly ILogger<RecordsController> _logger;
-        private readonly IFileService _fileService;
         private readonly IRecordService _recordService;
 
-        public RecordsController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<RecordsController> logger, IFileService fileService, IRecordService recordService)
+        public RecordsController(ILogger<RecordsController> logger, IRecordService recordService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _logger = logger;
-            _fileService = fileService;
             _recordService = recordService;
         }
+
+        // messages
+        public const string InvalidIdMessage = "Invalid id.";
 
         // [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllRecords()
         {
             var recordsDto = await _recordService.GetAllWithAuthorsGenresSupporters();
@@ -64,12 +61,12 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateRecord([FromForm] CreateRecordDto recordDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var responseDetails = await _recordService.TryCreateAndReturnResponseDetails(recordDto);
-
             if (!responseDetails.Succeeded)
                 return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
@@ -85,6 +82,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateRecord(int id, [FromForm] UpdateRecordDto recordDto)
         {
             if (!ModelState.IsValid || id < 1) return BadRequest(ModelState);
@@ -100,10 +98,11 @@ namespace DasharooAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteRecord(int id)
         {
             if (id < 1) return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest, "Invalid id."));
+                    StatusCodes.Status400BadRequest, InvalidIdMessage));
 
             var isDeleted = await _recordService.TryDeleteAndReturnBool(id);
             if (!isDeleted) return NotFound();

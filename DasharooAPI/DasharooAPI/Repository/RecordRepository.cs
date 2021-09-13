@@ -8,6 +8,8 @@ using DasharooAPI.IRepository;
 using DasharooAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace DasharooAPI.Repository
 {
@@ -17,25 +19,25 @@ namespace DasharooAPI.Repository
         {
         }
 
-        public List<string> IncludeAuthorsGenresSupporters { get; } = new()
+        private static IIncludableQueryable<Record, object> Includes(IQueryable<Record> x)
         {
-            "RecordAuthors",
-            "RecordAuthors.Author",
-            "RecordSupporters",
-            "RecordSupporters.Supporter",
-            "RecordGenres",
-            "RecordGenres.Genre",
-            "CreatedBy"
-        };
+            return x.Include(x => x.RecordAuthors)
+                        .ThenInclude(x => x.Author)
+                    .Include(x => x.RecordSupporters)
+                        .ThenInclude(x => x.Supporter)
+                    .Include(x => x.RecordGenres)
+                        .ThenInclude(x => x.Genre)
+                    .Include(x => x.CreatedBy);
+        }
 
         public Task<Record> GetByIdWithAuthorsGenresSupporters(int id)
         {
-            return Get(x => x.Id == id, IncludeAuthorsGenresSupporters);
+            return Get(x => x.Id == id, Includes);
         }
 
         public Task<IList<Record>> GetAllWithAuthorsGenresSupporters()
         {
-            return GetAll(includes: IncludeAuthorsGenresSupporters);
+            return GetAll(includes: Includes);
         }
     }
 }

@@ -8,6 +8,7 @@ using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
+using DasharooAPI.Services.Playlists;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
@@ -22,24 +23,25 @@ namespace DasharooAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<PlaylistsController> _logger;
         private readonly IFileService _fileService;
+        private readonly IPlaylistService _playlistService;
 
-        public PlaylistsController(IUnitOfWork unitOfWork, IMapper mapper,
-            ILogger<PlaylistsController> logger, IFileService fileService)
+        public PlaylistsController(ILogger<PlaylistsController> logger, IPlaylistService playlistService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _logger = logger;
-            _fileService = fileService;
+            _playlistService = playlistService;
         }
+
+        // messages
+        public const string InvalidIdMessage = "Invalid id.";
 
         // [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllPlaylists()
         {
-            var playlists = await _unitOfWork.Playlists.GetAllWithRecords();
-            var playlistsDto = _mapper.Map<IList<PlaylistDto>>(playlists);
+            var playlistsDto = await _playlistService.GetAllWithRecordsAndAuthor();
             return Ok(playlistsDto);
         }
 
@@ -48,11 +50,11 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPlaylistById(int id)
         {
-            var playlist = await _unitOfWork.Playlists.GetByIdWithRecordsAndAuthor(id);
-            if (playlist == null) return NotFound();
-            var playlistDto = _mapper.Map<PlaylistDto>(playlist);
+            var playlistDto = await _playlistService.GetByIdWithRecordsAndAuthor(id);
+            if (playlistDto == null) return NotFound();
             return Ok(playlistDto);
         }
 
@@ -62,40 +64,21 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreatePlaylist([FromForm] CreatePlaylistDto playlistDto)
         {
             if (!ModelState.IsValid)
-            {
-                _logger.LogError($"Invalid POST attempt in {nameof(CreatePlaylist)}");
                 return BadRequest(ModelState);
-            }
 
-            var playlist = _mapper.Map<Playlist>(playlistDto);
-            playlist.AuthorId = "f2fc5610-1830-451a-ad1b-3732c32b2970";
+            var responseDetails = await _playlistService.TryCreateAndReturnResponseDetails(playlistDto);
+            if (!responseDetails.Succeeded)
+                return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
-            // uploading cover image file
-            if (playlistDto.Image != null)
-            {
-                var resultImage = await _fileService.UploadFile(
-                    playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.ImagePath = (string)resultImage.Value;
-            }
+            var createdPlaylist = (Playlist)responseDetails.Value;
 
-            // uploading background image file
-            if (playlistDto.Background != null)
-            {
-                var resultImage = await _fileService.UploadFile(
-                    playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.BackgroundPath = (string)resultImage.Value;
-            }
-
-            await _unitOfWork.Playlists.Insert(playlist);
-            await _unitOfWork.Save();
 
             return CreatedAtRoute("GetPlaylistById",
-                new { id = playlist.Id }, playlist);
+                new { id = createdPlaylist.Id }, createdPlaylist);
         }
 
         // [Authorize(Roles = UserRoles.Administrator)]
@@ -104,43 +87,16 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdatePlaylist(int id, [FromForm] UpdatePlaylistDto playlistDto)
         {
             var user = User;
             if (!ModelState.IsValid || id < 1)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
                 return BadRequest(ModelState);
-            }
 
-            var playlist = await _unitOfWork.Playlists.Get(x => x.Id == id);
-            if (playlist == null)
-            {
-                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdatePlaylist)}");
-                return BadRequest(ModelState);
-            }
-            if (!User.IsCurrentUser(playlist.AuthorId)) return Unauthorized();
-
-            _mapper.Map(playlistDto, playlist);
-
-            // uploading cover image file
-            if (playlistDto.Image != null)
-            {
-                var resultImage = await _fileService.UploadFile(playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image, playlist.ImagePath);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.ImagePath = (string)resultImage.Value;
-            }
-
-            // uploading background image file
-            if (playlistDto.Background != null)
-            {
-                var resultImage = await _fileService.UploadFile(playlistDto.Background, _fileService.PlaylistBackgroundsDir, FileTypes.Image, playlist.BackgroundPath);
-                if (resultImage.StatusCode != StatusCodes.Status200OK) return StatusCode(resultImage.StatusCode, resultImage);
-                playlist.BackgroundPath = (string)resultImage.Value;
-            }
-
-            _unitOfWork.Playlists.Update(playlist);
-            await _unitOfWork.Save();
+            var responseDetails = await _playlistService.TryUpdateAndReturnResponseDetails(id, playlistDto);
+            if (!responseDetails.Succeeded)
+                return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
             return NoContent();
         }
@@ -149,28 +105,14 @@ namespace DasharooAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeletePlaylist(int id)
         {
-            if (id < 1)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest, "Invalid id."
-                ));
-            }
+            if (id < 1) return BadRequest(new Error(
+                    StatusCodes.Status400BadRequest, InvalidIdMessage));
 
-            var playlist = await _unitOfWork.Playlists.Get(x => x.Id == id);
-            if (playlist == null)
-            {
-                _logger.LogError($"Invalid DELETE attempt in {nameof(DeletePlaylist)}");
-                return BadRequest(new Error(
-                    StatusCodes.Status400BadRequest,
-                    "Playlist with the specified id does not exist."
-                ));
-            }
-
-            await _unitOfWork.Playlists.Delete(id);
-            await _unitOfWork.Save();
+            var isDeleted = await _playlistService.TryDeleteAndReturnBool(id);
+            if (!isDeleted) return NotFound();
 
             return NoContent();
         }

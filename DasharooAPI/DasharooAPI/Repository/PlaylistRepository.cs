@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DasharooAPI.Data;
 using DasharooAPI.IRepository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace DasharooAPI.Repository
 {
@@ -14,21 +16,26 @@ namespace DasharooAPI.Repository
         {
         }
 
-        public List<string> Includes { get; } = new()
+        private static IIncludableQueryable<Playlist, object> Includes(IQueryable<Playlist> x)
         {
-            "Records",
-            "Records.CreatedBy",
-            "Records.RecordAuthors",
-            "Records.RecordAuthors.Author",
-            "Author"
-        };
+            return x.Include(x => x.Records)
+                        .ThenInclude(x => x.CreatedBy)
+                    .Include(x => x.Records)
+                        .ThenInclude(x => x.RecordAuthors)
+                    .Include(x => x.Records)
+                        .ThenInclude(x => x.RecordAuthors)
+                        .ThenInclude(x => x.Author)
+
+                    .Include(x => x.Author);
+        }
 
         public Task<Playlist> GetByIdWithRecordsAndAuthor(int id)
         {
-            return Get(x => x.Id == id, includes: Includes);
+            return Get(x => x.Id == id, Includes);
 
         }
-        public Task<IList<Playlist>> GetAllWithRecords()
+
+        public Task<IList<Playlist>> GetAllWithRecordsAndAuthor()
         {
             return GetAll(includes: Includes);
         }

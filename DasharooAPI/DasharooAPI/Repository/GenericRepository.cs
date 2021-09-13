@@ -7,6 +7,7 @@ using DasharooAPI.Data;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using X.PagedList;
 
 namespace DasharooAPI.Repository
@@ -14,13 +15,11 @@ namespace DasharooAPI.Repository
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly DasharooDbContext _context;
-        // protected readonly IUnitOfWork _unitOfWork;
         protected readonly DbSet<T> _db;
 
         public GenericRepository(DasharooDbContext context)
         {
             _context = context;
-            // _unitOfWork = unitOfWork;
             _db = _context.Set<T>();
         }
 
@@ -29,11 +28,10 @@ namespace DasharooAPI.Repository
             return _db;
         }
 
-        protected IQueryable<T> Include(List<string> includes, IQueryable<T> query)
+        protected IQueryable<T> Include(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes, IQueryable<T> query)
         {
             return includes != null ?
-                includes.Aggregate(query, (current, property) =>
-                    current.Include(property))
+                includes(query)
                 : query;
         }
 
@@ -58,7 +56,7 @@ namespace DasharooAPI.Repository
             _db.RemoveRange(entities);
         }
 
-        public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes = null)
+        public async Task<T> Get(Expression<Func<T, bool>> expression, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             var query = Query();
             query = Include(includes, query);
@@ -73,7 +71,7 @@ namespace DasharooAPI.Repository
 
         public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            List<string> includes = null)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             var query = Query();
 
@@ -85,7 +83,7 @@ namespace DasharooAPI.Repository
         }
 
         public async Task<IPagedList<T>> GetPagedList(RequestParams requestParams,
-            List<string> includes = null)
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             var query = Query();
 
