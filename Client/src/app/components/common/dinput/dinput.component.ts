@@ -8,7 +8,7 @@ export class DinputController {
   }
 
   $onInit() {
-    console.log("dinput", this.iconName);
+    // console.log("dinput", this.iconName);
   }
 }
 

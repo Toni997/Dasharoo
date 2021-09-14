@@ -1,6 +1,6 @@
 <home-header></home-header>
 <dinput iconName="'search'"></dinput>
-<div id="explore-genres">
+<div id="explore-genres" pulltorefresh="$ctrl.reload()">
   <h2 class="section-title">Explore genres</h2>
   <loader ng-if="!$ctrl.$scope.genres"></loader>
 </div>

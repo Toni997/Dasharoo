@@ -4,8 +4,19 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import { userDetailsReducer } from "./reducers/userDetailsReducer";
 import { recordsReducer } from "./reducers/recordsReducer";
+import { HubConfigService } from "./services/hub-config.service";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+
+const hubConnectionBuilder: HubConnectionBuilder = new HubConnectionBuilder();
+
+export const hubConnection = hubConnectionBuilder
+  .withUrl("https://localhost:44350/myhub")
+  .build();
 
 export class AppConfig {
+  hubConfigService: HubConfigService;
+  hubConnection: HubConnection;
+
   constructor(
     $locationProvider: ng.ILocationProvider,
     $compileProvider: ng.ICompileProvider,

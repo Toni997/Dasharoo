@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace DasharooAPI.HubConfig
 {
-    public class ChartHub : Hub
+    public interface IMyHub
     {
+        Task NotifyOnConnect(string message);
+        Task SendNotification(object message);
     }
 }

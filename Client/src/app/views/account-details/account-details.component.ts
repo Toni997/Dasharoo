@@ -2,6 +2,8 @@ import { StateParams } from "@uirouter/core";
 import { UsersService } from "app/services/users.service";
 import "./account-details.component.scss";
 
+("use strict");
+
 export class AccountDetailsController {
   usersService: UsersService;
   $stateParams: StateParams;
@@ -25,7 +27,6 @@ export class AccountDetailsController {
   async $onInit() {
     this.account = await this.usersService.getOne(this.paramId);
     this.$scope.$apply();
-    console.log(this.account);
   }
 }
 

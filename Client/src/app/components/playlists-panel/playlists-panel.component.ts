@@ -18,7 +18,6 @@ export class PlaylistsPanelController {
       this.$document.find("separator")[0].firstElementChild.lastElementChild;
 
     expandIcon.style.transform = "rotate(90deg)";
-    console.log(playlistsPanel);
     if (!playlistsPanel.classList.contains("display-none")) {
       playlistsPanel.classList.remove("display-block");
       playlistsPanel.classList.add("display-none");

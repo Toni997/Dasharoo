@@ -23,7 +23,6 @@ export class QuickPlayController {
 
   async $onInit() {
     this.$scope.users = await this.usersService.getAll();
-    console.log(this.$scope.users);
     this.$scope.$apply();
     this.dispatch = this.reduxService.dispatch();
   }

@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using DasharooAPI.Data;
+using DasharooAPI.HubConfig;
 using DasharooAPI.Models;
 using DasharooAPI.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
@@ -29,11 +32,12 @@ namespace DasharooAPI.Controllers
         private readonly IAuthManager _authManager;
         private readonly IMessageService _emailService;
         private readonly IFileService _fileService;
+        private readonly IHubContext<MyHub> _hubContext;
 
         public AccountController(UserManager<User> userManager,
             ILogger<AccountController> logger, IMapper mapper,
             IAuthManager authManager, IMessageService emailService,
-            IFileService fileService)
+            IFileService fileService, IHubContext<MyHub> hubContext)
         {
             _userManager = userManager;
             _logger = logger;
@@ -41,6 +45,7 @@ namespace DasharooAPI.Controllers
             _authManager = authManager;
             _emailService = emailService;
             _fileService = fileService;
+            _hubContext = hubContext;
         }
 
         [HttpPost]
@@ -158,6 +163,9 @@ namespace DasharooAPI.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
             var userDto = _mapper.Map<GetUserDto>(user);
+
+            await _hubContext.Clients.All.SendCoreAsync("ReceiveNotification", new object[] { "Somebody just loaded an user" });
+
             return Ok(userDto);
         }
 

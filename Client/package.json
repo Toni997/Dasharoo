@@ -20,6 +20,7 @@
     "angular-aria": "^1.8.2",
     "angular-cookies": "^1.8.2",
     "angular-messages": "^1.8.2",
+    "angular-pullrefresh": "^0.2.2",
     "angular-resource": "^1.8.2",
     "angular-sanitize": "^1.8.2",
     "ng-redux": "^4.4.3",

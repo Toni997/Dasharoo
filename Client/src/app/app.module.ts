@@ -28,9 +28,11 @@ import { ReduxService } from "./services/redux.service";
 import { DinputComponent } from "./components/common/dinput/dinput.component";
 import { UsersService } from "./services/users.service";
 import { LoaderComponent } from "./components/common/loader/loader.component";
-import { GenresService } from './services/genres.service';
-import { AccountDetailsComponent } from './views/account-details/account-details.component';
-import { HubConfigService } from './services/hub-config.service';
+import { GenresService } from "./services/genres.service";
+import { AccountDetailsComponent } from "./views/account-details/account-details.component";
+import { HubConfigService } from "./services/hub-config.service";
+import { NotificationPanelComponent } from "./components/notification-panel/notification-panel.component";
+import { MypulltorefreshDirective } from "./directives/mypulltorefresh.directive";
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -75,8 +77,10 @@ module.service("reduxService", ReduxService);
 module.component("dinput", DinputComponent);
 module.service("usersService", UsersService);
 module.component("loader", LoaderComponent);
-module.service('genresService', GenresService);
-module.component('accountDetails', AccountDetailsComponent);
-module.service('hubConfigService', HubConfigService);
+module.service("genresService", GenresService);
+module.component("accountDetails", AccountDetailsComponent);
+module.service("hubConfigService", HubConfigService);
+module.component("notificationPanel", NotificationPanelComponent);
+module.directive("mypulltorefresh", MypulltorefreshDirective);
 
 export const AppModule = module.name;

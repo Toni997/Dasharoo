@@ -21,9 +21,6 @@ namespace DasharooAPI
     {
         public static void Main(string[] args)
         {
-            
-
-
             Logger.Initialize();
 
             try
@@ -40,15 +37,9 @@ namespace DasharooAPI
                 Log.CloseAndFlush();
             }
 
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterType<GenreService>().As<IGenreService>();
-            var container = containerBuilder.Build();
 
-            using (var scope = container.BeginLifetimeScope())
-            {
-                var genreService = container.Resolve<IGenreService>();
 
-            }
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

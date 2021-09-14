@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
+using DasharooAPI.HubConfig;
 using DasharooAPI.IRepository;
 using DasharooAPI.Models;
 using DasharooAPI.Services.Playlists;

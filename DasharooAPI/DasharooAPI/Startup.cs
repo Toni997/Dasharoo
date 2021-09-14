@@ -1,4 +1,6 @@
 ﻿using AspNetCoreRateLimit;
+using Autofac;
+using AutoMapper;
 using DasharooAPI.Configurations;
 using DasharooAPI.Controllers;
 using DasharooAPI.Data;
@@ -11,6 +13,7 @@ using DasharooAPI.Services.Playlists;
 using DasharooAPI.Services.Records;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -57,8 +60,9 @@ namespace DasharooAPI
             services.AddTransient<IGenericRepository<AuthorFollower>, GenericRepository<AuthorFollower>>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IRecordService, RecordService>();
-            // services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IGenreService, GenreService>();
             services.AddTransient<IPlaylistService, PlaylistService>();
+            services.AddTransient<IMyHub, MyHub>();
 
             services.AddScoped<IAuthManager, AuthManager>();
 
@@ -99,7 +103,7 @@ namespace DasharooAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChartHub>("/chart");
+                endpoints.MapHub<MyHub>("/myhub");
             });
         }
     }

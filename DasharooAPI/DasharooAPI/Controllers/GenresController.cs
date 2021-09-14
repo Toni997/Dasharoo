@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DasharooAPI.Data;
+using DasharooAPI.HubConfig;
 using DasharooAPI.IRepository;
 using DasharooAPI.Migrations;
 using DasharooAPI.Models;
@@ -15,6 +16,7 @@ using DasharooAPI.Services.Genres;
 using DasharooAPI.Services.Records;
 using DasharooAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace DasharooAPI.Controllers
@@ -25,12 +27,13 @@ namespace DasharooAPI.Controllers
     {
         private readonly ILogger<GenresController> _logger;
         private readonly IGenreService _genreService;
+        private readonly IHubContext<MyHub> _hubContext;
 
-
-        public GenresController(ILogger<GenresController> logger, IGenreService genreService)
+        public GenresController(ILogger<GenresController> logger, IGenreService genreService, IHubContext<MyHub> hubContext)
         {
             _logger = logger;
             _genreService = genreService;
+            _hubContext = hubContext;
         }
 
         public const string InvalidIdMessage = "Invalid id.";
@@ -89,6 +92,8 @@ namespace DasharooAPI.Controllers
             var responseDetails = await _genreService.TryCreateAndReturnResponseDetails(genreDto);
             var createdGenre = (Genre)responseDetails.Value;
 
+            await _hubContext.Clients.All.SendCoreAsync("GenreNotification", new object[] { "Created" });
+
             return CreatedAtRoute("GetGenreById",
                 new { id = createdGenre.Id }, createdGenre);
         }
@@ -108,6 +113,8 @@ namespace DasharooAPI.Controllers
             if (!responseDetails.Succeeded)
                 return NotFound();
 
+            await _hubContext.Clients.All.SendCoreAsync("GenreNotification", new object[] { "Updated" });
+
             return NoContent();
         }
 
@@ -123,6 +130,9 @@ namespace DasharooAPI.Controllers
 
             var isDeleted = await _genreService.TryDeleteAndReturnBool(id);
             if (!isDeleted) return NotFound();
+
+            await _hubContext.Clients.All.SendCoreAsync("GenreNotification", new object[] { "Deleted" });
+
 
             return NoContent();
         }

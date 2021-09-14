@@ -1,6 +1,6 @@
 <h2 class="section-title">Quick play</h2>
 <loader ng-if="!$ctrl.$scope.users || $ctrl.$scope.users.length === 0"></loader>
-<div class="artists">
+<div ng-if="$ctrl.$scope.users" class="artists">
   <single-artist
     ng-repeat="artist in $ctrl.$scope.users"
     name="artist.artistName"

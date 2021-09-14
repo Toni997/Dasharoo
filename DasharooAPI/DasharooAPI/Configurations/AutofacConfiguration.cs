@@ -18,7 +18,6 @@ namespace DasharooAPI.Configurations
             containerBuilder.RegisterType<GenreService>().As<IGenreService>();
             var container = containerBuilder.Build();
 
-            var genreService = container.Resolve<IGenreService>();
         }
     }
 }

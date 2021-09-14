@@ -1,6 +1,10 @@
 class AppController {
   title: String;
 
+  constructor() {
+    "ngInject";
+  }
+
   $onInit() {
     this.title = "Dasharoo";
   }

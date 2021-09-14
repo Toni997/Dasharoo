@@ -27,14 +27,15 @@ export class SearchViewController {
 
   async $onInit() {
     this.$scope.genres = await this.genresService.getAll();
-    // this.getGenres();
     const exploreGenres: HTMLDivElement =
       this.$document[0].querySelector("#explore-genres");
     exploreGenres.appendChild(this.divElement);
     this.getGenresInList();
     this.$scope.$apply();
-    console.log(exploreGenres);
-    // console.log("s", this.$scope.genresStructured);
+  }
+
+  reload() {
+    console.log("pull");
   }
 
   // getGenres(

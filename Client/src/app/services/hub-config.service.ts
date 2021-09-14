@@ -1,17 +1,23 @@
-const signalR = require("@microsoft/signalr");
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 export class HubConfigService {
+  hubConnectionBuilder: HubConnectionBuilder = new HubConnectionBuilder();
+
   constructor() {
     "ngInject";
+    // this.connection.on("ReceiveMessage", (user, message) => {
+    //   console.log(user, message);
+    // });
 
-    let connection = new signalR.HubConnectionBuilder()
-      .withUrl("/chat")
+    // hubConnection.start().then(() => {
+    //   hubConnection.invoke("SendMessage", "Hello", "Brother");
+    //   console.log(hubConnection);
+    // });
+  }
+
+  connect() {
+    return this.hubConnectionBuilder
+      .withUrl("https://localhost:44350/myhub")
       .build();
-
-    connection.on("send", (data) => {
-      console.log(data);
-    });
-
-    connection.start().then(() => connection.invoke("send", "Hello"));
   }
 }
