@@ -37,9 +37,9 @@ namespace DasharooAPI.Data
             builder.ApplyConfiguration(new AuthorFollowerConfiguration());
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            return base.SaveChangesAsync(cancellationToken);
-        }
+        // public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        // {
+        //     return base.SaveChangesAsync(cancellationToken);
+        // }
     }
 }

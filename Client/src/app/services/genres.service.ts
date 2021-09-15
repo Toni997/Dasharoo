@@ -7,6 +7,7 @@ export class GenresService {
     "ngInject";
 
     this.restangular = Restangular;
+    // console.log(this.restangular);
   }
 
   async getAll() {

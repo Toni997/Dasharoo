@@ -7,6 +7,10 @@ export class AppRoutes {
   ) {
     "ngInject";
 
+    const _skipIfAuthenticated = ($state) => {
+      $state.go("/");
+    };
+
     $urlRouterProvider.otherwise("/");
 
     $stateProvider
@@ -33,6 +37,11 @@ export class AppRoutes {
         //     return UsersService.getOne($transition$.params().id);
         //   },
         // },
+      })
+      .state("login", {
+        url: "/login",
+        onEnter: _skipIfAuthenticated,
+        component: "login",
       });
 
     ("searchView");

@@ -1,0 +1,20 @@
+<h2>Log in with email/username and password</h2>
+<form ng-submit="onSubmit()">
+  <input
+    placeholder="Email or username"
+    type="text"
+    ng-model="loginModel.email"
+    required
+  />
+  <input
+    placeholder="Password"
+    type="password"
+    ng-model="loginModel.password"
+    required
+  />
+  <button type="submit">Log in</button>
+</form>
+
+<h2>log in with facebook</h2>
+<button ng-click="authenticate('facebook')">Sign in with Facebook</button>
+<button ng-click="logout('facebook')">Logout</button>

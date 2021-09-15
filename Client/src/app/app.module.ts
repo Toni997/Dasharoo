@@ -33,6 +33,7 @@ import { AccountDetailsComponent } from "./views/account-details/account-details
 import { HubConfigService } from "./services/hub-config.service";
 import { NotificationPanelComponent } from "./components/notification-panel/notification-panel.component";
 import { MypulltorefreshDirective } from "./directives/mypulltorefresh.directive";
+import { LoginComponent } from "./views/login/login.component";
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -45,6 +46,7 @@ let module: ng.IModule = angular.module("dasharoo", [
   "restangular",
   "oc.lazyLoad",
   "ngRedux",
+  "satellizer",
 ]);
 
 module.constant("ENVIRONMENT", ENV);
@@ -82,5 +84,6 @@ module.component("accountDetails", AccountDetailsComponent);
 module.service("hubConfigService", HubConfigService);
 module.component("notificationPanel", NotificationPanelComponent);
 module.directive("mypulltorefresh", MypulltorefreshDirective);
+module.component("login", LoginComponent);
 
 export const AppModule = module.name;

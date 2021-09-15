@@ -41,7 +41,11 @@ namespace DasharooAPI
 
             // services.ConfigureHttpCacheHeaders();
 
-            services.AddAuthentication();
+            // services.AddAuthentication().AddFacebook(facebookOptions =>
+            // {
+            //     facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+            //     facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            // });
             services.ConfigureIdentity();
             services.ConfigureJwt(Configuration);
 

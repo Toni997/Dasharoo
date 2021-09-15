@@ -39,7 +39,7 @@ namespace DasharooAPI.Controllers
         public const string InvalidIdMessage = "Invalid id.";
 
 
-        // [Authorize(Roles = UserRoles.User)]
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

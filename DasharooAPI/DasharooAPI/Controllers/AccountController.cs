@@ -9,6 +9,7 @@ using AutoMapper;
 using DasharooAPI.Data;
 using DasharooAPI.HubConfig;
 using DasharooAPI.Models;
+using DasharooAPI.Models.Auth.Facebook;
 using DasharooAPI.Services;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -78,6 +79,17 @@ namespace DasharooAPI.Controllers
             });
         }
 
+        // [HttpPost]
+        // [Route("Login")]
+        // [ProducesResponseType(StatusCodes.Status202Accepted)]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        // public async Task<IActionResult> FacebookLogin([FromBody] FacebookLogin facebookLogin)
+        // {
+        //
+        // }
+
         [HttpPost]
         [Route("Signup")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
@@ -146,6 +158,7 @@ namespace DasharooAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -158,6 +171,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -174,6 +188,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateAccount(string id, [FromForm] UpdateUserDto userDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -211,6 +226,7 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserImage(string id, [FromForm] UserImage userImage)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

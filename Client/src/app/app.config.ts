@@ -24,9 +24,17 @@ export class AppConfig {
     RestangularProvider: Restangular.IProvider,
     CONFIG,
     ENVIRONMENT: String,
-    $ngReduxProvider
+    $ngReduxProvider,
+    $authProvider
   ) {
     "ngInject";
+
+    $authProvider.facebook({
+      clientId: "1006915756787962",
+      responseType: "token",
+    });
+
+    console.log($authProvider);
 
     const reducer = combineReducers({
       userDetails: userDetailsReducer,
@@ -55,7 +63,12 @@ export class AppConfig {
       debug: ENVIRONMENT !== "prod" && ENVIRONMENT !== "production",
     });
 
+    localStorage.setItem("token", "jaja");
+
+    const token = localStorage.getItem("token") || "";
+
     // Reference: https://github.com/mgonto/restangular#setbaseurl
     RestangularProvider.setBaseUrl(CONFIG.BASE_URL);
+    RestangularProvider.setDefaultHeaders({ token });
   }
 }

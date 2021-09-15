@@ -17,6 +17,7 @@ namespace DasharooAPI.HubConfig
         {
             await Clients.Others.SendCoreAsync("ReceiveNotification", new[] { message });
         }
+
         public async Task SendGenresNotification(object value)
         {
             await Clients.Others.SendCoreAsync("GenreNotification", new[] { value });

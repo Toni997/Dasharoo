@@ -9,5 +9,6 @@ import "@uirouter/angularjs";
 import "restangular";
 import "oclazyload";
 import "ng-redux";
+import "satellizer";
 
 /// <reference path="custom-typings.d.ts" />

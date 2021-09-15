@@ -10,5 +10,6 @@ namespace DasharooAPI.HubConfig
     {
         Task NotifyOnConnect(string message);
         Task SendNotification(object message);
+        Task SendGenresNotification(object value);
     }
 }

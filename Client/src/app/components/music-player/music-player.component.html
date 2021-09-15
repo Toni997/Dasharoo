@@ -13,6 +13,7 @@
   <div class="left-panel">
     <div class="author-image">
       <img
+        ng-if="$ctrl.$scope.recordImage"
         draggable="false"
         src="{{ $ctrl.$scope.recordImage }}"
         alt="Profile image"

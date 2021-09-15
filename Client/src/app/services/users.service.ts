@@ -1,3 +1,4 @@
+import LoginModel from "app/data/login.model";
 import restangular = require("restangular");
 
 export class UsersService {
@@ -15,5 +16,9 @@ export class UsersService {
 
   async getOne(id: string) {
     return await this.restangular.one("account", id).get();
+  }
+
+  async login(loginModel: LoginModel) {
+    return await this.restangular.customPOST(loginModel);
   }
 }
