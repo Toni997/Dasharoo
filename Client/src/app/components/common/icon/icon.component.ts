@@ -18,7 +18,7 @@ export const IconComponent: ng.IComponentOptions = {
   template: require("./icon.component.html").default,
   controller: IconController,
   bindings: {
-    tooltip: "<",
+    tooltip: "@",
     src: "<",
     width: "<",
     alt: "<",

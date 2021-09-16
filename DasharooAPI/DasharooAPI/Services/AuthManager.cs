@@ -58,13 +58,16 @@ namespace DasharooAPI.Services
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, _user.Id),
-                new(ClaimTypes.Name, _user.UserName)
+                new("id", _user.Id),
+                new("userName", _user.UserName),
+                new("firstName",_user.Name),
+                new("artistName",_user.ArtistName)
+
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
 
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(roles.Select(role => new Claim("role", role)));
 
             return claims;
         }

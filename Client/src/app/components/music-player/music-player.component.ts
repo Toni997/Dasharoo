@@ -1,4 +1,4 @@
-import { RecordActionsService } from "app/record-actions.service";
+import { RecordActionsService } from "app/actions/record-actions.service";
 import { RecordsService } from "app/records.service";
 import "./music-player.component.scss";
 

@@ -11,8 +11,10 @@ using DasharooAPI.HubConfig;
 using DasharooAPI.Models;
 using DasharooAPI.Models.Auth.Facebook;
 using DasharooAPI.Services;
+using DasharooAPI.Utilities;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
@@ -154,7 +156,7 @@ namespace DasharooAPI.Controllers
             return Ok();
         }
 
-        // [Authorize(Roles = UserRoles.User)]
+        [Authorize(Roles = UserRoles.User)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -166,7 +168,7 @@ namespace DasharooAPI.Controllers
             return Ok(usersDto);
         }
 
-        // [Authorize(Roles = UserRoles.User)]
+        [Authorize(Roles = UserRoles.User)]
         [HttpGet("{id}", Name = "GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -183,6 +185,7 @@ namespace DasharooAPI.Controllers
             return Ok(userDto);
         }
 
+        [Authorize(Roles = UserRoles.User)]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -191,6 +194,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateAccount(string id, [FromForm] UpdateUserDto userDto)
         {
+            if (!User.IsCurrentUser(id)) return Unauthorized();
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = await _userManager.FindByIdAsync(id);
@@ -221,6 +226,7 @@ namespace DasharooAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = UserRoles.User)]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -229,6 +235,8 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUserImage(string id, [FromForm] UserImage userImage)
         {
+            if (!User.IsCurrentUser(id)) return Unauthorized();
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = await _userManager.FindByIdAsync(id);

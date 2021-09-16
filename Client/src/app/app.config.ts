@@ -2,7 +2,7 @@ import thunk from "redux-thunk";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-import { userDetailsReducer } from "./reducers/userDetailsReducer";
+import { userLoginReducer } from "./reducers/userReducers";
 import { recordsReducer } from "./reducers/recordsReducer";
 import { HubConfigService } from "./services/hub-config.service";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
@@ -26,8 +26,19 @@ export class AppConfig {
     ENVIRONMENT: String,
     $ngReduxProvider,
     $authProvider
+    // ngJwtAuthServiceProvider: NgJwtAuthServiceProvider
   ) {
     "ngInject";
+
+    // ngJwtAuthServiceProvider.configure({
+    //   base: "/api",
+    //   login: "/login-custom",
+    //   tokenExchange: "/token-custom",
+    //   refresh: "/refresh-custom",
+    // });
+
+    $authProvider.baseUrl = CONFIG.BASE_URL;
+    $authProvider.loginUrl = "Account/Login";
 
     $authProvider.facebook({
       clientId: "1006915756787962",
@@ -37,7 +48,7 @@ export class AppConfig {
     console.log($authProvider);
 
     const reducer = combineReducers({
-      userDetails: userDetailsReducer,
+      userDetails: userLoginReducer,
       records: recordsReducer,
     });
     const middleware = [thunk];
@@ -63,12 +74,28 @@ export class AppConfig {
       debug: ENVIRONMENT !== "prod" && ENVIRONMENT !== "production",
     });
 
-    localStorage.setItem("token", "jaja");
-
-    const token = localStorage.getItem("token") || "";
+    const token = localStorage.getItem("satellizer_token") || "";
 
     // Reference: https://github.com/mgonto/restangular#setbaseurl
     RestangularProvider.setBaseUrl(CONFIG.BASE_URL);
     RestangularProvider.setDefaultHeaders({ token });
+
+    // var refreshAccesstoken = function () {
+    //   var deferred = $q.defer();
+
+    //   // Refresh access-token logic
+
+    //   return deferred.promise;
+    // };
+
+    // RestangularProvider.setErrorInterceptor(async function (
+    //   response,
+    //   deferred,
+    //   responseHandler
+    // ) {
+    //   console.log(response);
+    //   console.log(deferred);
+    //   console.log(responseHandler);
+    // });
   }
 }

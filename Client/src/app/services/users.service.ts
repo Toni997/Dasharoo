@@ -3,6 +3,8 @@ import restangular = require("restangular");
 
 export class UsersService {
   restangular: restangular.IService;
+  account: string = "Account";
+  loginStr: string = "Login";
 
   constructor(Restangular: restangular.IService) {
     "ngInject";
@@ -11,14 +13,16 @@ export class UsersService {
   }
 
   async getAll() {
-    return await this.restangular.all("account").getList();
+    return await this.restangular.all(this.account).getList();
   }
 
   async getOne(id: string) {
-    return await this.restangular.one("account", id).get();
+    return await this.restangular.one(this.account, id).get();
   }
 
   async login(loginModel: LoginModel) {
-    return await this.restangular.customPOST(loginModel);
+    return await this.restangular
+      .all(`${this.account}/${this.loginStr}`)
+      .post(loginModel);
   }
 }

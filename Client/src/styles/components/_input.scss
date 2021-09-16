@@ -1,0 +1,32 @@
+// input {
+//   padding: 30px !important;
+// }
+
+.dinput-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dinput-icon {
+  position: absolute;
+  margin-left: 10px;
+}
+
+.input {
+  padding: 10px;
+  border-radius: 15px;
+  border: 3px solid $primary-color;
+  transition: 0.5s;
+  background: $text-color;
+  color: $background-color;
+  width: 100%;
+  padding-left: 40px;
+  &:focus {
+    outline: none;
+    border-color: $text-color;
+  }
+  &::placeholder {
+    margin-left: 10px;
+  }
+}

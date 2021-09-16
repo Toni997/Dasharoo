@@ -2,18 +2,24 @@ import "./dinput.component.scss";
 
 export class DinputController {
   iconName: string = "search";
+  placeholder: string = "";
+  type: string = "text";
 
   constructor() {
     "ngInject";
   }
 
   $onInit() {
-    // console.log("dinput", this.iconName);
+    console.log(this.type);
   }
 }
 
 export const DinputComponent: ng.IComponentOptions = {
   template: require("./dinput.component.html").default,
   controller: DinputController,
-  bindings: {},
+  bindings: {
+    placeholder: "@",
+    text: "@",
+    type: "@",
+  },
 };

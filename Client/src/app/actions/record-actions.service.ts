@@ -2,10 +2,10 @@ import {
   RECORDS_FAIL,
   RECORDS_REQUEST,
   RECORDS_SUCCESS,
-} from "./constants/recordConstants";
-import QueueAddType from "./queueAddType.enum";
-import { RecordsService } from "./records.service";
-import { PlaylistsService } from "./services/playlists.service";
+} from "../constants/recordConstants";
+import QueueAddType from "../queueAddType.enum";
+import { RecordsService } from "../records.service";
+import { PlaylistsService } from "../services/playlists.service";
 
 export class RecordActionsService {
   recordsService: RecordsService;

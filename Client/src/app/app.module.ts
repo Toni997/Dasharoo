@@ -7,7 +7,7 @@ import { AppRoutes } from "./app.routing";
 import { AppComponent } from "./app.component";
 import { MusicPlayerComponent } from "./components/music-player/music-player.component";
 import { RecordsService } from "./records.service";
-import { RecordActionsService } from "./record-actions.service";
+import { RecordActionsService } from "./actions/record-actions.service";
 import { LeftSidebarComponent } from "./components/left-sidebar/left-sidebar.component";
 import { SeparatorComponent } from "./components/separator/separator.component";
 import { RightSidebarComponent } from "./components/right-sidebar/right-sidebar.component";
@@ -32,8 +32,8 @@ import { GenresService } from "./services/genres.service";
 import { AccountDetailsComponent } from "./views/account-details/account-details.component";
 import { HubConfigService } from "./services/hub-config.service";
 import { NotificationPanelComponent } from "./components/notification-panel/notification-panel.component";
-import { MypulltorefreshDirective } from "./directives/mypulltorefresh.directive";
 import { LoginComponent } from "./views/login/login.component";
+import { UserActionsService } from "./actions/user-actions.service";
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -47,6 +47,7 @@ let module: ng.IModule = angular.module("dasharoo", [
   "oc.lazyLoad",
   "ngRedux",
   "satellizer",
+  // "ngJwtAuth",
 ]);
 
 module.constant("ENVIRONMENT", ENV);
@@ -54,6 +55,17 @@ module.constant("CONFIG", CONFIG);
 
 module.config(AppConfig);
 module.config(AppRoutes);
+
+class RestConfig {
+  title: String;
+
+  constructor() {
+    "ngInject";
+    // console.log(Restangular);
+  }
+}
+
+module.run(RestConfig);
 
 module.component("app", AppComponent);
 module.component("musicPlayer", MusicPlayerComponent);
@@ -83,7 +95,7 @@ module.service("genresService", GenresService);
 module.component("accountDetails", AccountDetailsComponent);
 module.service("hubConfigService", HubConfigService);
 module.component("notificationPanel", NotificationPanelComponent);
-module.directive("mypulltorefresh", MypulltorefreshDirective);
 module.component("login", LoginComponent);
+module.service("userActionsService", UserActionsService);
 
 export const AppModule = module.name;

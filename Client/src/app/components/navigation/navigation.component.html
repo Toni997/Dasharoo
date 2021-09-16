@@ -11,7 +11,7 @@
       </li>
     </a>
     <a
-      ui-sref="search()"
+      ui-sref="search"
       ui-sref-active="active"
       ng-click="$ctrl.closeLeftSidebar()"
     >
@@ -21,13 +21,23 @@
       </li>
     </a>
     <a
-      ui-sref="my-account()"
+      ui-sref="my-account"
       ui-sref-active="active"
       ng-click="$ctrl.closeLeftSidebar()"
     >
       <li>
         <icon src="'my-account'"></icon>
         <span>My Account</span>
+      </li>
+    </a>
+    <a
+      ui-sref="login"
+      ui-sref-active="active"
+      ng-click="$ctrl.closeLeftSidebar()"
+    >
+      <li>
+        <icon src="'my-account'"></icon>
+        <span>Login</span>
       </li>
     </a>
   </ul>

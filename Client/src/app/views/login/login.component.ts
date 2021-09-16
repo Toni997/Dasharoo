@@ -1,10 +1,23 @@
 import LoginModel from "app/data/login.model";
-import { UsersService } from "app/services/users.service";
+import { ReduxService } from "app/services/redux.service";
+// import { UsersService } from "app/services/users.service";
 import "./login.component.scss";
 
 export class LoginController {
-  constructor($scope, $auth, usersService: UsersService) {
+  constructor(
+    $scope: any,
+    $state: any,
+    $auth: any,
+    reduxService: ReduxService
+  ) {
     "ngInject";
+
+    $state.defaultErrorHandler(function (error) {
+      // This is a naive example of how to silence the default error handler.
+      console.log(error);
+    });
+
+    const dispatch = reduxService.dispatch();
 
     $scope.loginModel = {
       email: "",
@@ -13,20 +26,19 @@ export class LoginController {
 
     $scope.authenticate = async function (provider) {
       await $auth.authenticate(provider);
-      console.log(await $auth.getToken());
-      console.log("successfully logged in");
+      $state.go("app");
     };
 
-    $scope.logout = async function (provider) {
-      await $auth.unlink(provider);
+    $scope.logout = async function () {
+      // await $auth.unlink(provider);
       await $auth.logout();
       console.log("successfully logged out");
     };
 
     $scope.onSubmit = async () => {
-      console.log($scope.loginModel);
-      const data = await usersService.login($scope.loginModel);
-      console.log(data);
+      dispatch.login($scope.loginModel);
+      console.log("successfully logged in");
+      $state.go("app");
     };
   }
 

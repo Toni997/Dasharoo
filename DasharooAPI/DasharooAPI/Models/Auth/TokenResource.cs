@@ -7,9 +7,7 @@ namespace DasharooAPI.Models.Auth
 {
     public class TokenResource
     {
-
         public string Token { get; set; }
         public long Expiry { get; set; }
-
     }
 }

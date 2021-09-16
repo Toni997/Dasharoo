@@ -11,10 +11,12 @@
     type="password"
     ng-model="loginModel.password"
     required
+    Dinput
   />
+
   <button type="submit">Log in</button>
 </form>
 
 <h2>log in with facebook</h2>
 <button ng-click="authenticate('facebook')">Sign in with Facebook</button>
-<button ng-click="logout('facebook')">Logout</button>
+<button ng-click="logout()">Logout</button>

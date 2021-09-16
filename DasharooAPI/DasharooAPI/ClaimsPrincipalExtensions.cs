@@ -10,17 +10,17 @@ namespace DasharooAPI
     {
         public static string GetUserEmail(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Email);
+            return principal.FindFirstValue("email");
         }
 
         public static string GetUserId(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            return principal.FindFirstValue("id");
         }
 
         public static string GetUserName(this ClaimsPrincipal principal)
         {
-            return principal.FindFirstValue(ClaimTypes.Name);
+            return principal.FindFirstValue("userName");
         }
 
         public static bool IsCurrentUser(this ClaimsPrincipal principal, string id)
