@@ -1,5 +1,6 @@
 import { RecordActionsService } from "app/actions/record-actions.service";
 import { RecordsService } from "app/records.service";
+import { AuthService } from "app/services/auth.service";
 import "./music-player.component.scss";
 
 export class MusicPlayerController {
@@ -34,15 +35,19 @@ export class MusicPlayerController {
   imagePath: string;
   currentQueueIndex: number;
   shuffleEnabled: boolean = false;
+  authService: AuthService;
 
   constructor(
     $scope: any,
     $ngRedux: any,
     recordsService: RecordsService,
     recordActionsService: RecordActionsService,
+    authService: AuthService,
     CONFIG
   ) {
     ("ngInject");
+
+    this.authService = authService;
 
     this.config = CONFIG;
     this.audioPath = this.config.BASE_URL + "Files/Records/Sources?source=";
@@ -62,7 +67,6 @@ export class MusicPlayerController {
     });
   }
   async $onInit() {
-    console.log(this.audioPath);
     this.$scope.recordTitle = "No music in queue";
     this.$scope.recordAuthors = "Dasharoo";
     this.$scope.recordSrc = "";

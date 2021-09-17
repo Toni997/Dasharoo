@@ -35,6 +35,17 @@ export class ReduxService {
       logout() {
         self.redux.dispatch(self.userActions.logout());
       },
+      loadUserInfo(userInfo: any) {
+        self.redux.dispatch(self.userActions.loadUserInfo(userInfo));
+      },
     };
+  }
+
+  getCurrentUser() {
+    return this.redux.getState().userDetails.user;
+  }
+
+  getRecords() {
+    return this.redux.getState().records;
   }
 }

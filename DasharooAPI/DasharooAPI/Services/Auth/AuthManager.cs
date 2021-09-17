@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DasharooAPI.Data;
 using DasharooAPI.Models;
+using DasharooAPI.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -29,23 +31,27 @@ namespace DasharooAPI.Services
             _configuration = configuration;
         }
 
-        public async Task<string> CreateToken()
+
+
+        public async Task<string> CreateToken(TokenTypes tokenType)
         {
-            var signingCredentials = GetSigningCredentials();
+            var signingCredentials = GetSigningCredentials(tokenType);
             var claims = await GetClaims();
-            var token = GenerateTokenOptions(signingCredentials, claims);
+            var token = GenerateTokenOptions(signingCredentials, claims, tokenType);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, IEnumerable<Claim> claims, TokenTypes tokenType)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(
-                jwtSettings.GetSection("lifetime").Value));
+            DateTime? expiration = tokenType == TokenTypes.AccessToken
+                ? DateTime.Now.AddMinutes(Convert.ToDouble(
+                    jwtSettings.GetSection("lifetime").Value))
+                : null;
 
             var token = new JwtSecurityToken(
-                issuer: jwtSettings.GetSection("Issuer").Value,
+                jwtSettings.GetSection("Issuer").Value,
                 claims: claims,
                 expires: expiration,
                 signingCredentials: signingCredentials
@@ -72,9 +78,16 @@ namespace DasharooAPI.Services
             return claims;
         }
 
-        private static SigningCredentials GetSigningCredentials()
+        private static SigningCredentials GetSigningCredentials(TokenTypes tokenType)
         {
-            var key = Environment.GetEnvironmentVariable("KEY");
+            var envVariableName = tokenType switch
+            {
+                TokenTypes.AccessToken => "ACCESS_TOKEN_KEY",
+                TokenTypes.RefreshToken => "REFRESH_TOKEN_KEY",
+                _ => throw new ArgumentOutOfRangeException(nameof(tokenType), tokenType, null)
+            };
+
+            var key = Environment.GetEnvironmentVariable(envVariableName);
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);

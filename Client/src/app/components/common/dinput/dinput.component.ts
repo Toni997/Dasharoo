@@ -1,25 +1,32 @@
 import "./dinput.component.scss";
 
 export class DinputController {
-  iconName: string = "search";
-  placeholder: string = "";
-  type: string = "text";
+  icon: string;
+  placeholder: string;
+  type: string;
+  bindto: any;
+  required: boolean;
+  min: number;
+  max: number;
 
   constructor() {
     "ngInject";
   }
 
-  $onInit() {
-    console.log(this.type);
-  }
+  $onInit() {}
 }
 
 export const DinputComponent: ng.IComponentOptions = {
   template: require("./dinput.component.html").default,
   controller: DinputController,
   bindings: {
+    icon: "@",
     placeholder: "@",
     text: "@",
     type: "@",
+    bindto: "=",
+    required: "<",
+    min: "<",
+    max: "<",
   },
 };

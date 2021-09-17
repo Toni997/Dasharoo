@@ -1,4 +1,5 @@
 import LoginModel from "app/data/login.model.js";
+import { UsersService } from "app/services/users.service";
 import {
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
@@ -16,14 +17,26 @@ import {
   // USER_UPDATE_PROFILE_REQUEST,
   // USER_DETAILS_RESET,
 } from "../constants/userConstants";
+import { RECORDS_RESET } from "../constants/recordConstants";
 
 export class UserActionsService {
   $auth: any;
+  $state: any;
+  jwt: any;
+  usersService: UsersService;
 
-  constructor($auth: any) {
+  constructor(
+    $auth: any,
+    $state: any,
+    jwtHelper: any,
+    usersService: UsersService
+  ) {
     "ngInject";
 
     this.$auth = $auth;
+    this.$state = $state;
+    this.jwt = jwtHelper;
+    this.usersService = usersService;
   }
 
   login(loginModel: LoginModel) {
@@ -34,15 +47,18 @@ export class UserActionsService {
           type: USER_LOGIN_REQUEST,
         });
 
-        await self.$auth.login(loginModel);
-        const userInfo = self.$auth.getPayload();
-
-        console.log("payload", userInfo);
+        const tokens: any = await self.usersService.login(loginModel);
+        const userInfo = self.jwt.decodeToken(tokens.accessToken);
 
         dispatch({
           type: USER_LOGIN_SUCCESS,
           payload: userInfo,
         });
+
+        localStorage.setItem("accessToken", tokens.accessToken);
+        localStorage.setItem("refreshToken", tokens.refreshToken);
+
+        self.$state.go("app");
       } catch (error) {
         dispatch({
           type: USER_LOGIN_FAIL,
@@ -54,28 +70,30 @@ export class UserActionsService {
       }
     };
   }
+
+  loadUserInfo(userInfo) {
+    return async function (dispatch) {
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: userInfo,
+      });
+    };
+  }
+
   logout() {
     const self = this;
     return async function (dispatch) {
-      try {
-        dispatch({
-          type: USER_LOGIN_REQUEST,
-        });
-
-        await self.$auth.logout();
-
-        dispatch({
-          type: USER_LOGOUT,
-        });
-      } catch (error) {
-        dispatch({
-          type: USER_LOGIN_FAIL,
-          payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
-              : error.message,
-        });
-      }
+      localStorage.removeItem("accessToken");
+      // TODO remove refresh token from db
+      localStorage.removeItem("refreshToken");
+      dispatch({
+        type: USER_LOGOUT,
+      });
+      dispatch({
+        type: RECORDS_RESET,
+      });
+      console.log("successfully logged out");
+      self.$state.go("login");
     };
   }
 }

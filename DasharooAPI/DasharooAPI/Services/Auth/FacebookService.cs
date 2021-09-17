@@ -11,7 +11,6 @@ namespace DasharooAPI.Services.Auth
 {
     public class FacebookService
     {
-
         private readonly HttpClient _httpClient;
 
         public FacebookService()
@@ -49,7 +48,7 @@ namespace DasharooAPI.Services.Auth
         {
             var response = await _httpClient.GetAsync($"{endpoint}?access_token={accessToken}&{args}");
             if (!response.IsSuccessStatusCode)
-                return default(T);
+                return default;
 
             var result = await response.Content.ReadAsStringAsync();
 

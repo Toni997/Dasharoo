@@ -149,3 +149,26 @@ nav {
     }
   }
 }
+
+.dform {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.dbutton {
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 50px;
+  border: none;
+  color: $background-color;
+  background: $primary-color;
+  font-size: 1.3em;
+  transition: 0.8s;
+  box-shadow: 0 5px 15px 1px $background-color;
+  &:hover {
+    // background: rgba(0, 255, 170, 0.685);
+    transform: scale(1.01);
+  }
+}

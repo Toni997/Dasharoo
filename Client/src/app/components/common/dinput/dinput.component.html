@@ -1,8 +1,12 @@
 <div class="dinput-container">
-  <icon width="20" class="dinput-icon" src="$ctrl.iconName"></icon>
+  <icon width="20" class="dinput-icon" src="{{ $ctrl.icon }}"></icon>
   <input
     class="input"
     placeholder="{{ $ctrl.placeholder }}"
     type="{{ $ctrl.type }}"
+    ng-model="$ctrl.bindto"
+    ng-required="$ctrl.required"
+    minlength="{{ $ctrl.min }}"
+    maxlength="{{ $ctrl.max }}"
   />
 </div>

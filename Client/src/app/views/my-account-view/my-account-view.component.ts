@@ -4,7 +4,7 @@ import "./my-account-view.component.scss";
 export class MyAccountViewController {
   reduxService: ReduxService;
 
-  constructor($scope: any, $state: any, reduxService: ReduxService) {
+  constructor($scope: any, reduxService: ReduxService) {
     "ngInject";
 
     const dispatch = reduxService.dispatch();
@@ -13,8 +13,6 @@ export class MyAccountViewController {
       // await $auth.unlink(provider);
       // await $auth.logout();
       dispatch.logout();
-      console.log("successfully logged out");
-      $state.go("login");
     };
   }
 

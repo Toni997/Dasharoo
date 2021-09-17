@@ -10,6 +10,7 @@ import "restangular";
 import "oclazyload";
 import "ng-redux";
 import "satellizer";
+import "angular-jwt";
 // import "angular-jwt-auth";
 
 /// <reference path="custom-typings.d.ts" />

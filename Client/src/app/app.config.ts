@@ -45,7 +45,7 @@ export class AppConfig {
       responseType: "token",
     });
 
-    console.log($authProvider);
+    // console.log($authProvider);
 
     const reducer = combineReducers({
       userDetails: userLoginReducer,
@@ -74,11 +74,11 @@ export class AppConfig {
       debug: ENVIRONMENT !== "prod" && ENVIRONMENT !== "production",
     });
 
-    const token = localStorage.getItem("satellizer_token") || "";
+    // const token = localStorage.getItem("accessToken") || null;
 
     // Reference: https://github.com/mgonto/restangular#setbaseurl
     RestangularProvider.setBaseUrl(CONFIG.BASE_URL);
-    RestangularProvider.setDefaultHeaders({ token });
+    // RestangularProvider.setDefaultHeaders({ Authorization: "Bearer " + token });
 
     // var refreshAccesstoken = function () {
     //   var deferred = $q.defer();

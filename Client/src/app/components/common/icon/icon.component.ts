@@ -1,9 +1,9 @@
 import "./icon.component.scss";
 
 export class IconController {
-  tooltip: string = "";
-  src: string = "";
-  width: string = "";
+  tooltip: string;
+  src: string;
+  width: string;
   alt: string = "Icon";
   constructor() {
     "ngInject";
@@ -19,8 +19,8 @@ export const IconComponent: ng.IComponentOptions = {
   controller: IconController,
   bindings: {
     tooltip: "@",
-    src: "<",
-    width: "<",
-    alt: "<",
+    src: "@",
+    width: "@",
+    alt: "@",
   },
 };

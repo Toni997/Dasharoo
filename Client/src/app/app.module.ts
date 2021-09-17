@@ -34,6 +34,8 @@ import { HubConfigService } from "./services/hub-config.service";
 import { NotificationPanelComponent } from "./components/notification-panel/notification-panel.component";
 import { LoginComponent } from "./views/login/login.component";
 import { UserActionsService } from "./actions/user-actions.service";
+import { AuthService } from "./services/auth.service";
+import restangular = require("restangular");
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -47,6 +49,7 @@ let module: ng.IModule = angular.module("dasharoo", [
   "oc.lazyLoad",
   "ngRedux",
   "satellizer",
+  "angular-jwt",
   // "ngJwtAuth",
 ]);
 
@@ -59,9 +62,28 @@ module.config(AppRoutes);
 class RestConfig {
   title: String;
 
-  constructor() {
+  constructor(
+    reduxService: ReduxService,
+    jwtHelper: any,
+    Restangular: restangular.IService
+  ) {
     "ngInject";
     // console.log(Restangular);
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      const userInfo = jwtHelper.decodeToken(accessToken);
+      reduxService.dispatch().loadUserInfo(userInfo);
+    }
+
+    Restangular.addRequestInterceptor((element) => {
+      const accessToken = localStorage.getItem("accessToken");
+      Restangular.setDefaultHeaders({ Authorization: "Bearer " + accessToken });
+      return element;
+    });
+
+    Restangular.setErrorInterceptor((response, deferred) => {
+      console.log(response, deferred);
+    });
   }
 }
 
@@ -97,5 +119,6 @@ module.service("hubConfigService", HubConfigService);
 module.component("notificationPanel", NotificationPanelComponent);
 module.component("login", LoginComponent);
 module.service("userActionsService", UserActionsService);
+module.service("authService", AuthService);
 
 export const AppModule = module.name;

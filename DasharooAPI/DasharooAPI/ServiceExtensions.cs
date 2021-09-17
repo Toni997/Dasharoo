@@ -35,7 +35,7 @@ namespace DasharooAPI
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            var key = Environment.GetEnvironmentVariable("KEY");
+            var key = Environment.GetEnvironmentVariable("ACCESS_TOKEN_KEY");
 
             var jwtSettings = configuration.GetSection("Jwt");
 

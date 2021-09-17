@@ -11,6 +11,7 @@ using DasharooAPI.HubConfig;
 using DasharooAPI.Models;
 using DasharooAPI.Models.Auth.Facebook;
 using DasharooAPI.Services;
+using DasharooAPI.Services.Auth;
 using DasharooAPI.Utilities;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -77,7 +78,9 @@ namespace DasharooAPI.Controllers
 
             return Accepted(new
             {
-                Token = await _authManager.CreateToken()
+                AccessToken = await _authManager.CreateToken(TokenTypes.AccessToken),
+                RefreshToken = await _authManager.CreateToken(TokenTypes.RefreshToken)
+
             });
         }
 

@@ -7,9 +7,10 @@ export class AppRoutes {
   ) {
     "ngInject";
 
-    function _skipIfAuthenticated($q, $state, $auth) {
+    function skipIfAuthenticated($q, $state, $ngRedux) {
+      var user = $ngRedux.getState().userDetails.user;
       var defer = $q.defer();
-      if ($auth.isAuthenticated()) {
+      if (user) {
         defer.reject(); /* (1) */
         $state.go("app");
       } else {
@@ -18,9 +19,10 @@ export class AppRoutes {
       return defer.promise;
     }
 
-    function _redirectIfNotAuthenticated($q, $state, $auth) {
+    function redirectIfNotAuthenticated($q, $state, $ngRedux) {
+      var user = $ngRedux.getState().userDetails.user;
       var defer = $q.defer();
-      if ($auth.isAuthenticated()) {
+      if (user) {
         defer.resolve(); /* (3) */
       } else {
         defer.reject();
@@ -34,22 +36,22 @@ export class AppRoutes {
     $stateProvider
       .state("app", {
         url: "/",
-        onEnter: _redirectIfNotAuthenticated,
+        onEnter: redirectIfNotAuthenticated,
         component: "app",
       })
       .state("search", {
         url: "/search",
-        onEnter: _redirectIfNotAuthenticated,
+        onEnter: redirectIfNotAuthenticated,
         component: "searchView",
       })
       .state("my-account", {
         url: "/my-account",
-        onEnter: _redirectIfNotAuthenticated,
+        onEnter: redirectIfNotAuthenticated,
         component: "myAccountView",
       })
       .state("account-details", {
         url: "/account/{id}",
-        onEnter: _redirectIfNotAuthenticated,
+        onEnter: redirectIfNotAuthenticated,
         component: "accountDetails",
       })
       .state("login", {
@@ -57,7 +59,7 @@ export class AppRoutes {
         // resolve: {
         //   skipIfAuthenticated: _skipIfAuthenticated,
         // },
-        onEnter: _skipIfAuthenticated,
+        onEnter: skipIfAuthenticated,
         component: "login",
       });
 
