@@ -46,7 +46,6 @@ namespace DasharooAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllGenres()
         {
-            // var user = User.Identity.Name;
             var genresDto = await _genreService.GetAll();
             return Ok(genresDto);
         }

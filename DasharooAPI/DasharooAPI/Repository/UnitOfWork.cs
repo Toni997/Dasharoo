@@ -11,6 +11,7 @@ namespace DasharooAPI.Repository
         private IRecordRepository _records;
         private IPlaylistRepository _playlists;
         private IGenreRepository _genres;
+        private IGenericRepository<RefreshToken> _refreshTokens;
         private IGenericRepository<RecordGenre> _recordGenres;
         private IGenericRepository<RecordPlaylist> _recordPlaylists;
         private IGenericRepository<RecordAuthor> _recordAuthors;
@@ -25,6 +26,7 @@ namespace DasharooAPI.Repository
         public IRecordRepository Records => _records ??= new RecordRepository(_context);
         public IPlaylistRepository Playlists => _playlists ??= new PlaylistRepository(_context);
         public IGenreRepository Genres => _genres ??= new GenreRepository(_context);
+        public IGenericRepository<RefreshToken> RefreshTokens => _refreshTokens ??= new GenericRepository<RefreshToken>(_context);
         public IGenericRepository<RecordGenre> RecordGenres => _recordGenres ??= new GenericRepository<RecordGenre>(_context);
         public IGenericRepository<RecordPlaylist> RecordPlaylists => _recordPlaylists ??= new GenericRepository<RecordPlaylist>(_context);
         public IGenericRepository<RecordAuthor> RecordAuthors => _recordAuthors ??= new GenericRepository<RecordAuthor>(_context);

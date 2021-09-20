@@ -86,4 +86,10 @@ namespace DasharooAPI.Models
     {
         [Required] public IFormFile File { get; set; }
     }
+
+    public class UserIdDto
+    {
+        [Required]
+        public string UserId { get; set; }
+    }
 }

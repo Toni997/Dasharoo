@@ -7,6 +7,7 @@ export class SearchViewController {
   genresStructured: any[] = [];
   divElement: HTMLElement;
   $document: ng.IDocumentService;
+  dinputText: string;
 
   constructor(
     $scope: any,

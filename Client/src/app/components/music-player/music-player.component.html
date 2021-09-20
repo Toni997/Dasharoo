@@ -49,41 +49,41 @@
       <icon
         width="18"
         class="control-button"
-        src="'random'"
-        tooltip="'Enable shuffling'"
+        src="random"
+        tooltip="Enable shuffling"
         ng-click="$ctrl.shuffle($event)"
       >
       </icon>
       <icon
         width="18"
         class="control-button"
-        src="'previous'"
-        alt="'Previous'"
-        tooltip="'Previous'"
+        src="previous"
+        alt="Previous"
+        tooltip="Previous"
         ng-click="$ctrl.playPrevious()"
       ></icon>
       <icon
         width="70"
         class="control-button play-button"
-        src="$ctrl.centerButtonIcon"
-        alt="$ctrl.playButtonTooltip"
-        tooltip="$ctrl.playButtonTooltip"
+        src="{{ $ctrl.centerButtonIcon }}"
+        alt="{{ $ctrl.playButtonTooltip }}"
+        tooltip="{{ $ctrl.playButtonTooltip }}"
         ng-click="$ctrl.playOrPause()"
       ></icon>
       <icon
         width="18"
         class="control-button"
-        src="'next'"
-        alt="'Next'"
-        tooltip="'Next'"
+        src="next"
+        alt="Next"
+        tooltip="Next"
         ng-click="$ctrl.playNext()"
       ></icon>
       <icon
         width="18"
         class="control-button"
-        src="'loop'"
-        alt="'Loop'"
-        tooltip="'Enable looping'"
+        src="loop"
+        alt="Loop"
+        tooltip="Enable looping"
         ng-click="$ctrl.loop($event)"
       ></icon>
     </div>

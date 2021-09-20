@@ -9,6 +9,7 @@ export class ReduxService {
   recordsService: RecordsService;
   recordActions: RecordActionsService;
   userActions: UserActionsService;
+  isLoggedIn: boolean = false;
 
   constructor(
     $ngRedux: any,
@@ -21,6 +22,11 @@ export class ReduxService {
     this.recordsService = recordsService;
     this.recordActions = recordActionsService;
     this.userActions = userActionsService;
+
+    this.redux.subscribe(() => {
+      if (this.getCurrentUser()) this.isLoggedIn = true;
+      else this.isLoggedIn = false;
+    });
   }
 
   dispatch() {
@@ -33,7 +39,8 @@ export class ReduxService {
         self.redux.dispatch(self.userActions.login(loginModel));
       },
       logout() {
-        self.redux.dispatch(self.userActions.logout());
+        const currentUserId = self.getCurrentUser().id;
+        self.redux.dispatch(self.userActions.logout(currentUserId));
       },
       loadUserInfo(userInfo: any) {
         self.redux.dispatch(self.userActions.loadUserInfo(userInfo));

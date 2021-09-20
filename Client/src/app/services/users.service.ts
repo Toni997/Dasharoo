@@ -4,7 +4,8 @@ import restangular = require("restangular");
 export class UsersService {
   restangular: restangular.IService;
   account: string = "Account";
-  loginStr: string = "Login";
+  loginEndpoint: string = "Auth/Login";
+  logoutEndpoint: string = "Auth/Logout";
 
   constructor(Restangular: restangular.IService) {
     "ngInject";
@@ -21,8 +22,10 @@ export class UsersService {
   }
 
   async login(loginModel: LoginModel) {
-    return await this.restangular
-      .all(`${this.account}/${this.loginStr}`)
-      .post(loginModel);
+    return await this.restangular.all(this.loginEndpoint).post(loginModel);
+  }
+
+  async logout(userId: string) {
+    return await this.restangular.all(this.logoutEndpoint).post({ userId });
   }
 }

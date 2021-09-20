@@ -1,5 +1,4 @@
 import { ILocationService } from "angular";
-import { AuthService } from "app/services/auth.service";
 import { SidebarsService } from "app/services/sidebars.service";
 
 import "./navigation.component.scss";
@@ -14,8 +13,7 @@ export class NavigationController {
   constructor(
     $scope: any,
     $location: ILocationService,
-    sidebarsService: SidebarsService,
-    authService: AuthService
+    sidebarsService: SidebarsService
   ) {
     "ngInject";
 

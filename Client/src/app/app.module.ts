@@ -36,6 +36,7 @@ import { LoginComponent } from "./views/login/login.component";
 import { UserActionsService } from "./actions/user-actions.service";
 import { AuthService } from "./services/auth.service";
 import restangular = require("restangular");
+import { StateService } from "@uirouter/core";
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -65,7 +66,8 @@ class RestConfig {
   constructor(
     reduxService: ReduxService,
     jwtHelper: any,
-    Restangular: restangular.IService
+    Restangular: restangular.IService,
+    $state: StateService
   ) {
     "ngInject";
     // console.log(Restangular);
@@ -81,8 +83,42 @@ class RestConfig {
       return element;
     });
 
-    Restangular.setErrorInterceptor((response, deferred) => {
-      console.log(response, deferred);
+    Restangular.setErrorInterceptor(async (response, deferred) => {
+      if (response.status == 401) {
+        const currentAccessToken = localStorage.getItem("accessToken");
+        const isExpired: boolean = jwtHelper.isTokenExpired(currentAccessToken);
+        if (isExpired) {
+          const refreshToken = localStorage.getItem("refreshToken");
+          Restangular.all("Auth/Token")
+            .post({
+              userId: "f2fc5610-1830-451a-ad1b-3732c32b2970",
+              token: refreshToken,
+            })
+            .then(function (x) {
+              localStorage.setItem("accessToken", x.accessToken);
+              const newAuthorizationHeader = "Bearer " + x.accessToken;
+              Restangular.setDefaultHeaders({
+                Authorization: newAuthorizationHeader,
+              });
+              $state.reload();
+              // const req = {
+              //   method: response.config.method,
+              //   url: response.config.url,
+              //   headers: {
+              //     Accept: "application/json, text/plain, */*",
+              //     Authorization: newAuthorizationHeader,
+              //   },
+              //   data: response.data,
+              // };
+              // $http(req)
+              //   .then(deferred.reject)
+              //   .catch((y) => console.log(y));
+            })
+            .catch((err) => deferred.resolve);
+        }
+        return false;
+      }
+      return true;
     });
   }
 }

@@ -58,6 +58,7 @@ export class UserActionsService {
         localStorage.setItem("accessToken", tokens.accessToken);
         localStorage.setItem("refreshToken", tokens.refreshToken);
 
+        console.log("successfully logged in");
         self.$state.go("app");
       } catch (error) {
         dispatch({
@@ -80,11 +81,12 @@ export class UserActionsService {
     };
   }
 
-  logout() {
+  logout(userId: string) {
     const self = this;
     return async function (dispatch) {
       localStorage.removeItem("accessToken");
       // TODO remove refresh token from db
+      self.usersService.logout(userId);
       localStorage.removeItem("refreshToken");
       dispatch({
         type: USER_LOGOUT,

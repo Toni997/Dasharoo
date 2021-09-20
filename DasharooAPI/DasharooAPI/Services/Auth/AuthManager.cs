@@ -31,12 +31,10 @@ namespace DasharooAPI.Services
             _configuration = configuration;
         }
 
-
-
-        public async Task<string> CreateToken(TokenTypes tokenType)
+        public async Task<string> CreateToken(TokenTypes tokenType, string userId = null)
         {
             var signingCredentials = GetSigningCredentials(tokenType);
-            var claims = await GetClaims();
+            var claims = await GetClaims(userId);
             var token = GenerateTokenOptions(signingCredentials, claims, tokenType);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -46,7 +44,7 @@ namespace DasharooAPI.Services
         {
             var jwtSettings = _configuration.GetSection("Jwt");
             DateTime? expiration = tokenType == TokenTypes.AccessToken
-                ? DateTime.Now.AddMinutes(Convert.ToDouble(
+                ? DateTime.Now.AddSeconds(Convert.ToDouble(
                     jwtSettings.GetSection("lifetime").Value))
                 : null;
 
@@ -60,8 +58,10 @@ namespace DasharooAPI.Services
             return token;
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private async Task<List<Claim>> GetClaims(string userId = null)
         {
+            _user ??= await _userManager.FindByIdAsync(userId);
+
             var claims = new List<Claim>
             {
                 new("id", _user.Id),

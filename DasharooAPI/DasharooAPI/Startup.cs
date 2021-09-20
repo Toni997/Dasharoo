@@ -8,6 +8,7 @@ using DasharooAPI.HubConfig;
 using DasharooAPI.IRepository;
 using DasharooAPI.Repository;
 using DasharooAPI.Services;
+using DasharooAPI.Services.Auth;
 using DasharooAPI.Services.Genres;
 using DasharooAPI.Services.Playlists;
 using DasharooAPI.Services.Records;
@@ -58,6 +59,7 @@ namespace DasharooAPI
             services.AddTransient<IRecordRepository, RecordRepository>();
             services.AddTransient<IPlaylistRepository, PlaylistRepository>();
             services.AddTransient<IGenreRepository, GenreRepository>();
+            services.AddTransient<IGenericRepository<RefreshToken>, GenericRepository<RefreshToken>>();
             services.AddTransient<IGenericRepository<RecordGenre>, GenericRepository<RecordGenre>>();
             services.AddTransient<IGenericRepository<RecordAuthor>, GenericRepository<RecordAuthor>>();
             services.AddTransient<IGenericRepository<RecordPlaylist>, GenericRepository<RecordPlaylist>>();
@@ -67,6 +69,7 @@ namespace DasharooAPI
             services.AddTransient<IGenreService, GenreService>();
             services.AddTransient<IPlaylistService, PlaylistService>();
             services.AddTransient<IMyHub, MyHub>();
+            services.AddTransient<IAuthService, AuthService>();
 
             services.AddScoped<IAuthManager, AuthManager>();
 

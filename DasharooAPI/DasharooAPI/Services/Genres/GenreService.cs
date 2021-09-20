@@ -13,8 +13,6 @@ namespace DasharooAPI.Services.Genres
 {
     public class GenreService : IGenreService
     {
-
-
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
@@ -26,6 +24,7 @@ namespace DasharooAPI.Services.Genres
             _mapper = mapper;
             _fileService = fileService;
         }
+
         public async Task<bool> TryDeleteAndReturnBool(int id)
         {
             var genre = await _unitOfWork.Genres.GetById(id);

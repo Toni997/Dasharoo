@@ -56,7 +56,8 @@ namespace DasharooAPI
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 

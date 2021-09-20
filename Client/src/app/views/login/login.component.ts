@@ -36,7 +36,6 @@ export class LoginController {
 
   onSubmit() {
     this.dispatch.login(this.loginModel);
-    console.log("successfully logged in");
     console.log(this.loginModel);
   }
 

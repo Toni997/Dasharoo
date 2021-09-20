@@ -11,6 +11,6 @@ namespace DasharooAPI.Services
     public interface IAuthManager
     {
         Task<User> ValidateAndReturnUser(LoginUserDto userDto);
-        Task<string> CreateToken(TokenTypes tokenType);
+        Task<string> CreateToken(TokenTypes tokenType, string userId = null);
     }
 }

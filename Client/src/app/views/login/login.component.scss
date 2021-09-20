@@ -2,3 +2,12 @@
 //  views/login
 //----------------------------------------
 @import "../../../styles/abstracts/variables";
+
+.dlink {
+  cursor: pointer;
+  color: $primary-color;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
+}

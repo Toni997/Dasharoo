@@ -10,12 +10,12 @@ namespace DasharooAPI.Data
     {
         public DasharooDbContext(DbContextOptions options) : base(options)
         {
-
         }
 
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RecordGenre> RecordGenres { get; set; }
         public DbSet<RecordSupporter> RecordSupporters { get; set; }
         public DbSet<RecordAuthor> RecordAuthors { get; set; }

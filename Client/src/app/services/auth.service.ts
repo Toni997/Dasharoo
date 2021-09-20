@@ -8,6 +8,7 @@ export class AuthService {
   usersService: UsersService;
   reduxService: ReduxService;
   dispatch: any;
+  loginEndpoint: string = "Auth/Login";
 
   constructor(
     Restangular: restangular.IService,
@@ -22,11 +23,6 @@ export class AuthService {
     this.dispatch = this.reduxService.dispatch();
   }
 
-  // async login(loginModel: LoginModel) {
-  //   const tokens: any = await this.usersService.login(loginModel);
-  //   this.dispatch.login(loginModel);
-  // }
-
   // unused
   logout() {
     localStorage.removeItem("accessToken");
@@ -34,8 +30,8 @@ export class AuthService {
     localStorage.removeItem("refreshToken");
   }
 
-  isLoggedIn() {
-    if (this.reduxService.getCurrentUser()) return true;
-    return false;
-  }
+  // isLoggedIn() {
+  //   if (this.reduxService.getCurrentUser()) return true;
+  //   return false;
+  // }
 }
