@@ -39,10 +39,10 @@ namespace DasharooAPI.Services.Playlists
             return true;
         }
 
-        public async Task<ResponseDetails> TryCreateAndReturnResponseDetails(CreatePlaylistDto playlistDto)
+        public async Task<ResponseDetails> TryCreateAndReturnResponseDetails(CreatePlaylistDto playlistDto, string authorId)
         {
             var playlist = _mapper.Map<Playlist>(playlistDto);
-            playlist.AuthorId = "f2fc5610-1830-451a-ad1b-3732c32b2970";
+            playlist.AuthorId = authorId;
 
             // uploading cover image file
             if (playlistDto.Image != null)

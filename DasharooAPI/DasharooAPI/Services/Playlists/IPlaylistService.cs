@@ -9,7 +9,7 @@ namespace DasharooAPI.Services.Playlists
     public interface IPlaylistService
     {
         Task<bool> TryDeleteAndReturnBool(int id);
-        Task<ResponseDetails> TryCreateAndReturnResponseDetails(CreatePlaylistDto playlistDto);
+        Task<ResponseDetails> TryCreateAndReturnResponseDetails(CreatePlaylistDto playlistDto, string authorId);
         Task<ResponseDetails> TryUpdateAndReturnResponseDetails(int id, UpdatePlaylistDto playlistDto);
         Task<IList<PlaylistDto>> GetAllWithRecordsAndAuthor();
         Task<PlaylistDto> GetByIdWithRecordsAndAuthor(int id);

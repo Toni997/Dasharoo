@@ -40,11 +40,12 @@ namespace DasharooAPI.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, IEnumerable<Claim> claims, TokenTypes tokenType)
+        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials,
+            IEnumerable<Claim> claims, TokenTypes tokenType)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
             DateTime? expiration = tokenType == TokenTypes.AccessToken
-                ? DateTime.Now.AddSeconds(Convert.ToDouble(
+                ? DateTime.Now.AddMinutes(Convert.ToDouble(
                     jwtSettings.GetSection("lifetime").Value))
                 : null;
 
@@ -68,7 +69,6 @@ namespace DasharooAPI.Services
                 new("userName", _user.UserName),
                 new("firstName",_user.Name),
                 new("artistName",_user.ArtistName)
-
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
@@ -98,7 +98,8 @@ namespace DasharooAPI.Services
             _user = await _userManager.FindByEmailAsync(userDto.Email)
                     ?? await _userManager.FindByNameAsync(userDto.Email);
 
-            if (_user == null || !await _userManager.CheckPasswordAsync(_user, userDto.Password)) return null;
+            if (_user == null
+                || !await _userManager.CheckPasswordAsync(_user, userDto.Password)) return null;
 
             return _user;
         }

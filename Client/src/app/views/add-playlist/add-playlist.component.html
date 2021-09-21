@@ -1,0 +1,43 @@
+<home-header></home-header>
+<h2 class="section-title">Add Playlist</h2>
+<form class="dform" ng-submit="APC.onSubmit()" enctype="multipart/form-data">
+  <label for="name">Name:</label>
+  <dinput
+    id="name"
+    required="true"
+    placeholder="Name"
+    type="text"
+    icon="dinput-default"
+    bindto="APC.name"
+  ></dinput>
+  <label for="name">Description:</label>
+  <dinput
+    id="description"
+    placeholder="Description"
+    type="text"
+    icon="dinput-default"
+    id="description"
+    bindto="APC.description"
+  ></dinput>
+  <label for="image">Image:</label>
+  <input id="image" type="file" ng-ref="APC.image" accept=".jpg,.jpeg,.png" />
+  <label for="background">Background:</label>
+  <input
+    id="background"
+    type="file"
+    ng-ref="APC.background"
+    accept=".jpg,.jpeg,.png"
+  />
+  <label for="date">Release Date:</label>
+  <input id="date" class="ddate" type="date" ng-model="APC.releaseDate" />
+  <label for="visibility">Visibility:</label>
+  <select id="visibility" class="dselect" ng-model="APC.visibilityId">
+    <option value="1">Public</option>
+    <option value="2">Private</option>
+    <option value="3">Unlisted</option>
+    <option value="4">Scheduled</option>
+  </select>
+  <button class="dbutton" type="submit" ng-disabled="APC.isSaving">
+    Save Playlist
+  </button>
+</form>

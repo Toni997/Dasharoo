@@ -37,6 +37,9 @@ import { UserActionsService } from "./actions/user-actions.service";
 import { AuthService } from "./services/auth.service";
 import restangular = require("restangular");
 import { StateService } from "@uirouter/core";
+import { AddPlaylistComponent } from "./views/add-playlist/add-playlist.component";
+import { FileReadDirective } from "./directives/file-read.directive";
+import { PlaylistDetailsComponent } from './views/playlist-details/playlist-details.component';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -79,11 +82,13 @@ class RestConfig {
 
     Restangular.addRequestInterceptor((element) => {
       const accessToken = localStorage.getItem("accessToken");
-      Restangular.setDefaultHeaders({ Authorization: "Bearer " + accessToken });
+      Restangular.setDefaultHeaders({
+        Authorization: "Bearer " + accessToken,
+      });
       return element;
     });
 
-    Restangular.setErrorInterceptor(async (response, deferred) => {
+    Restangular.setErrorInterceptor(async (response) => {
       if (response.status == 401) {
         const currentAccessToken = localStorage.getItem("accessToken");
         const isExpired: boolean = jwtHelper.isTokenExpired(currentAccessToken);
@@ -94,27 +99,18 @@ class RestConfig {
               userId: "f2fc5610-1830-451a-ad1b-3732c32b2970",
               token: refreshToken,
             })
-            .then(function (x) {
+            .then((x) => {
               localStorage.setItem("accessToken", x.accessToken);
               const newAuthorizationHeader = "Bearer " + x.accessToken;
               Restangular.setDefaultHeaders({
                 Authorization: newAuthorizationHeader,
               });
               $state.reload();
-              // const req = {
-              //   method: response.config.method,
-              //   url: response.config.url,
-              //   headers: {
-              //     Accept: "application/json, text/plain, */*",
-              //     Authorization: newAuthorizationHeader,
-              //   },
-              //   data: response.data,
-              // };
-              // $http(req)
-              //   .then(deferred.reject)
-              //   .catch((y) => console.log(y));
             })
-            .catch((err) => deferred.resolve);
+            .catch((err) => {
+              console.log("err", err);
+              reduxService.dispatch().logout();
+            });
         }
         return false;
       }
@@ -156,5 +152,8 @@ module.component("notificationPanel", NotificationPanelComponent);
 module.component("login", LoginComponent);
 module.service("userActionsService", UserActionsService);
 module.service("authService", AuthService);
+module.component("addPlaylist", AddPlaylistComponent);
+module.directive("fileRead", FileReadDirective);
+module.component('playlistDetails', PlaylistDetailsComponent);
 
 export const AppModule = module.name;

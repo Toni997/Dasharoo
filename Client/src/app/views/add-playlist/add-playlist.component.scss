@@ -1,0 +1,9 @@
+//----------------------------------------
+//  views/add-playlist
+//----------------------------------------
+
+.dbutton:disabled {
+  transition: 0.3s;
+  cursor: wait;
+  opacity: 0.5;
+}

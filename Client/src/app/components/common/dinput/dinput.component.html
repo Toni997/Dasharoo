@@ -1,7 +1,11 @@
+<label class="dlabel" ng-if="$ctrl.label" for="{{ $ctrl.id }}">{{
+  $ctrl.label
+}}</label>
 <div class="dinput-container">
   <icon width="20" class="dinput-icon" src="{{ $ctrl.icon }}"></icon>
   <input
     class="input"
+    id="{{ $ctrl.id }}"
     placeholder="{{ $ctrl.placeholder }}"
     type="{{ $ctrl.type }}"
     ng-model="$ctrl.bindto"

@@ -2,6 +2,8 @@
 //  dasharoo
 //----------------------------------------
 @import "../styles/abstracts/variables";
+@import "../styles/components/dselect";
+@import "../styles/components/ddate";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap");
 
 *,
@@ -171,4 +173,11 @@ nav {
     // background: rgba(0, 255, 170, 0.685);
     transform: scale(1.01);
   }
+}
+
+.text-shadow {
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+.box-shadow {
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }

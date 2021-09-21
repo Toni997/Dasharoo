@@ -25,11 +25,16 @@
   color: $background-color;
   width: 100%;
   padding-left: 40px;
+  outline: none;
   &:focus {
-    outline: none;
     border-color: $text-color;
   }
   &::placeholder {
     margin-left: 10px;
   }
+}
+
+.dlabel {
+  transform: translateX(-20px);
+  font-weight: 300;
 }

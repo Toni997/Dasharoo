@@ -1,0 +1,9 @@
+.ddate {
+  padding: 15px;
+  border-radius: 25px;
+  outline-width: 0;
+  border: 3px solid $primary-color;
+  &:focus {
+    border-color: $text-color;
+  }
+}

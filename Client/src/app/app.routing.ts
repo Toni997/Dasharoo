@@ -54,11 +54,18 @@ export class AppRoutes {
         onEnter: redirectIfNotAuthenticated,
         component: "accountDetails",
       })
+      .state("add-playlist", {
+        url: "/playlist/add",
+        onEnter: redirectIfNotAuthenticated,
+        component: "addPlaylist",
+      })
+      .state("playlist-details", {
+        url: "/playlist/{id}",
+        onEnter: redirectIfNotAuthenticated,
+        component: "playlistDetails",
+      })
       .state("login", {
         url: "/login",
-        // resolve: {
-        //   skipIfAuthenticated: _skipIfAuthenticated,
-        // },
         onEnter: skipIfAuthenticated,
         component: "login",
       });

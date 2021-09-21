@@ -1,0 +1,27 @@
+//----------------------------------------
+//  views/playlist-details
+//----------------------------------------
+
+.playlist-details-container {
+  display: flex;
+  gap: 25px;
+}
+
+.playlist-details-left {
+  width: 180px;
+  overflow: hidden;
+  img {
+    width: inherit;
+  }
+}
+
+.playlist-details-right {
+  align-self: center;
+  h1 {
+    font-size: 3.5em;
+    font-weight: bold;
+  }
+  h2 {
+    font-weight: 300;
+  }
+}

@@ -79,23 +79,5 @@ export class AppConfig {
     // Reference: https://github.com/mgonto/restangular#setbaseurl
     RestangularProvider.setBaseUrl(CONFIG.BASE_URL);
     // RestangularProvider.setDefaultHeaders({ Authorization: "Bearer " + token });
-
-    // var refreshAccesstoken = function () {
-    //   var deferred = $q.defer();
-
-    //   // Refresh access-token logic
-
-    //   return deferred.promise;
-    // };
-
-    // RestangularProvider.setErrorInterceptor(async function (
-    //   response,
-    //   deferred,
-    //   responseHandler
-    // ) {
-    //   console.log(response);
-    //   console.log(deferred);
-    //   console.log(responseHandler);
-    // });
   }
 }

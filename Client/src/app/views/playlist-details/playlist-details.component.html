@@ -1,0 +1,16 @@
+<home-header></home-header>
+<loader ng-if="!PDC.playlist"></loader>
+<div ng-if="PDC.playlist">
+  <div class="playlist-details-container">
+    <div class="playlist-details-left box-shadow">
+      <img ng-ref="PDC.playlistImage" src="" alt="" />
+    </div>
+    <div class="playlist-details-right text-shadow">
+      <h1>{{ PDC.playlist.name }}</h1>
+      <h2>
+        {{ PDC.playlist.author.artistName }} &middot;
+        {{ PDC.playlist.releasedIn }} &middot; 5 records
+      </h2>
+    </div>
+  </div>
+</div>

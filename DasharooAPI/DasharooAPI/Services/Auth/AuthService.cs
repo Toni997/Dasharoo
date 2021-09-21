@@ -27,18 +27,24 @@ namespace DasharooAPI.Services.Auth
             _authManager = authManager;
         }
 
+        // messages
+        private const string AccountNotConfirmed = "Account not confirmed.";
+        private const string WrongCredentials = "Wrong credentials.";
+        private const string RefreshTokenInvalid = "Refresh token is not valid.";
+        private const string RefreshTokenExpired = "Refresh token has expired.";
+
         public async Task<ResponseDetails> TryLogin([FromBody] LoginUserDto userDto)
         {
             var user = await _authManager.ValidateAndReturnUser(userDto);
 
             if (user == null)
                 return new Error(
-                    StatusCodes.Status401Unauthorized, "Wrong credentials."
+                    StatusCodes.Status401Unauthorized, WrongCredentials
                 );
 
             if (!user.EmailConfirmed)
                 return new Error(
-                    StatusCodes.Status401Unauthorized, "Account not confirmed."
+                    StatusCodes.Status401Unauthorized, AccountNotConfirmed
                 );
 
             var refreshToken = await _authManager.CreateToken(TokenTypes.RefreshToken);
@@ -78,12 +84,12 @@ namespace DasharooAPI.Services.Auth
 
             if (refreshToken == null)
                 return new Error(StatusCodes.Status401Unauthorized,
-                    "Refresh token is not valid.");
+                    RefreshTokenInvalid);
 
             // check if the refresh token has expired
             if (DateTime.Compare(refreshToken.Expires, DateTime.Now) < 0)
                 return new Error(StatusCodes.Status401Unauthorized,
-                    "Refresh token has expired.");
+                    RefreshTokenExpired);
 
             return new Success(StatusCodes.Status202Accepted,
                 await _authManager.CreateToken(TokenTypes.AccessToken, refreshTokenDto.UserId));

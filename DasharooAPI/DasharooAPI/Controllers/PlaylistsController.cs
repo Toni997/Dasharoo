@@ -59,7 +59,7 @@ namespace DasharooAPI.Controllers
             return Ok(playlistDto);
         }
 
-        // [Authorize(Roles = UserRoles.Administrator)]
+        [Authorize(Roles = UserRoles.User)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +71,7 @@ namespace DasharooAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var responseDetails = await _playlistService.TryCreateAndReturnResponseDetails(playlistDto);
+            var responseDetails = await _playlistService.TryCreateAndReturnResponseDetails(playlistDto, User.GetUserId());
             if (!responseDetails.Succeeded)
                 return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 

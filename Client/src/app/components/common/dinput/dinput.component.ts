@@ -8,6 +8,8 @@ export class DinputController {
   required: boolean;
   min: number;
   max: number;
+  id: string;
+  label: string;
 
   constructor() {
     "ngInject";
@@ -24,9 +26,11 @@ export const DinputComponent: ng.IComponentOptions = {
     placeholder: "@",
     text: "@",
     type: "@",
+    label: "@",
     bindto: "=",
     required: "<",
     min: "<",
     max: "<",
+    id: "@",
   },
 };
