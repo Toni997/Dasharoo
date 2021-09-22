@@ -1,4 +1,3 @@
-import QueueAddType from "app/queueAddType.enum";
 import { RecordActionsService } from "app/actions/record-actions.service";
 import { RecordsService } from "app/records.service";
 import LoginModel from "app/data/login.model";
@@ -32,8 +31,8 @@ export class ReduxService {
   dispatch() {
     const self = this;
     return {
-      addToQueue(id: number, type: QueueAddType = null) {
-        self.redux.dispatch(self.recordActions.addToQueue(id, type));
+      addToQueue(id: number) {
+        self.redux.dispatch(self.recordActions.addToQueue(id));
       },
       login(loginModel: LoginModel) {
         self.redux.dispatch(self.userActions.login(loginModel));

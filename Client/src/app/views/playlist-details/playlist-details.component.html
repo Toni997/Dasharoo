@@ -3,14 +3,72 @@
 <div ng-if="PDC.playlist">
   <div class="playlist-details-container">
     <div class="playlist-details-left box-shadow">
-      <img ng-ref="PDC.playlistImage" src="" alt="" />
+      <img ng-ref="PDC.playlistImage" src="" alt="Playlist image" />
     </div>
-    <div class="playlist-details-right text-shadow">
-      <h1>{{ PDC.playlist.name }}</h1>
-      <h2>
-        {{ PDC.playlist.author.artistName }} &middot;
-        {{ PDC.playlist.releasedIn }} &middot; 5 records
-      </h2>
+    <div class="playlist-details-right">
+      <div class="playlist-title text-shadow">
+        <h1>{{ PDC.playlist.name }}</h1>
+      </div>
+      <div class="playlist-subtitle">
+        <img ng-ref="PDC.artistImage" src="" alt="" />
+        <h2 class="playlist-h2">
+          <a
+            class="router-link"
+            ui-sref="account-details({id: PDC.playlist.author.id})"
+            >{{ PDC.playlist.author.artistName }}</a
+          ><icon
+            width="15"
+            ng-if="PDC.playlist.author.verified"
+            tooltip="Verified artist"
+            src="verified"
+          ></icon>
+          <span class="opacity50"
+            >&middot; {{ PDC.playlist.releaseYear }} &middot;
+            {{ PDC.playlist.records.length }} records</span
+          >
+        </h2>
+      </div>
     </div>
   </div>
+  <div class="playlist-details-options">
+    <icon
+      width="70"
+      tooltip="Play this playlist"
+      src="play"
+      ng-click="PDC.onPlayPlaylist()"
+    ></icon>
+    <icon class="opacity50" width="30" tooltip="Options" src="dots"></icon>
+  </div>
+  <table class="records-table">
+    <thead>
+      <tr class="table-head-row">
+        <th>#</th>
+        <th>TITLE</th>
+        <th>PLAYS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="table-body-row"
+        ng-click="PDC.onPlayRecord(record.id)"
+        ng-repeat="record in PDC.playlist.records"
+      >
+        <td class="opacity50">{{ $index + 1 }}</td>
+        <td>
+          {{ record.name }}
+          <div class="record-authors opacity50">
+            <span ng-repeat="author in record.recordAuthors">
+              <a
+                ng-click="$event.stopPropagation()"
+                class="router-link"
+                ui-sref="account-details({id: author.author.id})"
+                >{{ author.author.artistName }}</a
+              >{{ $last ? "" : ", " }}</span
+            >
+          </div>
+        </td>
+        <td class="opacity50">{{ record.plays }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

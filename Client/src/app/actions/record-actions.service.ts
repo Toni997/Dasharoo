@@ -2,8 +2,8 @@ import {
   RECORDS_FAIL,
   RECORDS_REQUEST,
   RECORDS_SUCCESS,
+  QUEUE_INDEX_CHANGE,
 } from "../constants/recordConstants";
-import QueueAddType from "../queueAddType.enum";
 import { RecordsService } from "../records.service";
 import { PlaylistsService } from "../services/playlists.service";
 
@@ -21,25 +21,18 @@ export class RecordActionsService {
     this.playlistsService = playlistsService;
   }
 
-  addToQueue(id: number, type: QueueAddType = null) {
+  changeIndex(newIndex: number) {
+    return async function (dispatch) {
+      dispatch({ type: QUEUE_INDEX_CHANGE, payload: newIndex });
+    };
+  }
+
+  addToQueue(id: number) {
     const self = this;
     return async function (dispatch) {
       try {
         dispatch({ type: RECORDS_REQUEST });
-        let data = null;
-        switch (type) {
-          case QueueAddType.Playlist:
-            data = await self.playlistsService.getOne(id);
-            data = data.records;
-            console.log(data);
-            break;
-          case QueueAddType.Record:
-            data = await self.recordsService.getOne(id);
-            data = [data];
-            break;
-          default:
-            return;
-        }
+        let data = await self.playlistsService.getOne(id);
 
         dispatch({ type: RECORDS_SUCCESS, payload: data });
       } catch (error) {

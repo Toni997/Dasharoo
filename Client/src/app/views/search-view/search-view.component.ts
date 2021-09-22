@@ -73,7 +73,7 @@ export class SearchViewController {
     for (let genre of genreChildren) {
       let a: HTMLElement = this.$document[0].createElement("a");
       a.setAttribute("href", genre.id);
-      a.classList.add("genre-link");
+      a.classList.add("router-link");
 
       let li: HTMLElement = this.$document[0].createElement("li");
       a.innerText = genre.name;

@@ -59,10 +59,11 @@ export class MusicPlayerController {
     this.redux = $ngRedux;
     this.recordsService = recordsService;
     this.recordActions = recordActionsService;
-    this.$scope.records = null;
+    this.$scope.queue = null;
     this.redux.subscribe(() => {
       this.$scope.records = this.redux.getState().records;
-      if (this.$scope.records && this.$scope.records.queue.length !== 0)
+      console.log(this.$scope.records);
+      if (this.$scope.records && this.$scope.records.queue !== null)
         this.updateMusicPlayer();
     });
   }
@@ -201,7 +202,7 @@ export class MusicPlayerController {
   }
 
   updateMusicPlayer() {
-    let queue = this.$scope.records.queue;
+    let queue = this.$scope.records.queue.records;
     let nextInQueue = queue[this.currentQueueIndex];
     this.$scope.recordTitle = nextInQueue.name;
     this.$scope.recordAuthors = nextInQueue.recordAuthors;

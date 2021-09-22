@@ -8,7 +8,7 @@
 </audio>
 <div
   class="musicPlayer"
-  ng-if="$ctrl.$scope.records && $ctrl.$scope.records.queue.length > 0"
+  ng-if="$ctrl.$scope.records && $ctrl.$scope.records.queue"
 >
   <div class="left-panel">
     <div class="author-image">
@@ -112,21 +112,20 @@
     </div>
   </div>
   <div class="right-panel">
-    <img
+    <icon
+      ui-sref="queue"
       class="control-button"
-      src="assets/icons/queue.svg"
+      src="queue"
       alt="queue"
-      title="Queue"
-      draggable="false"
-    />
-    <img
+      tooltip="Queue"
+    ></icon>
+    <icon
       ng-click="$ctrl.mute()"
       class="control-button"
-      ng-src="assets/icons/{{ $ctrl.volumeIcon }}.svg"
+      src="volume-mid"
       alt="volume bar"
-      title="Mute"
-      draggable="false"
-    />
+      tooltip="Mute"
+    ></icon>
     <input
       class="range"
       ng-ref="$ctrl.volumeBar"

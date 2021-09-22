@@ -1,0 +1,37 @@
+<home-header></home-header>
+<h2 class="section-title">Queue</h2>
+<div ng-if="QC.$scope.queue === null">Nothing in queue yet!</div>
+<div ng-if="QC.$scope.queue !== null">
+  <table class="records-table">
+    <thead>
+      <tr class="table-head-row">
+        <th>#</th>
+        <th>TITLE</th>
+        <th>PLAYS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="table-body-row"
+        ng-click="QC.onPlayRecord(record.id)"
+        ng-repeat="record in QC.$scope.queue.records"
+      >
+        <td class="opacity50">{{ $index + 1 }}</td>
+        <td>
+          {{ record.name }}
+          <div class="record-authors opacity50">
+            <span ng-repeat="author in record.recordAuthors">
+              <a
+                ng-click="$event.stopPropagation()"
+                class="router-link"
+                ui-sref="account-details({id: author.author.id})"
+                >{{ author.author.artistName }}</a
+              >{{ $last ? "" : ", " }}</span
+            >
+          </div>
+        </td>
+        <td class="opacity50">{{ record.plays }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

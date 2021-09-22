@@ -11,14 +11,16 @@
   ng-if="!$ctrl.$scope.playlists || $ctrl.$scope.playlists.length === 0"
 ></loader>
 <div class="playlists">
+  <a href=""></a>
   <single-playlist
     ng-repeat="playlist in $ctrl.$scope.playlists"
-    ng-click="$ctrl.onClick(playlist.id)"
     image="playlist.imagePath"
     title="playlist.name"
-    tooltip="playlist.name"
     author="playlist.author.artistName"
+    playlistid="playlist.author.id"
+    ui-sref="playlist-details({id: playlist.id})"
   >
   </single-playlist>
 </div>
 <div class="see-more"><span>SEE MORE</span></div>
+<!-- ng-click="$ctrl.onClick(playlist.id)" -->

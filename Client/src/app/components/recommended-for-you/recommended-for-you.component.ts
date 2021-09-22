@@ -1,4 +1,3 @@
-import QueueAddType from "app/queueAddType.enum";
 import { PlaylistsService } from "app/services/playlists.service";
 import { ReduxService } from "app/services/redux.service";
 import "./recommended-for-you.component.scss";
@@ -34,7 +33,7 @@ export class RecommendedForYouController {
   }
 
   onClick(id: number) {
-    this.dispatch.addToQueue(id, QueueAddType.Playlist);
+    this.dispatch.addToQueue(id);
   }
 }
 

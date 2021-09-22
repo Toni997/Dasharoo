@@ -1,3 +1,4 @@
+import { StateService } from "@uirouter/core";
 import "./single-playlist.component.scss";
 
 export class SinglePlaylistController {
@@ -5,12 +6,23 @@ export class SinglePlaylistController {
   title: string = "";
   author: string = "";
   tooltip: string = "";
+  playlistid: string;
+  $state: StateService;
 
-  constructor() {
+  constructor($state: StateService) {
     "ngInject";
+
+    this.$state = $state;
   }
 
   $onInit() {}
+
+  onAuthorClick() {
+    console.log("clicked");
+    console.log(this.playlistid);
+    this.$state.go("account-details", { id: this.playlistid });
+    // e.stopPropagation();
+  }
 }
 
 export const SinglePlaylistComponent: ng.IComponentOptions = {
@@ -21,5 +33,6 @@ export const SinglePlaylistComponent: ng.IComponentOptions = {
     title: "<",
     author: "<",
     tooltip: "<",
+    playlistid: "<",
   },
 };

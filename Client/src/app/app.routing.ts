@@ -64,6 +64,11 @@ export class AppRoutes {
         onEnter: redirectIfNotAuthenticated,
         component: "playlistDetails",
       })
+      .state("queue", {
+        url: "/queue",
+        onEnter: redirectIfNotAuthenticated,
+        component: "queue",
+      })
       .state("login", {
         url: "/login",
         onEnter: skipIfAuthenticated,

@@ -9,9 +9,12 @@
     />
   </div>
   <div class="playlist-details">
-    <h2>{{ $ctrl.tooltip }}</h2>
+    <h2>{{ $ctrl.title }}</h2>
     <h3 class="record-author">
-      By <span class="author-name">{{ $ctrl.author }}</span>
+      By
+      <a ng-click="$ctrl.onAuthorClick($event)" class="author-name">{{
+        $ctrl.author
+      }}</a>
     </h3>
   </div>
 </div>

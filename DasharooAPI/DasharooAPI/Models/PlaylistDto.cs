@@ -38,4 +38,12 @@ namespace DasharooAPI.Models
     public class UpdatePlaylistDto : CreatePlaylistDto
     {
     }
+
+    public class PlaylistForQueueDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<RecordDto> Records { get; set; }
+        public UserOnRecordDto Author { get; set; }
+    }
 }

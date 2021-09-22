@@ -50,4 +50,14 @@ namespace DasharooAPI.Models
     {
         public new IFormFile Source { get; set; }
     }
+
+    public class RecordForQueueDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string SourcePath { get; set; }
+        public GetUserDto CreatedBy { get; set; }
+        public ICollection<RecordAuthorDto> RecordAuthors { get; set; }
+        public ICollection<RecordGenreDto> RecordGenres { get; set; }
+    }
 }

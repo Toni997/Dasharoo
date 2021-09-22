@@ -4,16 +4,6 @@
 
 @import "../../../styles/abstracts/variables";
 
-a {
-  text-decoration: none;
-  list-style: none;
-  color: $text-color;
-}
-
-.genre-link:hover {
-  text-decoration: underline;
-}
-
 #explore-genres {
   margin-top: 30px;
   h1 {
