@@ -1,7 +1,12 @@
 <home-header></home-header>
-<h2 class="section-title">Queue</h2>
-<div ng-if="QC.$scope.queue === null">Nothing in queue yet!</div>
-<div ng-if="QC.$scope.queue !== null">
+<h2 class="section-title" ng-if="QC.$scope.recordsState.queue === null">
+  Nothing in queue yet!
+</h2>
+<div ng-if="QC.$scope.recordsState.queue !== null">
+  <h2 class="section-title">
+    Now playing: {{ QC.$scope.recordsState.queue.name }} by
+    {{ QC.$scope.recordsState.queue.author.artistName }}
+  </h2>
   <table class="records-table">
     <thead>
       <tr class="table-head-row">
@@ -13,12 +18,24 @@
     <tbody>
       <tr
         class="table-body-row"
-        ng-click="QC.onPlayRecord(record.id)"
-        ng-repeat="record in QC.$scope.queue.records"
+        ng-click="QC.onPlayRecord($index)"
+        ng-repeat="record in QC.$scope.recordsState.queue.records"
       >
-        <td class="opacity50">{{ $index + 1 }}</td>
+        <td class="opacity50">
+          <span ng-if="QC.$scope.recordsState.index !== $index">{{
+            $index + 1
+          }}</span>
+          <span ng-if="QC.$scope.recordsState.index === $index">
+            <soundwave class="make-it-green"></soundwave>
+          </span>
+        </td>
         <td>
-          {{ record.name }}
+          <span
+            ng-class="{
+              'make-it-green': QC.$scope.recordsState.index === $index
+            }"
+            >{{ record.name }}</span
+          >
           <div class="record-authors opacity50">
             <span ng-repeat="author in record.recordAuthors">
               <a

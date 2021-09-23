@@ -32,7 +32,6 @@ namespace DasharooAPI.Repository
         public Task<Playlist> GetByIdWithRecordsAndAuthor(int id)
         {
             return Get(x => x.Id == id, Includes);
-
         }
 
         public Task<IList<Playlist>> GetAllWithRecordsAndAuthor()

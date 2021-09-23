@@ -142,11 +142,6 @@
   margin: 0;
 }
 
-.control-selected {
-  filter: invert(42%) sepia(93%) saturate(150%) hue-rotate(87deg)
-    brightness(119%) contrast(119%);
-}
-
 .range {
   min-width: 70px;
   max-width: 200px;

@@ -41,6 +41,7 @@ import { AddPlaylistComponent } from "./views/add-playlist/add-playlist.componen
 import { FileReadDirective } from "./directives/file-read.directive";
 import { PlaylistDetailsComponent } from './views/playlist-details/playlist-details.component';
 import { QueueComponent } from './views/queue/queue.component';
+import { SoundwaveComponent } from './components/common/soundwave/soundwave.component';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -157,5 +158,6 @@ module.component("addPlaylist", AddPlaylistComponent);
 module.directive("fileRead", FileReadDirective);
 module.component('playlistDetails', PlaylistDetailsComponent);
 module.component('queue', QueueComponent);
+module.component('soundwave', SoundwaveComponent);
 
 export const AppModule = module.name;

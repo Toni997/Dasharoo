@@ -32,8 +32,15 @@
   </div>
   <div class="playlist-details-options">
     <icon
+      ng-class="{
+        'disabled-icon': PDC.isCurrentlyPlaying
+      }"
       width="70"
-      tooltip="Play this playlist"
+      tooltip="{{
+        PDC.isCurrentlyPlaying
+          ? 'Already playing this playlist'
+          : 'Play this playlist'
+      }}"
       src="play"
       ng-click="PDC.onPlayPlaylist()"
     ></icon>
@@ -50,12 +57,33 @@
     <tbody>
       <tr
         class="table-body-row"
-        ng-click="PDC.onPlayRecord(record.id)"
+        ng-click="PDC.isCurrentlyPlaying && PDC.onPlayRecord($index)"
         ng-repeat="record in PDC.playlist.records"
       >
-        <td class="opacity50">{{ $index + 1 }}</td>
+        <td class="opacity50">
+          <span
+            ng-if="
+              !PDC.isCurrentlyPlaying ||
+              PDC.$scope.recordsState.index !== $index
+            "
+            >{{ $index + 1 }}</span
+          >
+          <span
+            ng-if="
+              PDC.isCurrentlyPlaying && PDC.$scope.recordsState.index === $index
+            "
+            ><soundwave class="make-it-green"></soundwave
+          ></span>
+        </td>
         <td>
-          {{ record.name }}
+          <span
+            ng-class="{
+              'make-it-green':
+                PDC.isCurrentlyPlaying &&
+                PDC.$scope.recordsState.index === $index
+            }"
+            >{{ record.name }}</span
+          >
           <div class="record-authors opacity50">
             <span ng-repeat="author in record.recordAuthors">
               <a

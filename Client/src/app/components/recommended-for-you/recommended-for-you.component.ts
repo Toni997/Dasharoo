@@ -19,12 +19,12 @@ export class RecommendedForYouController {
     this.playlistsService = playlistsService;
     this.$scope.playlists = null;
     this.reduxService = reduxService;
+    this.dispatch = this.reduxService.dispatch();
   }
 
   async $onInit() {
     this.$scope.playlists = await this.playlistsService.getAll();
     this.$scope.$apply();
-    this.dispatch = this.reduxService.dispatch();
 
     this.reduxService.redux.subscribe(() => {
       this.$scope.records = this.reduxService.redux.getState().records;

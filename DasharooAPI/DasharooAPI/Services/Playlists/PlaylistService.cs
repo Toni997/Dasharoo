@@ -115,5 +115,14 @@ namespace DasharooAPI.Services.Playlists
             var playlistDto = _mapper.Map<PlaylistDto>(playlist);
             return playlistDto;
         }
+
+        public async Task<PlaylistForQueueDto> GetByIdWithRecordsAndAuthorForQueue(int id)
+        {
+            var playlist = await _unitOfWork.Playlists.GetByIdWithRecordsAndAuthor(id);
+            if (playlist == null) return null;
+
+            var playlistDto = _mapper.Map<PlaylistForQueueDto>(playlist);
+            return playlistDto;
+        }
     }
 }

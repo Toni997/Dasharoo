@@ -32,7 +32,7 @@ export class RecordActionsService {
     return async function (dispatch) {
       try {
         dispatch({ type: RECORDS_REQUEST });
-        let data = await self.playlistsService.getOne(id);
+        let data = await self.playlistsService.getOneForQueue(id);
 
         dispatch({ type: RECORDS_SUCCESS, payload: data });
       } catch (error) {

@@ -1,15 +1,12 @@
 <audio
   ng-on-timeupdate="$ctrl.updateProgressBar()"
-  ng-on-ended="$ctrl.playNext($event)"
+  ng-on-ended="$ctrl.onRecordEnded()"
   preload="auto"
   ng-ref="$ctrl.musicPlayerRef"
 >
   <source src="" />
 </audio>
-<div
-  class="musicPlayer"
-  ng-if="$ctrl.$scope.records && $ctrl.$scope.records.queue"
->
+<div class="musicPlayer" ng-if="$ctrl.$scope.recordsState.queue">
   <div class="left-panel">
     <div class="author-image">
       <img
@@ -37,9 +34,9 @@
       <icon
         width="70"
         class="control-button play-button"
-        src="$ctrl.centerButtonIcon"
-        alt="$ctrl.playButtonTooltip"
-        tooltip="$ctrl.playButtonTooltip"
+        src="{{ $ctrl.centerButtonIcon }}"
+        alt="{{ $ctrl.playButtonTooltip }}"
+        tooltip="{{ $ctrl.playButtonTooltip }}"
         ng-click="$ctrl.playOrPause()"
       ></icon>
     </div>
@@ -47,11 +44,13 @@
   <div class="center-panel">
     <div class="controls-top">
       <icon
+        id="shuffle"
         width="18"
         class="control-button"
         src="random"
         tooltip="Enable shuffling"
-        ng-click="$ctrl.shuffle($event)"
+        ng-ref="$ctrl.shuffleIcon"
+        ng-click="$ctrl.shuffle()"
       >
       </icon>
       <icon
@@ -79,12 +78,14 @@
         ng-click="$ctrl.playNext()"
       ></icon>
       <icon
+        id="loop"
         width="18"
         class="control-button"
         src="loop"
         alt="Loop"
         tooltip="Enable looping"
-        ng-click="$ctrl.loop($event)"
+        ng-ref="$ctrl.loopIcon"
+        ng-click="$ctrl.loop()"
       ></icon>
     </div>
     <div class="controls-bottom">

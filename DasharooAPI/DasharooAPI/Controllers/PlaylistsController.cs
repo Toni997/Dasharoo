@@ -59,6 +59,18 @@ namespace DasharooAPI.Controllers
             return Ok(playlistDto);
         }
 
+        [HttpGet("queue/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPlaylistByIdForQueue(int id)
+        {
+            var playlistDto = await _playlistService.GetByIdWithRecordsAndAuthorForQueue(id);
+            if (playlistDto == null) return NotFound();
+            return Ok(playlistDto);
+        }
+
         [Authorize(Roles = UserRoles.User)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

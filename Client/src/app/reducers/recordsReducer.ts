@@ -24,7 +24,11 @@ export const recordsReducer = (
     case RECORDS_RESET:
       return { loading: false, index: 0, queue: null };
     case QUEUE_INDEX_CHANGE:
-      return { loading: false, index: action.payload, queue: state.queue };
+      return {
+        loading: state.loading,
+        index: action.payload,
+        queue: state.queue,
+      };
     default:
       return state;
   }

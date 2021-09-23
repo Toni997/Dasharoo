@@ -1,19 +1,31 @@
+import { ReduxService } from "app/services/redux.service";
 import "./queue.component.scss";
 
 export class QueueController {
   redux: any;
   $scope: any;
+  reduxService: ReduxService;
+  dispatch: any;
 
-  constructor($ngRedux, $scope: any) {
+  constructor($ngRedux, $scope: any, reduxService: ReduxService) {
     "ngInject";
     this.redux = $ngRedux;
     this.$scope = $scope;
-    const queueFromRedux = this.redux.getState().records.queue;
-    console.log(queueFromRedux);
-    this.$scope.queue = queueFromRedux ? queueFromRedux : null;
+    this.reduxService = reduxService;
+    this.dispatch = this.reduxService.dispatch();
+    this.$scope.recordsState = this.redux.getState().records;
   }
 
-  $postLink() {}
+  $onInit() {
+    this.redux.subscribe(() => {
+      this.$scope.recordsState = this.redux.getState().records;
+      console.log("state", this.$scope.recordsState);
+    });
+  }
+
+  onPlayRecord(newIndex: number) {
+    this.dispatch.changeIndex(newIndex);
+  }
 }
 
 export const QueueComponent: ng.IComponentOptions = {

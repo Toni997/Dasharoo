@@ -34,6 +34,9 @@ export class ReduxService {
       addToQueue(id: number) {
         self.redux.dispatch(self.recordActions.addToQueue(id));
       },
+      changeIndex(newIndex: number) {
+        self.redux.dispatch(self.recordActions.changeIndex(newIndex));
+      },
       login(loginModel: LoginModel) {
         self.redux.dispatch(self.userActions.login(loginModel));
       },

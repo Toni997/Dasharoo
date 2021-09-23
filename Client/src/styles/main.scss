@@ -193,3 +193,13 @@ nav {
     text-decoration: underline;
   }
 }
+
+.make-it-green {
+  filter: invert(42%) sepia(93%) saturate(150%) hue-rotate(87deg)
+    brightness(119%) contrast(119%) !important;
+}
+
+.disabled-icon {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}

@@ -1,0 +1,97 @@
+//----------------------------------------
+//  components/common/soundwave
+//----------------------------------------
+
+// soundwave {
+//   #first {
+//     animation: first 1s infinite;
+//   }
+//   #second {
+//     animation: second 0.5s infinite;
+//   }
+//   #third {
+//     animation: third 0.7s infinite;
+//   }
+// }
+
+// @keyframes first {
+//   0% {
+//     transform: translateY(3px);
+//   }
+//   50% {
+//     transform: translateY(10px);
+//   }
+//   100% {
+//     transform: translateY(3px);
+//   }
+// }
+
+// @keyframes second {
+//   0% {
+//     transform: translateY(8px);
+//   }
+//   50% {
+//     transform: translateY(12px);
+//   }
+//   100% {
+//     transform: translateY(8px);
+//   }
+// }
+// @keyframes third {
+//   0% {
+//     transform: translateY(12px);
+//   }
+//   50% {
+//     transform: translateY(7px);
+//   }
+//   100% {
+//     transform: translateY(12px);
+//   }
+// }
+
+soundwave {
+  #first {
+    animation: first 0.9s infinite;
+  }
+  #second {
+    animation: second 0.4s infinite;
+  }
+  #third {
+    animation: third 0.7s infinite;
+  }
+}
+
+@keyframes first {
+  0% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(13px);
+  }
+  100% {
+    transform: translateY(3px);
+  }
+}
+
+@keyframes second {
+  0% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(13px);
+  }
+  100% {
+    transform: translateY(3px);
+  }
+}
+@keyframes third {
+  0% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(13px);
+  }
+  100% {
+    transform: translateY(3px);
+  }
+}

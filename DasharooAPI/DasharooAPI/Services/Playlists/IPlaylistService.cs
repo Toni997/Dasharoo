@@ -13,5 +13,6 @@ namespace DasharooAPI.Services.Playlists
         Task<ResponseDetails> TryUpdateAndReturnResponseDetails(int id, UpdatePlaylistDto playlistDto);
         Task<IList<PlaylistDto>> GetAllWithRecordsAndAuthor();
         Task<PlaylistDto> GetByIdWithRecordsAndAuthor(int id);
+        Task<PlaylistForQueueDto> GetByIdWithRecordsAndAuthorForQueue(int id);
     }
 }

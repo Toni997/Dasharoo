@@ -1,6 +1,8 @@
+import { IDocumentService } from "angular";
 import { RecordActionsService } from "app/actions/record-actions.service";
 import { RecordsService } from "app/records.service";
 import { AuthService } from "app/services/auth.service";
+import { ReduxService } from "app/services/redux.service";
 import "./music-player.component.scss";
 
 export class MusicPlayerController {
@@ -24,46 +26,51 @@ export class MusicPlayerController {
   volumeIcon: "volume-mid" | "muted" = "volume-mid";
   playButtonTooltip: "Play" | "Pause" = "Play";
   redux;
+  reduxService: ReduxService;
+  dispatch: any;
   recordsService: RecordsService;
   recordActions: RecordActionsService;
   records: any;
   $scope: any;
-  currentRecordIndex: number = 0;
   self;
   config;
   audioPath: string;
   imagePath: string;
-  currentQueueIndex: number;
+  currentQueueIndex: number = 0;
   shuffleEnabled: boolean = false;
   authService: AuthService;
+  $document: IDocumentService;
 
   constructor(
     $scope: any,
     $ngRedux: any,
+    reduxService: ReduxService,
     recordsService: RecordsService,
     recordActionsService: RecordActionsService,
     authService: AuthService,
+    $document: IDocumentService,
     CONFIG
   ) {
     ("ngInject");
 
-    this.authService = authService;
+    this.$document = $document;
+
+    this.reduxService = reduxService;
+    this.dispatch = this.reduxService.dispatch();
 
     this.config = CONFIG;
     this.audioPath = this.config.BASE_URL + "Files/Records/Sources?source=";
     this.imagePath = this.config.BASE_URL + "Files/Records/Images?source=";
 
-    this.currentQueueIndex = 0;
-
     this.$scope = $scope;
+    this.authService = authService;
     this.redux = $ngRedux;
     this.recordsService = recordsService;
     this.recordActions = recordActionsService;
-    this.$scope.queue = null;
     this.redux.subscribe(() => {
-      this.$scope.records = this.redux.getState().records;
-      console.log(this.$scope.records);
-      if (this.$scope.records && this.$scope.records.queue !== null)
+      this.$scope.recordsState = this.redux.getState().records;
+      this.currentQueueIndex = this.$scope.recordsState.index;
+      if (this.$scope.recordsState && this.$scope.recordsState.queue !== null)
         this.updateMusicPlayer();
     });
   }
@@ -140,15 +147,41 @@ export class MusicPlayerController {
     }
   }
 
-  playPrevious() {
-    if (
-      !this.$scope.records ||
-      this.$scope.records.queue.length === 0 ||
-      this.currentQueueIndex === 0
-    )
+  onRecordEnded() {
+    if (!this.shuffleEnabled) this.playNext();
+    else this.playRandom();
+  }
+
+  playRandom() {
+    if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
       return;
 
-    this.currentQueueIndex--;
+    const oldIndex = this.currentQueueIndex;
+    do {
+      this.currentQueueIndex = this.randomNum(
+        0,
+        this.$scope.recordsState.queue.records.length - 1
+      );
+    } while (this.currentQueueIndex === oldIndex);
+
+    this.dispatch.changeIndex(this.currentQueueIndex);
+
+    this.updateMusicPlayer();
+    this.mp.play();
+  }
+
+  playPrevious() {
+    if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
+      return;
+
+    if (this.currentQueueIndex !== 0) {
+      this.dispatch.changeIndex(--this.currentQueueIndex);
+    } else {
+      this.dispatch.changeIndex(
+        this.$scope.recordsState.queue.records.length - 1
+      );
+    }
+
     this.updateMusicPlayer();
     this.mp.play();
   }
@@ -158,21 +191,18 @@ export class MusicPlayerController {
   }
 
   playNext() {
-    if (
-      !this.$scope.records ||
-      this.$scope.records.queue.length === 0 ||
-      this.currentQueueIndex === this.$scope.records.queue.length - 1
-    )
+    if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
       return;
 
-    if (!this.shuffleEnabled) {
-      this.currentQueueIndex++;
+    if (
+      this.currentQueueIndex !==
+      this.$scope.recordsState.queue.records.length - 1
+    ) {
+      this.dispatch.changeIndex(++this.currentQueueIndex);
     } else {
-      this.currentQueueIndex = this.randomNum(
-        0,
-        this.$scope.records.queue.length - 1
-      );
+      this.dispatch.changeIndex(0);
     }
+
     this.updateMusicPlayer();
     this.mp.play();
   }
@@ -187,11 +217,15 @@ export class MusicPlayerController {
   }
 
   playOrPause() {
-    if (!this.$scope.records || this.$scope.records.queue.length === 0) return;
+    if (
+      this.$scope.recordsState.queue === null ||
+      this.$scope.recordsState.queue.records.length === 0
+    )
+      return;
 
-    let queue = this.$scope.records.queue;
+    let records = this.$scope.recordsState.queue.records;
     if (!this.mp.src) {
-      this.mp.src = this.audioPath + queue[this.currentQueueIndex].sourcePath;
+      this.mp.src = this.audioPath + records[this.currentQueueIndex].sourcePath;
       this.updateMusicPlayer();
     }
     if (this.mp.paused) {
@@ -202,8 +236,8 @@ export class MusicPlayerController {
   }
 
   updateMusicPlayer() {
-    let queue = this.$scope.records.queue.records;
-    let nextInQueue = queue[this.currentQueueIndex];
+    let nextInQueue =
+      this.$scope.recordsState.queue.records[this.currentQueueIndex];
     this.$scope.recordTitle = nextInQueue.name;
     this.$scope.recordAuthors = nextInQueue.recordAuthors;
     this.$scope.recordSrc = this.audioPath + nextInQueue.sourcePath;
@@ -222,25 +256,25 @@ export class MusicPlayerController {
     }
   }
 
-  loop(e: any) {
-    const el: HTMLImageElement = e.target;
+  loop() {
+    const el: HTMLElement = this.$document[0].querySelector("#loop");
+
     if (this.mp.loop) {
       this.mp.loop = false;
-      el.classList.remove("control-selected");
+      el.classList.remove("make-it-green");
     } else {
       this.mp.loop = true;
-      el.classList.add("control-selected");
+      el.classList.add("make-it-green");
     }
   }
 
-  shuffle(e: any) {
-    const el: HTMLImageElement = e.target;
+  shuffle() {
+    const el: HTMLElement = this.$document[0].querySelector("#shuffle");
     this.shuffleEnabled = !this.shuffleEnabled;
-    console.log(this.shuffleEnabled);
     if (!this.shuffleEnabled) {
-      el.classList.remove("control-selected");
+      el.classList.remove("make-it-green");
     } else {
-      el.classList.add("control-selected");
+      el.classList.add("make-it-green");
     }
   }
 }

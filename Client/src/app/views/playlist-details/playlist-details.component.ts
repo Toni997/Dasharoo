@@ -1,12 +1,11 @@
 import { StateParams } from "@uirouter/core";
-import { IScope } from "angular";
-import QueueAddType from "app/queueAddType.enum";
+import { IDocumentService } from "angular";
 import { PlaylistsService } from "app/services/playlists.service";
 import { ReduxService } from "app/services/redux.service";
 import "./playlist-details.component.scss";
 
 export class PlaylistDetailsController {
-  $scope: IScope;
+  $scope: any;
   reduxService: ReduxService;
   dispatch: any;
   playlistsService: PlaylistsService;
@@ -14,19 +13,37 @@ export class PlaylistDetailsController {
   playlistImage: HTMLImageElement[];
   playlistId: number;
   artistImage: HTMLImageElement[];
+  redux: any;
+  isCurrentlyPlaying: boolean = false;
+  $document: IDocumentService;
+  audioElement: HTMLAudioElement;
 
   constructor(
     $stateParams: StateParams,
     playlistsService: PlaylistsService,
-    $scope: IScope,
-    reduxService: ReduxService
+    $scope: any,
+    reduxService: ReduxService,
+    $ngRedux: any,
+    $document: IDocumentService
   ) {
     "ngInject";
 
+    this.$document = $document;
     this.$scope = $scope;
-    this.playlistId = $stateParams.id;
+    this.playlistId = parseInt($stateParams.id);
     this.playlistsService = playlistsService;
+    this.redux = $ngRedux;
     this.reduxService = reduxService;
+    this.$scope.recordsState = this.redux.getState().records;
+    this.isCurrentlyPlaying =
+      this.$scope.recordsState.queue !== null &&
+      this.$scope.recordsState.queue.id === this.playlistId;
+    this.redux.subscribe(() => {
+      this.$scope.recordsState = this.redux.getState().records;
+      this.isCurrentlyPlaying =
+        this.$scope.recordsState.queue !== null &&
+        this.$scope.recordsState.queue.id === this.playlistId;
+    });
   }
 
   async $onInit() {
@@ -34,6 +51,7 @@ export class PlaylistDetailsController {
     this.playlist.releaseYear = new Date(
       this.playlist.releaseDate
     ).getFullYear();
+
     this.$scope.$apply();
     this.dispatch = this.reduxService.dispatch();
     this.playlistImage[0].src =
@@ -43,15 +61,30 @@ export class PlaylistDetailsController {
     this.artistImage[0].src =
       "https://localhost:44350/api/Files/Accounts/Images?source=" +
       this.playlist.author.imagePath;
-    console.log(this.playlist);
+    this.audioElement = this.$document[0].querySelector("audio");
+
+    // toggle bars animation play state on audio paused change
+    this.$scope.$watch("PDC.audioElement.paused", () => {
+      const first = this.$document[0].getElementById("first");
+      const second = this.$document[0].getElementById("second");
+      const third = this.$document[0].getElementById("third");
+      first.style.animationPlayState =
+        this.audioElement.paused === true ? "paused" : "running";
+      second.style.animationPlayState =
+        this.audioElement.paused === true ? "paused" : "running";
+      third.style.animationPlayState =
+        this.audioElement.paused === true ? "paused" : "running";
+    });
   }
+
+  $postLink() {}
 
   onPlayPlaylist() {
-    this.dispatch.addToQueue(this.playlistId, QueueAddType.Playlist);
+    if (!this.isCurrentlyPlaying) this.dispatch.addToQueue(this.playlistId);
   }
 
-  onPlayRecord(id: number) {
-    this.dispatch.addToQueue(id, QueueAddType.Record);
+  onPlayRecord(newIndex: number) {
+    this.dispatch.changeIndex(newIndex);
   }
 }
 
