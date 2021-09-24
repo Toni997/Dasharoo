@@ -46,4 +46,19 @@ namespace DasharooAPI.Models
         public ICollection<RecordDto> Records { get; set; }
         public UserOnRecordDto Author { get; set; }
     }
+
+    public class PlaylistForSidebarDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImagePath { get; set; }
+    }
+
+    public class CreatePlaylistRecordDto
+    {
+        [Required]
+        public int RecordId { get; set; }
+        [Required]
+        public int PlaylistId { get; set; }
+    }
 }

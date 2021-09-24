@@ -4,6 +4,7 @@ export class PlaylistsService {
   private restangular: restangular.IService;
   private playlistsEndpoint: string = "playlists";
   private playlistForQueueEndpoint: string = "playlists/queue";
+  private playlistsForSidebarEndpoint: string = "playlists/for-sidebar";
 
   constructor(Restangular: restangular.IService) {
     "ngInject";
@@ -13,6 +14,12 @@ export class PlaylistsService {
 
   async getAll() {
     return await this.restangular.all(this.playlistsEndpoint).getList();
+  }
+
+  async getAllForSidebar() {
+    return await this.restangular
+      .all(this.playlistsForSidebarEndpoint)
+      .getList();
   }
 
   async getOne(id: number) {

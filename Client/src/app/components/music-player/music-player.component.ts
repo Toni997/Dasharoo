@@ -40,6 +40,7 @@ export class MusicPlayerController {
   shuffleEnabled: boolean = false;
   authService: AuthService;
   $document: IDocumentService;
+  $rootScope: ng.IRootScopeService;
 
   constructor(
     $scope: any,
@@ -49,10 +50,12 @@ export class MusicPlayerController {
     recordActionsService: RecordActionsService,
     authService: AuthService,
     $document: IDocumentService,
-    CONFIG
+    CONFIG,
+    $rootScope: ng.IRootScopeService
   ) {
     ("ngInject");
 
+    this.$rootScope = $rootScope;
     this.$document = $document;
 
     this.reduxService = reduxService;
@@ -76,11 +79,12 @@ export class MusicPlayerController {
   }
   async $onInit() {
     this.$scope.recordTitle = "No music in queue";
-    this.$scope.recordAuthors = "Dasharoo";
+    this.$scope.recordAuthors = null;
     this.$scope.recordSrc = "";
     this.$scope.recordImage = this.imagePath + "no-image.png";
 
     this.$scope.$watch("$ctrl.mp.paused", () => {
+      this.$rootScope.$broadcast("playPauseEvent", this.mp.paused);
       this.centerButtonIcon = this.mp.paused ? "play" : "pause";
       this.playButtonTooltip = this.mp.paused ? "Play" : "Pause";
     });
@@ -152,7 +156,7 @@ export class MusicPlayerController {
     else this.playRandom();
   }
 
-  playRandom() {
+  async playRandom() {
     if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
       return;
 
@@ -167,10 +171,10 @@ export class MusicPlayerController {
     this.dispatch.changeIndex(this.currentQueueIndex);
 
     this.updateMusicPlayer();
-    this.mp.play();
+    await this.mp.play();
   }
 
-  playPrevious() {
+  async playPrevious() {
     if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
       return;
 
@@ -183,14 +187,14 @@ export class MusicPlayerController {
     }
 
     this.updateMusicPlayer();
-    this.mp.play();
+    await this.mp.play();
   }
 
   randomNum(min: number, max: number) {
     return Math.floor(Math.random() * (max - min)) + min; // You can remove the Math.floor if you don't want it to be an integer
   }
 
-  playNext() {
+  async playNext() {
     if (!this.$scope.recordsState || this.$scope.recordsState.queue === null)
       return;
 
@@ -204,7 +208,7 @@ export class MusicPlayerController {
     }
 
     this.updateMusicPlayer();
-    this.mp.play();
+    await this.mp.play();
   }
 
   changeTime(e: any) {
@@ -216,7 +220,7 @@ export class MusicPlayerController {
     this.mp.currentTime = (this.currentPercentage / 100) * this.mp.duration;
   }
 
-  playOrPause() {
+  async playOrPause() {
     if (
       this.$scope.recordsState.queue === null ||
       this.$scope.recordsState.queue.records.length === 0
@@ -229,13 +233,13 @@ export class MusicPlayerController {
       this.updateMusicPlayer();
     }
     if (this.mp.paused) {
-      this.mp.play();
+      await this.mp.play();
     } else {
       this.mp.pause();
     }
   }
 
-  updateMusicPlayer() {
+  async updateMusicPlayer() {
     let nextInQueue =
       this.$scope.recordsState.queue.records[this.currentQueueIndex];
     this.$scope.recordTitle = nextInQueue.name;
@@ -243,7 +247,7 @@ export class MusicPlayerController {
     this.$scope.recordSrc = this.audioPath + nextInQueue.sourcePath;
     this.$scope.recordImage = this.imagePath + nextInQueue.imagePath;
     this.mp.src = this.audioPath + nextInQueue.sourcePath;
-    this.mp.play();
+    await this.mp.play();
   }
 
   mute() {

@@ -1,3 +1,4 @@
+import { IAngularEvent, IDocumentService } from "angular";
 import { ReduxService } from "app/services/redux.service";
 import "./queue.component.scss";
 
@@ -6,11 +7,25 @@ export class QueueController {
   $scope: any;
   reduxService: ReduxService;
   dispatch: any;
+  audioElement: HTMLAudioElement;
+  $document: IDocumentService;
+  $rootScope: ng.IRootScopeService;
+  playPauseEvent: any;
 
-  constructor($ngRedux, $scope: any, reduxService: ReduxService) {
+  constructor(
+    $document: IDocumentService,
+    $ngRedux,
+    $scope: any,
+    reduxService: ReduxService,
+    $rootScope: ng.IRootScopeService
+  ) {
     "ngInject";
-    this.redux = $ngRedux;
+
+    this.$rootScope = $rootScope;
+    this.$document = $document;
+
     this.$scope = $scope;
+    this.redux = $ngRedux;
     this.reduxService = reduxService;
     this.dispatch = this.reduxService.dispatch();
     this.$scope.recordsState = this.redux.getState().records;
@@ -19,8 +34,22 @@ export class QueueController {
   $onInit() {
     this.redux.subscribe(() => {
       this.$scope.recordsState = this.redux.getState().records;
-      console.log("state", this.$scope.recordsState);
     });
+
+    // toggle bars animation play state on audio paused change
+    this.audioElement = this.$document[0].querySelector("audio");
+    this.$scope.$on(
+      "playPauseEvent",
+      (event: IAngularEvent, isPaused: boolean) => {
+        console.log(event);
+        const first = this.$document[0].getElementById("first");
+        const second = this.$document[0].getElementById("second");
+        const third = this.$document[0].getElementById("third");
+        first.style.animationPlayState = isPaused ? "paused" : "running";
+        second.style.animationPlayState = isPaused ? "paused" : "running";
+        third.style.animationPlayState = isPaused ? "paused" : "running";
+      }
+    );
   }
 
   onPlayRecord(newIndex: number) {

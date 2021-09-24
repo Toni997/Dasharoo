@@ -38,5 +38,10 @@ namespace DasharooAPI.Repository
         {
             return GetAll(includes: Includes);
         }
+
+        public Task<IList<Playlist>> GetAllByUserForSidebar(string userId)
+        {
+            return GetAll(x => x.AuthorId == userId);
+        }
     }
 }

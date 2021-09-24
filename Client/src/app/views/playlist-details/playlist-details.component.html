@@ -30,8 +30,13 @@
       </div>
     </div>
   </div>
+  <div
+    class="playlist-details-options"
+    ng-if="PDC.playlist.records.length === 0"
+  ></div>
   <div class="playlist-details-options">
     <icon
+      ng-if="PDC.playlist.records.length > 0"
       ng-class="{
         'disabled-icon': PDC.isCurrentlyPlaying
       }"
@@ -46,10 +51,10 @@
     ></icon>
     <icon class="opacity50" width="30" tooltip="Options" src="dots"></icon>
   </div>
-  <table class="records-table">
+  <table class="records-table" ng-if="PDC.playlist.records.length > 0">
     <thead>
       <tr class="table-head-row">
-        <th>#</th>
+        <th><div class="table-index-container">#</div></th>
         <th>TITLE</th>
         <th>PLAYS</th>
       </tr>
@@ -61,19 +66,22 @@
         ng-repeat="record in PDC.playlist.records"
       >
         <td class="opacity50">
-          <span
-            ng-if="
-              !PDC.isCurrentlyPlaying ||
-              PDC.$scope.recordsState.index !== $index
-            "
-            >{{ $index + 1 }}</span
-          >
-          <span
-            ng-if="
-              PDC.isCurrentlyPlaying && PDC.$scope.recordsState.index === $index
-            "
-            ><soundwave class="make-it-green"></soundwave
-          ></span>
+          <div class="table-index-container">
+            <span
+              ng-show="
+                !PDC.isCurrentlyPlaying ||
+                PDC.$scope.recordsState.index !== $index
+              "
+              >{{ $index + 1 }}</span
+            >
+            <span
+              ng-show="
+                PDC.isCurrentlyPlaying &&
+                PDC.$scope.recordsState.index === $index
+              "
+              ><soundwave class="make-it-green"></soundwave
+            ></span>
+          </div>
         </td>
         <td>
           <span
@@ -95,8 +103,11 @@
             >
           </div>
         </td>
-        <td class="opacity50">{{ record.plays }}</td>
+        <td class="opacity50">{{ record.plays | number }}</td>
       </tr>
     </tbody>
   </table>
+  <h2 class="section-title" ng-if="PDC.playlist.records.length === 0">
+    This playlist has no records yet
+  </h2>
 </div>

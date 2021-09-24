@@ -28,6 +28,9 @@ namespace DasharooAPI.Services.Playlists
             _fileService = fileService;
         }
 
+        // constants
+        public const string ImageDefault = "no-image.png";
+
         public async Task<bool> TryDeleteAndReturnBool(int id)
         {
             var playlist = await _unitOfWork.Playlists.Get(x => x.Id == id);
@@ -51,6 +54,10 @@ namespace DasharooAPI.Services.Playlists
                     playlistDto.Image, _fileService.PlaylistImagesDir, FileTypes.Image);
                 if (!resultImage.Succeeded) return (Error)resultImage;
                 playlist.ImagePath = (string)resultImage.Value;
+            }
+            else
+            {
+                playlist.ImagePath = ImageDefault;
             }
 
             // uploading background image file
@@ -107,6 +114,14 @@ namespace DasharooAPI.Services.Playlists
             return playlistsDto;
         }
 
+        public async Task<IList<PlaylistDto>> GetAllWithRecordsAndAuthorByUser(string userId)
+        {
+            var playlists = await _unitOfWork.Playlists.GetAllWithRecordsAndAuthor();
+            var playlistsDto = _mapper.Map<IList<PlaylistDto>>(playlists);
+
+            return playlistsDto;
+        }
+
         public async Task<PlaylistDto> GetByIdWithRecordsAndAuthor(int id)
         {
             var playlist = await _unitOfWork.Playlists.GetByIdWithRecordsAndAuthor(id);
@@ -123,6 +138,35 @@ namespace DasharooAPI.Services.Playlists
 
             var playlistDto = _mapper.Map<PlaylistForQueueDto>(playlist);
             return playlistDto;
+        }
+
+        public async Task<IList<PlaylistForSidebarDto>> GetAllByUserForSidebar(string userId)
+        {
+            var playlists = await _unitOfWork.Playlists.GetAllByUserForSidebar(userId);
+            var playlistsDto = _mapper.Map<IList<PlaylistForSidebarDto>>(playlists);
+
+            return playlistsDto;
+        }
+
+        public async Task<ResponseDetails> TryAddToPlaylistRecords(int playlistId, int recordId)
+        {
+            var playlist = await _unitOfWork.Playlists.GetById(playlistId);
+            var record = await _unitOfWork.Records.GetById(recordId);
+
+            if (playlist == null || record == null)
+            {
+                return new Error(StatusCodes.Status400BadRequest, "Invalid request.");
+            }
+
+            await _unitOfWork.RecordPlaylists.Insert(new RecordPlaylist
+            {
+                PlaylistId = playlistId,
+                RecordId = recordId
+            });
+
+            await _unitOfWork.Save();
+
+            return new Success(StatusCodes.Status201Created, "Successfully added record to the playlist.");
         }
     }
 }

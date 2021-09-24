@@ -1,15 +1,38 @@
+import { PlaylistsService } from "app/services/playlists.service";
 import "./playlists-panel.component.scss";
+import { FilesService } from "app/services/files.service";
+import { SidebarsService } from "app/services/sidebars.service";
 
 export class PlaylistsPanelController {
   $document: ng.IDocumentService;
+  playlistsService: PlaylistsService;
+  $scope: any;
+  baseUrl: string;
+  filesService: FilesService;
+  sidebarsService: SidebarsService;
+  closeLeftSidebar: any;
 
-  constructor($document: ng.IDocumentService) {
+  constructor(
+    $document: ng.IDocumentService,
+    $scope: any,
+    filesService: FilesService,
+    playlistsService: PlaylistsService,
+    sidebarsService: SidebarsService
+  ) {
     "ngInject";
 
     this.$document = $document;
+    this.$scope = $scope;
+    this.filesService = filesService;
+    this.playlistsService = playlistsService;
+    this.sidebarsService = sidebarsService;
   }
 
-  $onInit() {}
+  async $onInit() {
+    this.$scope.myPlaylists = null;
+    this.$scope.myPlaylists = await this.playlistsService.getAllForSidebar();
+    this.$scope.$apply();
+  }
 
   togglePanel() {
     const playlistsPanel =
@@ -33,4 +56,5 @@ export class PlaylistsPanelController {
 export const PlaylistsPanelComponent: ng.IComponentOptions = {
   template: require("./playlists-panel.component.html").default,
   controller: PlaylistsPanelController,
+  controllerAs: "PPC",
 };

@@ -1,4 +1,8 @@
-<separator text="'PLAYLISTS'" ng-click="$ctrl.togglePanel($event)"></separator>
+<separator
+  text="'MY PLAYLISTS'"
+  ng-click="$ctrl.togglePanel($event)"
+></separator>
+<loader ng-if="!PPC.$scope.myPlaylists"></loader>
 <nav id="playlists-panel">
   <ul>
     <a ui-sref="add-playlist" ui-sref-active="active">
@@ -7,10 +11,19 @@
         <span>Add Playlist</span>
       </li>
     </a>
-    <a href="#">
+    <a
+      ng-repeat="playlist in PPC.$scope.myPlaylists"
+      ui-sref="playlist-details({id: playlist.id})"
+      ui-sref-active="active"
+    >
       <li>
-        <icon src="no-image"></icon>
-        <span>Best of 2014</span>
+        <div class="panel-playlist-image-container">
+          <img
+            ng-src="{{ PPC.filesService.PLAYLIST_IMAGE + playlist.imagePath }}"
+          />
+        </div>
+
+        <span>{{ playlist.name }}</span>
       </li>
     </a>
   </ul>

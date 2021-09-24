@@ -12,7 +12,9 @@
     "sourceMap": true,
     "removeComments": false,
     "declaration": false,
-    "noResolve": false
+    "noResolve": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "exclude": [
     "node_modules",

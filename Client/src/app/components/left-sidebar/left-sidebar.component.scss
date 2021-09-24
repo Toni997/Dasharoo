@@ -49,6 +49,7 @@
   left-sidebar {
     display: block !important;
   }
+
   ui-view {
     margin-left: $sidebar-width !important;
   }
@@ -57,5 +58,8 @@
 @media (max-width: $breakpoint-sm) {
   left-sidebar {
     display: none;
+  }
+  .left-sidebar {
+    height: 100%;
   }
 }

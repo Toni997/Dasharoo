@@ -2,3 +2,11 @@
 //  components/playlists-panel
 //----------------------------------------
 
+.panel-playlist-image-container {
+  width: 25px;
+  height: 25px;
+  overflow: hidden;
+  img {
+    width: inherit;
+  }
+}

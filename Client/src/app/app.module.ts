@@ -38,10 +38,10 @@ import { AuthService } from "./services/auth.service";
 import restangular = require("restangular");
 import { StateService } from "@uirouter/core";
 import { AddPlaylistComponent } from "./views/add-playlist/add-playlist.component";
-import { FileReadDirective } from "./directives/file-read.directive";
-import { PlaylistDetailsComponent } from './views/playlist-details/playlist-details.component';
-import { QueueComponent } from './views/queue/queue.component';
-import { SoundwaveComponent } from './components/common/soundwave/soundwave.component';
+import { PlaylistDetailsComponent } from "./views/playlist-details/playlist-details.component";
+import { QueueComponent } from "./views/queue/queue.component";
+import { SoundwaveComponent } from "./components/common/soundwave/soundwave.component";
+import { FilesService } from './services/files.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -155,9 +155,9 @@ module.component("login", LoginComponent);
 module.service("userActionsService", UserActionsService);
 module.service("authService", AuthService);
 module.component("addPlaylist", AddPlaylistComponent);
-module.directive("fileRead", FileReadDirective);
-module.component('playlistDetails', PlaylistDetailsComponent);
-module.component('queue', QueueComponent);
-module.component('soundwave', SoundwaveComponent);
+module.component("playlistDetails", PlaylistDetailsComponent);
+module.component("queue", QueueComponent);
+module.component("soundwave", SoundwaveComponent);
+module.service('filesService', FilesService);
 
 export const AppModule = module.name;

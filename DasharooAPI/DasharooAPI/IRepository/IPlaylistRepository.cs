@@ -11,5 +11,6 @@ namespace DasharooAPI.IRepository
     {
         Task<Playlist> GetByIdWithRecordsAndAuthor(int id);
         Task<IList<Playlist>> GetAllWithRecordsAndAuthor();
+        Task<IList<Playlist>> GetAllByUserForSidebar(string userId);
     }
 }

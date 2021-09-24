@@ -22,12 +22,14 @@
         ng-repeat="record in QC.$scope.recordsState.queue.records"
       >
         <td class="opacity50">
-          <span ng-if="QC.$scope.recordsState.index !== $index">{{
-            $index + 1
-          }}</span>
-          <span ng-if="QC.$scope.recordsState.index === $index">
-            <soundwave class="make-it-green"></soundwave>
-          </span>
+          <div class="table-index-container">
+            <span ng-show="QC.$scope.recordsState.index !== $index">{{
+              $index + 1
+            }}</span>
+            <span ng-show="QC.$scope.recordsState.index === $index">
+              <soundwave class="make-it-green"></soundwave>
+            </span>
+          </div>
         </td>
         <td>
           <span
@@ -47,7 +49,7 @@
             >
           </div>
         </td>
-        <td class="opacity50">{{ record.plays }}</td>
+        <td class="opacity50">{{ record.plays | number }}</td>
       </tr>
     </tbody>
   </table>

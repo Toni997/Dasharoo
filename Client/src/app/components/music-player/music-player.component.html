@@ -6,7 +6,8 @@
 >
   <source src="" />
 </audio>
-<div class="musicPlayer" ng-if="$ctrl.$scope.recordsState.queue">
+<!-- ng-if="$ctrl.$scope.recordsState.queue" -->
+<div class="musicPlayer">
   <div class="left-panel">
     <div class="author-image">
       <img
@@ -19,7 +20,7 @@
     <div class="author-details">
       <h2 class="record-name">{{ $ctrl.$scope.recordTitle }}</h2>
       <h4 class="record-author">
-        By
+        <span ng-if="$ctrl.$scope.recordAuthors">By</span>
         <span ng-repeat="author in $ctrl.$scope.recordAuthors"
           ><a
             ui-sref="account-details({id: author.author.id})"

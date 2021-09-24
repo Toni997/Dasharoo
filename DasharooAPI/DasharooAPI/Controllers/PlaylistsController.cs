@@ -35,8 +35,8 @@ namespace DasharooAPI.Controllers
         // messages
         public const string InvalidIdMessage = "Invalid id.";
 
-        // [Authorize(Roles = UserRoles.User)]
         [HttpGet]
+        [Authorize(Roles = UserRoles.User)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -46,7 +46,18 @@ namespace DasharooAPI.Controllers
             return Ok(playlistsDto);
         }
 
-        // [Authorize(Roles = UserRoles.User)]
+        [HttpGet("for-sidebar")]
+        [Authorize(Roles = UserRoles.User)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllPlaylistsByUserForSidebar()
+        {
+            var playlistsDto = await _playlistService.GetAllByUserForSidebar(User.GetUserId());
+            return Ok(playlistsDto);
+        }
+
+        [Authorize(Roles = UserRoles.User)]
         [HttpGet("{id:int}", Name = "GetPlaylistById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -71,8 +82,8 @@ namespace DasharooAPI.Controllers
             return Ok(playlistDto);
         }
 
-        [Authorize(Roles = UserRoles.User)]
         [HttpPost]
+        [Authorize(Roles = UserRoles.User)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -94,8 +105,8 @@ namespace DasharooAPI.Controllers
                 new { id = createdPlaylist.Id }, createdPlaylist);
         }
 
-        // [Authorize(Roles = UserRoles.Administrator)]
         [HttpPut("{id:int}")]
+        [Authorize(Roles = UserRoles.User)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -114,8 +125,8 @@ namespace DasharooAPI.Controllers
             return NoContent();
         }
 
-        // [Authorize(Roles = UserRoles.Administrator)]
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = UserRoles.User)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -126,6 +137,27 @@ namespace DasharooAPI.Controllers
 
             var isDeleted = await _playlistService.TryDeleteAndReturnBool(id);
             if (!isDeleted) return NotFound();
+
+            return NoContent();
+        }
+
+        [HttpPost("add-record")]
+        // [Authorize(Roles = UserRoles.User)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddToPlaylistRecords(
+            [FromBody] CreatePlaylistRecordDto createPlaylistRecordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var responseDetails = await _playlistService.TryAddToPlaylistRecords(
+                createPlaylistRecordDto.PlaylistId, createPlaylistRecordDto.RecordId);
+            if (!responseDetails.Succeeded)
+                return StatusCode(responseDetails.StatusCode, responseDetails.Value);
 
             return NoContent();
         }
