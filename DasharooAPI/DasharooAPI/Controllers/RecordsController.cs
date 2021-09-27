@@ -44,6 +44,17 @@ namespace DasharooAPI.Controllers
         }
 
         // [Authorize(Roles = UserRoles.User)]
+        [HttpGet("Search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetRecordsByKeyword([FromQuery] string keyword)
+        {
+            var recordsDto = await _recordService.GetByKeywordWithAuthorsGenresSupporters(keyword);
+            return Ok(recordsDto);
+        }
+
+        // [Authorize(Roles = UserRoles.User)]
         [HttpGet("{id:int}", Name = "GetRecordById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

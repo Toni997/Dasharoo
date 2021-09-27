@@ -47,9 +47,27 @@
           : 'Play this playlist'
       }}"
       src="play"
-      ng-click="PDC.onPlayPlaylist()"
+      ng-click="PDC.onPlay()"
     ></icon>
-    <icon class="opacity50" width="30" tooltip="Options" src="dots"></icon>
+    <div class="dots-menu">
+      <icon
+        class="dots-icon opacity50"
+        width="30"
+        tooltip="Options"
+        src="dots"
+        ng-click="PDC.shouldShowActionMenu = !PDC.shouldShowActionMenu"
+      ></icon>
+      <div class="action-menu" ng-show="PDC.shouldShowActionMenu">
+        <ul>
+          <a ui-sref="search({add_to: PDC.playlistId })"
+            ><li>Add records</li></a
+          >
+          <a ui-sref="search({add_to: PDC.playlistId })"
+            ><li>Add to favorites</li></a
+          >
+        </ul>
+      </div>
+    </div>
   </div>
   <table class="records-table" ng-if="PDC.playlist.records.length > 0">
     <thead>
@@ -62,7 +80,7 @@
     <tbody>
       <tr
         class="table-body-row"
-        ng-click="PDC.isCurrentlyPlaying && PDC.onPlayRecord($index)"
+        ng-click="PDC.onPlayRecord($index)"
         ng-repeat="record in PDC.playlist.records"
       >
         <td class="opacity50">

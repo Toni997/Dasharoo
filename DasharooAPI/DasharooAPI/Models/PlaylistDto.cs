@@ -32,6 +32,7 @@ namespace DasharooAPI.Models
         public ulong Listens { get; set; }
 
         public ICollection<RecordDto> Records { get; set; }
+        public ICollection<RecordPlaylistDto> RecordPlaylists { get; set; }
         public UserOnRecordDto Author { get; set; }
     }
 
@@ -44,6 +45,7 @@ namespace DasharooAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<RecordDto> Records { get; set; }
+        public ICollection<RecordPlaylistDto> RecordPlaylists { get; set; }
         public UserOnRecordDto Author { get; set; }
     }
 

@@ -39,5 +39,11 @@ namespace DasharooAPI.Repository
         {
             return GetAll(includes: Includes);
         }
+
+
+        public Task<IList<Record>> GetByKeywordWithAuthorsGenresSupporters(string keyword)
+        {
+            return GetAll(expression: x => x.Name.Contains(keyword), includes: Includes);
+        }
     }
 }

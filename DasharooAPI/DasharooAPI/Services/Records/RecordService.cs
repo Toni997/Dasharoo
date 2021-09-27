@@ -33,7 +33,12 @@ namespace DasharooAPI.Services
             var records = await _unitOfWork.Records.GetAllWithAuthorsGenresSupporters();
             var recordsDto = _mapper.Map<IList<RecordDto>>(records);
             return recordsDto;
-
+        }
+        public async Task<IList<RecordForSearchDto>> GetByKeywordWithAuthorsGenresSupporters(string keyword)
+        {
+            var records = await _unitOfWork.Records.GetByKeywordWithAuthorsGenresSupporters(keyword);
+            var recordsDto = _mapper.Map<IList<RecordForSearchDto>>(records);
+            return recordsDto;
         }
 
         public async Task<RecordDto> GetByIdWithAuthorsGenresSupporters(int id)

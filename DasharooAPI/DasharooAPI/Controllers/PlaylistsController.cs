@@ -57,7 +57,7 @@ namespace DasharooAPI.Controllers
             return Ok(playlistsDto);
         }
 
-        [Authorize(Roles = UserRoles.User)]
+        // [Authorize(Roles = UserRoles.User)]
         [HttpGet("{id:int}", Name = "GetPlaylistById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

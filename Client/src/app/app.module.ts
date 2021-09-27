@@ -6,7 +6,6 @@ import { AppConfig } from "./app.config";
 import { AppRoutes } from "./app.routing";
 import { AppComponent } from "./app.component";
 import { MusicPlayerComponent } from "./components/music-player/music-player.component";
-import { RecordsService } from "./records.service";
 import { RecordActionsService } from "./actions/record-actions.service";
 import { LeftSidebarComponent } from "./components/left-sidebar/left-sidebar.component";
 import { SeparatorComponent } from "./components/separator/separator.component";
@@ -41,7 +40,10 @@ import { AddPlaylistComponent } from "./views/add-playlist/add-playlist.componen
 import { PlaylistDetailsComponent } from "./views/playlist-details/playlist-details.component";
 import { QueueComponent } from "./views/queue/queue.component";
 import { SoundwaveComponent } from "./components/common/soundwave/soundwave.component";
-import { FilesService } from './services/files.service';
+import { FilesService } from "./services/files.service";
+import { RecordsService } from "./services/records.service";
+import { SnackbarComponent } from './components/common/snackbar/snackbar.component';
+import { SnackbarService } from './services/snackbar.service';
 
 let module: ng.IModule = angular.module("dasharoo", [
   "ngAnimate",
@@ -158,6 +160,9 @@ module.component("addPlaylist", AddPlaylistComponent);
 module.component("playlistDetails", PlaylistDetailsComponent);
 module.component("queue", QueueComponent);
 module.component("soundwave", SoundwaveComponent);
-module.service('filesService', FilesService);
+module.service("filesService", FilesService);
+module.service("recordsService", RecordsService);
+module.component('snackbar', SnackbarComponent);
+module.service('snackbarService', SnackbarService);
 
 export const AppModule = module.name;

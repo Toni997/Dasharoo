@@ -11,5 +11,6 @@ namespace DasharooAPI.IRepository
     {
         Task<Record> GetByIdWithAuthorsGenresSupporters(int id);
         Task<IList<Record>> GetAllWithAuthorsGenresSupporters();
+        Task<IList<Record>> GetByKeywordWithAuthorsGenresSupporters(string keyword);
     }
 }

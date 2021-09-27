@@ -7,4 +7,10 @@
         public int RecordId { get; set; }
         public RecordDto Record { get; set; }
     }
+
+    public class RecordGenreOnRecordDto
+    {
+        public int GenreId { get; set; }
+        public GenreOnRecordDto Genre { get; set; }
+    }
 }

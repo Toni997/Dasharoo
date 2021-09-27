@@ -19,6 +19,7 @@ namespace DasharooAPI.Configurations
             CreateMap<Record, CreateRecordDto>().ReverseMap();
             CreateMap<Record, UpdateRecordDto>().ReverseMap();
             CreateMap<Record, RecordForQueueDto>();
+            CreateMap<Record, RecordForSearchDto>();
 
 
             CreateMap<Playlist, PlaylistDto>().ReverseMap();
@@ -34,7 +35,9 @@ namespace DasharooAPI.Configurations
 
             // junction tables
             CreateMap<RecordGenre, RecordGenreDto>();
+            CreateMap<RecordGenre, RecordGenreOnRecordDto>();
             CreateMap<RecordAuthor, RecordAuthorDto>();
+            CreateMap<RecordPlaylist, RecordPlaylistDto>();
         }
     }
 }

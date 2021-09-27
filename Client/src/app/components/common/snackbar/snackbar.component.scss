@@ -1,0 +1,33 @@
+//----------------------------------------
+//  components/common/snackbar
+//----------------------------------------
+
+@import "../../../../styles/abstracts/variables";
+
+.snackbar {
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  max-width: 400px;
+  margin: auto;
+  padding: 10px;
+  background-color: $primary-color;
+  color: $background-color;
+  button {
+    color: $background-color;
+    border: 2px dotted $primary-color;
+    transition: 0.5s;
+    cursor: pointer;
+    padding: 10px;
+    background: none;
+    &:focus {
+      opacity: 0.5;
+      border: 2px dotted $background-color;
+    }
+  }
+}

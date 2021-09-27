@@ -58,6 +58,8 @@ namespace DasharooAPI.Models
         public string SourcePath { get; set; }
         public GetUserDto CreatedBy { get; set; }
         public ICollection<RecordAuthorDto> RecordAuthors { get; set; }
-        public ICollection<RecordGenreDto> RecordGenres { get; set; }
+        public ICollection<RecordGenreOnRecordDto> RecordGenres { get; set; }
     }
+
+    public class RecordForSearchDto : RecordForQueueDto { }
 }

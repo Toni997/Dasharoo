@@ -2,6 +2,7 @@ import { StateParams } from "@uirouter/core";
 import { IAngularEvent, IDocumentService } from "angular";
 import { PlaylistsService } from "app/services/playlists.service";
 import { ReduxService } from "app/services/redux.service";
+import { SnackbarService } from "app/services/snackbar.service";
 import "./playlist-details.component.scss";
 
 export class PlaylistDetailsController {
@@ -17,12 +18,15 @@ export class PlaylistDetailsController {
   isCurrentlyPlaying: boolean = false;
   $document: IDocumentService;
   audioElement: HTMLAudioElement;
+  shouldShowActionMenu: boolean = false;
+  snackbarService: SnackbarService;
 
   constructor(
     $document: IDocumentService,
     $scope: any,
     $stateParams: StateParams,
     playlistsService: PlaylistsService,
+    snackbarService: SnackbarService,
     reduxService: ReduxService,
     $ngRedux: any
   ) {
@@ -32,6 +36,7 @@ export class PlaylistDetailsController {
     this.$scope = $scope;
     this.playlistId = parseInt($stateParams.id);
     this.playlistsService = playlistsService;
+    this.snackbarService = snackbarService;
     this.redux = $ngRedux;
     this.reduxService = reduxService;
     this.$scope.recordsState = this.redux.getState().records;
@@ -47,7 +52,11 @@ export class PlaylistDetailsController {
   }
 
   async $onInit() {
+    console.log(this.snackbarService);
     this.playlist = await this.playlistsService.getOne(this.playlistId);
+    this.playlist.recordPlaylists.forEach((rp) => {
+      this.playlist.records.push(rp.record);
+    });
     console.log(this.playlist);
     this.playlist.releaseYear = new Date(
       this.playlist.releaseDate
@@ -77,16 +86,20 @@ export class PlaylistDetailsController {
         third.style.animationPlayState = isPaused ? "paused" : "running";
       }
     );
+    this.snackbarService.open("djhasdkjs");
   }
 
-  $postLink() {}
-
-  onPlayPlaylist() {
-    if (!this.isCurrentlyPlaying) this.dispatch.addToQueue(this.playlistId);
+  async onPlay(index: number = 0) {
+    if (!this.isCurrentlyPlaying)
+      await this.dispatch.addToQueue(this.playlistId, index);
   }
 
-  onPlayRecord(newIndex: number) {
-    this.dispatch.changeIndex(newIndex);
+  async onPlayRecord(index: number) {
+    if (!this.isCurrentlyPlaying)
+      await this.dispatch.addToQueue(this.playlistId, index);
+    else {
+      await this.dispatch.changeIndex(index);
+    }
   }
 }
 

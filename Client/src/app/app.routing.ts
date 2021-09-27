@@ -40,7 +40,7 @@ export class AppRoutes {
         component: "app",
       })
       .state("search", {
-        url: "/search",
+        url: "/search?q?add_to",
         onEnter: redirectIfNotAuthenticated,
         component: "searchView",
       })

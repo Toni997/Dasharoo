@@ -2,6 +2,8 @@
 //  views/playlist-details
 //----------------------------------------
 
+@import "../../../styles/abstracts/variables";
+
 .playlist-details-container {
   display: flex;
   gap: 25px;
@@ -98,4 +100,23 @@
 
 .record-authors {
   font-weight: 300;
+}
+
+.dots-menu {
+  position: relative;
+}
+
+.action-menu {
+  position: absolute;
+  background: $background-color;
+  li {
+    white-space: nowrap;
+    padding: 15px 20px;
+    transition: 0.2s;
+    list-style-type: none;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(77, 112, 84);
+    }
+  }
 }

@@ -1,7 +1,8 @@
 import restangular = require("restangular");
 
 export class RecordsService {
-  restangular: restangular.IService;
+  private restangular: restangular.IService;
+  private recordsSearchEndpoint: string = "Records/Search?keyword=";
 
   constructor(Restangular: restangular.IService) {
     "ngInject";
@@ -15,5 +16,11 @@ export class RecordsService {
 
   async getOne(id: number) {
     return await this.restangular.one("records", id).get();
+  }
+
+  async getAllByKeyword(keyword: string) {
+    return await this.restangular
+      .all(this.recordsSearchEndpoint + keyword)
+      .getList();
   }
 }

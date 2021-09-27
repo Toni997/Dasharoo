@@ -1,5 +1,5 @@
 import { RecordActionsService } from "app/actions/record-actions.service";
-import { RecordsService } from "app/records.service";
+import { RecordsService } from "app/services/records.service";
 import LoginModel from "app/data/login.model";
 import { UserActionsService } from "app/actions/user-actions.service";
 
@@ -31,8 +31,8 @@ export class ReduxService {
   dispatch() {
     const self = this;
     return {
-      addToQueue(id: number) {
-        self.redux.dispatch(self.recordActions.addToQueue(id));
+      addToQueue(id: number, index: number) {
+        self.redux.dispatch(self.recordActions.addToQueue(id, index));
       },
       changeIndex(newIndex: number) {
         self.redux.dispatch(self.recordActions.changeIndex(newIndex));

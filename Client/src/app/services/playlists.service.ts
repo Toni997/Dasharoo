@@ -1,3 +1,4 @@
+import AddRecordToPlaylist from "app/data/addRecordToPlaylist";
 import restangular = require("restangular");
 
 export class PlaylistsService {
@@ -5,6 +6,7 @@ export class PlaylistsService {
   private playlistsEndpoint: string = "playlists";
   private playlistForQueueEndpoint: string = "playlists/queue";
   private playlistsForSidebarEndpoint: string = "playlists/for-sidebar";
+  private addRecordToPlaylistEndpoint: string = "playlists/add-record";
 
   constructor(Restangular: restangular.IService) {
     "ngInject";
@@ -37,12 +39,11 @@ export class PlaylistsService {
         "Content-Type": undefined,
         Accept: "*/*",
       });
-    // const req = {
-    //   method: "POST",
-    //   url: "https://localhost:44350/api/playlists",
+  }
 
-    //   data: formData,
-    // };
-    // return await this.$http(req);
+  async addToPlaylist(addRecordToPlaylist: AddRecordToPlaylist) {
+    return await this.restangular
+      .all(this.addRecordToPlaylistEndpoint)
+      .post(addRecordToPlaylist);
   }
 }

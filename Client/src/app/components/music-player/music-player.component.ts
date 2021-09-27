@@ -1,6 +1,6 @@
 import { IDocumentService } from "angular";
 import { RecordActionsService } from "app/actions/record-actions.service";
-import { RecordsService } from "app/records.service";
+import { RecordsService } from "app/services/records.service";
 import { AuthService } from "app/services/auth.service";
 import { ReduxService } from "app/services/redux.service";
 import "./music-player.component.scss";

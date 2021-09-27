@@ -1,11 +1,42 @@
 <home-header></home-header>
-<dinput
-  icon="search"
-  type="text"
-  placeholder="Searh artists, playlists, songs..."
-  bindto="$ctrl.dinputText"
-></dinput>
-<div id="explore-genres" pulltorefresh="$ctrl.reload()">
+<button
+  class="dbutton stop-adding"
+  ng-if="SC.$stateParams.add_to"
+  ui-sref="search({q: SC.$stateParams.q, add_to: null})"
+>
+  Stop adding to selected playlist
+</button>
+<form id="search-form" ng-submit="SC.onSubmit()">
+  <dinput
+    icon="search"
+    type="text"
+    placeholder="Searh artists, playlists, records..."
+    bindto="SC.dinputText"
+  ></dinput>
+</form>
+<div id="search-results" ng-if="SC.$stateParams.q">
+  <h2 class="section-title">Search results for "{{ SC.$stateParams.q }}"</h2>
+  <div>
+    <h3>Records</h3>
+    <ul ng-if="SC.searchResults.records.length > 0">
+      <li ng-repeat="record in SC.searchResults.records">
+        {{ record.name }}
+        <icon
+          class="add-to-playlist-icon"
+          width="20"
+          src="add-to-playlist"
+          tooltip="Add to selected playlist"
+          ng-if="SC.$stateParams.add_to"
+          ng-click="SC.addRecordToPlaylist(record.id)"
+        ></icon>
+      </li>
+    </ul>
+    <p ng-if="SC.searchResults.records.length === 0">
+      No matching records found.
+    </p>
+  </div>
+</div>
+<div id="explore-genres" ng-if="!SC.$stateParams.q">
   <h2 class="section-title">Explore genres</h2>
-  <loader ng-if="!$ctrl.$scope.genres"></loader>
+  <loader ng-if="!SC.$scope.genres"></loader>
 </div>

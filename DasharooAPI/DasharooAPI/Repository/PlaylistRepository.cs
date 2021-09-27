@@ -25,8 +25,18 @@ namespace DasharooAPI.Repository
                     .Include(x => x.Records)
                         .ThenInclude(x => x.RecordAuthors)
                         .ThenInclude(x => x.Author)
+                    .Include(x => x.RecordPlaylists)
+                        .ThenInclude(x => x.Record)
+                        .ThenInclude(x => x.CreatedBy)
+                    .Include(x => x.RecordPlaylists)
+                        .ThenInclude(x => x.Record)
+                        .ThenInclude(x => x.RecordAuthors)
+                    .Include(x => x.RecordPlaylists)
+                        .ThenInclude(x => x.Record)
+                        .ThenInclude(x => x.RecordAuthors)
+                        .ThenInclude(x => x.Author)
 
-                    .Include(x => x.Author);
+                        .Include(x => x.Author);
         }
 
         public Task<Playlist> GetByIdWithRecordsAndAuthor(int id)

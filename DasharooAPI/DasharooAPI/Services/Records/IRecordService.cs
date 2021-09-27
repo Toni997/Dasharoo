@@ -13,6 +13,7 @@ namespace DasharooAPI.Services.Records
         Task<ResponseDetails> TryCreateAndReturnResponseDetails(CreateRecordDto recordDto);
         Task<ResponseDetails> TryUpdateAndReturnResponseDetails(int id, UpdateRecordDto recordDto);
         Task<IList<RecordDto>> GetAllWithAuthorsGenresSupporters();
+        Task<IList<RecordForSearchDto>> GetByKeywordWithAuthorsGenresSupporters(string keyword);
         Task<RecordDto> GetByIdWithAuthorsGenresSupporters(int id);
     }
 }
