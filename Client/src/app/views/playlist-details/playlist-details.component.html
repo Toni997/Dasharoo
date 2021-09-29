@@ -57,7 +57,7 @@
         src="dots"
         ng-click="PDC.shouldShowActionMenu = !PDC.shouldShowActionMenu"
       ></icon>
-      <div class="action-menu" ng-show="PDC.shouldShowActionMenu">
+      <div class="action-menu box-shadow" ng-show="PDC.shouldShowActionMenu">
         <ul>
           <a ui-sref="search({add_to: PDC.playlistId })"
             ><li>Add records</li></a
@@ -65,6 +65,7 @@
           <a ui-sref="search({add_to: PDC.playlistId })"
             ><li>Add to favorites</li></a
           >
+          <a ng-click="PDC.onDelete()"><li class="error">Delete</li></a>
         </ul>
       </div>
     </div>
@@ -110,7 +111,7 @@
             }"
             >{{ record.name }}</span
           >
-          <div class="record-authors opacity50">
+          <div class="record-authors">
             <span ng-repeat="author in record.recordAuthors">
               <a
                 ng-click="$event.stopPropagation()"

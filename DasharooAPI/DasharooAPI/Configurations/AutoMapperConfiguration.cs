@@ -21,7 +21,6 @@ namespace DasharooAPI.Configurations
             CreateMap<Record, RecordForQueueDto>();
             CreateMap<Record, RecordForSearchDto>();
 
-
             CreateMap<Playlist, PlaylistDto>().ReverseMap();
             CreateMap<Playlist, CreatePlaylistDto>().ReverseMap();
             CreateMap<Playlist, UpdatePlaylistDto>().ReverseMap();

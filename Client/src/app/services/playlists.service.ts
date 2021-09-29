@@ -32,6 +32,10 @@ export class PlaylistsService {
     return await this.restangular.one(this.playlistForQueueEndpoint, id).get();
   }
 
+  async deleteOne(id: number) {
+    return await this.restangular.one(this.playlistsEndpoint, id).remove();
+  }
+
   async postOne(formData: FormData) {
     return await this.restangular
       .all(this.playlistsEndpoint)

@@ -1,9 +1,9 @@
 <separator
   text="'MY PLAYLISTS'"
-  ng-click="$ctrl.togglePanel($event)"
+  ng-click="PPC.shouldShowPlaylistPanel = !PPC.shouldShowPlaylistPanel"
 ></separator>
-<loader ng-if="!PPC.$scope.myPlaylists"></loader>
-<nav id="playlists-panel">
+<loader ng-if="PPC.$scope.isLoading === true"></loader>
+<nav id="playlists-panel" ng-show="PPC.shouldShowPlaylistPanel">
   <ul>
     <a ui-sref="add-playlist" ui-sref-active="active">
       <li>

@@ -211,3 +211,11 @@ nav {
   justify-content: center;
   align-items: center;
 }
+
+.success {
+  background-color: $primary-color;
+}
+
+.error {
+  background-color: #e78471;
+}

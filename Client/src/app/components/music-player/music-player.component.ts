@@ -114,9 +114,11 @@ export class MusicPlayerController {
   }
 
   timeToString(time: number) {
-    let seconds = time;
-    let hours = 0;
-    let minutes = 0;
+    const defaultTime: "0:00" = "0:00";
+    let stringified: string;
+    let seconds: number = time;
+    let hours: number = 0;
+    let minutes: number = 0;
     while (seconds >= 3600) {
       seconds -= 3600;
       hours++;
@@ -126,15 +128,18 @@ export class MusicPlayerController {
       minutes++;
     }
     if (hours === 0) {
-      return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+      stringified = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+    } else {
+      stringified =
+        hours +
+        ":" +
+        (minutes < 10 ? "0" + minutes : minutes) +
+        ":" +
+        (seconds < 10 ? "0" + seconds : seconds);
     }
-    return (
-      hours +
-      ":" +
-      (minutes < 10 ? "0" + minutes : minutes) +
-      ":" +
-      (seconds < 10 ? "0" + seconds : seconds)
-    );
+
+    if (stringified.includes("NaN")) return defaultTime;
+    return stringified;
   }
 
   updateProgressBar() {

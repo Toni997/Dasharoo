@@ -1,4 +1,4 @@
-import { StateParams } from "@uirouter/core";
+import { StateParams, StateService } from "@uirouter/core";
 import { IAngularEvent, IDocumentService } from "angular";
 import { PlaylistsService } from "app/services/playlists.service";
 import { ReduxService } from "app/services/redux.service";
@@ -7,6 +7,7 @@ import "./playlist-details.component.scss";
 
 export class PlaylistDetailsController {
   $scope: any;
+  $state: StateService;
   reduxService: ReduxService;
   dispatch: any;
   playlistsService: PlaylistsService;
@@ -24,6 +25,7 @@ export class PlaylistDetailsController {
   constructor(
     $document: IDocumentService,
     $scope: any,
+    $state: StateService,
     $stateParams: StateParams,
     playlistsService: PlaylistsService,
     snackbarService: SnackbarService,
@@ -34,6 +36,8 @@ export class PlaylistDetailsController {
 
     this.$document = $document;
     this.$scope = $scope;
+    this.$state = $state;
+
     this.playlistId = parseInt($stateParams.id);
     this.playlistsService = playlistsService;
     this.snackbarService = snackbarService;
@@ -52,7 +56,6 @@ export class PlaylistDetailsController {
   }
 
   async $onInit() {
-    console.log(this.snackbarService);
     this.playlist = await this.playlistsService.getOne(this.playlistId);
     this.playlist.recordPlaylists.forEach((rp) => {
       this.playlist.records.push(rp.record);
@@ -86,7 +89,6 @@ export class PlaylistDetailsController {
         third.style.animationPlayState = isPaused ? "paused" : "running";
       }
     );
-    this.snackbarService.open("djhasdkjs");
   }
 
   async onPlay(index: number = 0) {
@@ -99,6 +101,16 @@ export class PlaylistDetailsController {
       await this.dispatch.addToQueue(this.playlistId, index);
     else {
       await this.dispatch.changeIndex(index);
+    }
+  }
+
+  async onDelete() {
+    try {
+      await this.playlistsService.deleteOne(this.playlistId);
+      this.snackbarService.open("Successfully deleted");
+      this.$state.go("app");
+    } catch (error) {
+      this.snackbarService.open("Could not delete!");
     }
   }
 }

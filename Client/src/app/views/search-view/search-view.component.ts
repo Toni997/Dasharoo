@@ -4,6 +4,7 @@ import { GenresService } from "app/services/genres.service";
 import "./search-view.component.scss";
 import { PlaylistsService } from "app/services/playlists.service";
 import AddRecordToPlaylist from "app/data/addRecordToPlaylist";
+import { SnackbarService } from "app/services/snackbar.service";
 
 interface SearchResults {
   artists: [];
@@ -22,6 +23,7 @@ export class SearchViewController {
   dinputText: string;
   $state: StateService;
   $stateParams: StateParams;
+  snackbarService: SnackbarService;
   searchResults: SearchResults = {
     artists: [],
     playlists: [],
@@ -35,7 +37,8 @@ export class SearchViewController {
     $stateParams: StateParams,
     playlistsService: PlaylistsService,
     recordsService: RecordsService,
-    genresService: GenresService
+    genresService: GenresService,
+    snackbarService: SnackbarService
   ) {
     "ngInject";
 
@@ -44,10 +47,12 @@ export class SearchViewController {
     this.$state = $state;
     this.$stateParams = $stateParams;
 
-    this.$scope.genres = null;
     this.playlistsService = playlistsService;
     this.recordsService = recordsService;
     this.genresService = genresService;
+    this.snackbarService = snackbarService;
+
+    this.$scope.genres = null;
     this.$scope.genresStructured = [];
 
     this.divElement = this.$document[0].createElement("div");
@@ -135,9 +140,11 @@ export class SearchViewController {
       .addToPlaylist(addRecordToPlaylist)
       .then(() => {
         console.log("success adding to playlist");
+        this.snackbarService.open("Successfully added");
       })
-      .catch(() => {
-        console.log("error adding to playlist");
+      .catch((e) => {
+        console.log("error adding to playlist", e);
+        this.snackbarService.open("Error occurred!");
       });
   }
 }

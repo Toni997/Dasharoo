@@ -38,7 +38,7 @@
         src="{{ $ctrl.centerButtonIcon }}"
         alt="{{ $ctrl.playButtonTooltip }}"
         tooltip="{{ $ctrl.playButtonTooltip }}"
-        ng-click="$ctrl.playOrPause()"
+        ng-click="$ctrl.$scope.recordsState.queue && $ctrl.playOrPause()"
       ></icon>
     </div>
   </div>
@@ -68,7 +68,7 @@
         src="{{ $ctrl.centerButtonIcon }}"
         alt="{{ $ctrl.playButtonTooltip }}"
         tooltip="{{ $ctrl.playButtonTooltip }}"
-        ng-click="$ctrl.playOrPause()"
+        ng-click="$ctrl.$scope.recordsState.queue && $ctrl.playOrPause()"
       ></icon>
       <icon
         width="18"

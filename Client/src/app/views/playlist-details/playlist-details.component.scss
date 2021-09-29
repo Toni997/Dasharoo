@@ -95,7 +95,8 @@
 }
 
 .opacity50 {
-  opacity: 0.5;
+  // opacity: 0.5;
+  filter: brightness(50%);
 }
 
 .record-authors {

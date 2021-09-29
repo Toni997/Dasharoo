@@ -1,12 +1,14 @@
 // import PlaylistModel from "app/data/playlist.model";
 import { StateService } from "@uirouter/core";
 import { PlaylistsService } from "app/services/playlists.service";
+import { SnackbarService } from "app/services/snackbar.service";
 import "./add-playlist.component.scss";
 
 export class AddPlaylistController {
   $state: StateService;
   isSaving: boolean = false;
   playlistsService: PlaylistsService;
+  snackbarService: SnackbarService;
   image: any;
   background: any;
   name: string;
@@ -14,11 +16,16 @@ export class AddPlaylistController {
   releaseDate: Date;
   visibilityId: string = "1";
   formData: FormData = new FormData();
-  constructor(playlistsService: PlaylistsService, $state: StateService) {
+  constructor(
+    playlistsService: PlaylistsService,
+    $state: StateService,
+    snackbarService: SnackbarService
+  ) {
     "ngInject";
 
     this.$state = $state;
     this.playlistsService = playlistsService;
+    this.snackbarService = snackbarService;
   }
 
   $onInit() {}
@@ -38,9 +45,11 @@ export class AddPlaylistController {
         "background.jpg"
       );
     this.isSaving = true;
-    const playlist = await this.playlistsService.postOne(this.formData);
-    this.isSaving = false;
-    this.$state.go("playlist-details", { id: playlist.id });
+    this.playlistsService.postOne(this.formData).then((playlist) => {
+      this.isSaving = false;
+      this.snackbarService.open("Playlist successfully created");
+      this.$state.go("playlist-details", { id: playlist.id });
+    });
   }
 }
 
